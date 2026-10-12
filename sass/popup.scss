@@ -196,10 +196,27 @@ svg {
   height: 442px;
   overflow-x: hidden;
   overflow-y: hidden;
+  // Flex column so the folder tree/list scrolls while the Archive section
+  // stays pinned to the bottom of the frame.
+  display: flex;
+  flex-direction: column;
   @include themify($themes) {
     background: themed("grey-background");
   }
   padding-right: 10px;
+
+  // Scrollable content region holding the list / folder tree. It fills the
+  // remaining height; the Archive section below it is non-shrinking.
+  .codesScroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+
+  &:hover .codesScroll {
+    overflow-y: scroll;
+  }
 
   .deleteAction {
     @include themify($themes) {
@@ -214,7 +231,6 @@ svg {
 
   &:hover {
     padding-right: 0;
-    overflow-y: scroll;
   }
 
   &.edit {
@@ -346,6 +362,84 @@ svg {
 @for $depth from 0 through 4 {
   .folderEntry.depth-#{$depth} {
     margin-left: 10px + $depth * 12px;
+  }
+}
+
+// Bottom-anchored Archive section. Non-shrinking flex child of #codes, pinned
+// to the bottom of the frame and separated by a top border. Its body scrolls
+// independently if there are many archived entries.
+.archiveSection {
+  flex: 0 0 auto;
+  @include themify($themes) {
+    border-top: 1px solid themed("grey-2");
+    background: themed("grey-background");
+  }
+
+  .archiveHeader {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    margin-left: 10px;
+    height: 28px;
+    line-height: 28px;
+    font-size: 12px;
+    cursor: pointer;
+    @include themify($themes) {
+      color: themed("grey-1");
+    }
+
+    .archiveCount {
+      margin-left: 4px;
+    }
+  }
+
+  .archiveBody {
+    max-height: 220px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .archiveEmpty {
+    @include themify($themes) {
+      color: themed("grey-1");
+    }
+    font-size: 12px;
+    padding: 10px;
+    text-align: center;
+  }
+}
+
+// Right-click context menu, positioned at the cursor via inline left/top.
+.entryContextMenu {
+  position: fixed;
+  z-index: 100;
+  min-width: 150px;
+  padding: 4px 0;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  @include themify($themes) {
+    background: themed("grey-background");
+    border: 1px solid themed("grey-2");
+  }
+
+  .entryContextMenuItem {
+    display: block;
+    width: 100%;
+    padding: 8px 14px;
+    border: none;
+    background: none;
+    text-align: left;
+    font-size: 13px;
+    cursor: pointer;
+    @include themify($themes) {
+      color: themed("grey-1");
+    }
+
+    &:hover {
+      @include themify($themes) {
+        background: themed("grey-2");
+      }
+    }
   }
 }
 

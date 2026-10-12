@@ -81,6 +81,14 @@ interface AccountsState {
   // Kept in the store (not component data) so it survives the folder tree's
   // frequent re-renders, which rebuild EntryComponent instances.
   openFolderPicker: string;
+  // Whether the bottom-anchored Archive section is collapsed. Collapsed by
+  // default so the archive stays out of the way until the user opens it.
+  archiveCollapsed: boolean;
+  // The entry whose right-click context menu is open, plus the cursor
+  // coordinates to position it. An empty hash means no menu is open. Kept in
+  // the store (not component data) so the folder tree's frequent re-renders
+  // cannot dismiss it — same pattern as openFolderPicker.
+  openContextMenu: { hash: string; x: number; y: number };
 }
 
 interface NotificationState {

@@ -234,6 +234,10 @@ export class EntryStorage {
       storageItem.folder = entry.folder;
     }
 
+    if (entry.archived) {
+      storageItem.archived = true;
+    }
+
     if (entry.type === OTPType.hotp || entry.type === OTPType.hhex) {
       storageItem.counter = entry.counter;
     }
@@ -424,6 +428,7 @@ export class EntryStorage {
       }
 
       delete entry.pinned;
+      delete entry.archived;
 
       if (!encrypted) {
         // decrypt the data to export
@@ -482,6 +487,7 @@ export class EntryStorage {
         algorithm: OTPAlgorithm;
         pinned: boolean;
         folder: string;
+        archived: boolean;
       } = {
         type: (parseInt(data[hash].type) as OTPType) || OTPType[OTPType.totp],
         index: data[hash].index || 0,
@@ -497,6 +503,7 @@ export class EntryStorage {
           : OTPAlgorithm.SHA1,
         pinned: data[hash].pinned || false,
         folder: data[hash].folder || "",
+        archived: data[hash].archived || false,
         hash: data[hash].hash || hash,
       };
 
@@ -667,6 +674,7 @@ export class EntryStorage {
         algorithm: OTPAlgorithm[entryData.algorithm],
         pinned: entryData.pinned,
         folder: entryData.folder,
+        archived: entryData.archived,
       });
 
       data.push(entry);

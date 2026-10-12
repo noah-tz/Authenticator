@@ -60,6 +60,7 @@ export class OTPEntry implements OTPEntryInterface {
   algorithm: OTPAlgorithm;
   pinned: boolean;
   folder: string;
+  archived: boolean;
   encryption?: EncryptionInterface;
   encData?: string;
   encSecret?: string;
@@ -82,6 +83,7 @@ export class OTPEntry implements OTPEntryInterface {
           algorithm?: OTPAlgorithm;
           pinned?: boolean;
           folder?: string;
+          archived?: boolean;
         }
       | {
           encrypted: true;
@@ -111,6 +113,7 @@ export class OTPEntry implements OTPEntryInterface {
       this.algorithm = OTPAlgorithm.SHA1;
       this.pinned = false;
       this.folder = "";
+      this.archived = false;
       return;
     } else if (entry.encrypted) {
       // v2 encryption backwards compat logic
@@ -160,6 +163,11 @@ export class OTPEntry implements OTPEntryInterface {
       this.folder = entry.folder;
     } else {
       this.folder = "";
+    }
+    if (entry.archived) {
+      this.archived = entry.archived;
+    } else {
+      this.archived = false;
     }
     if (this.type === OTPType.totp && entry.period) {
       this.period = entry.period;
@@ -231,6 +239,7 @@ export class OTPEntry implements OTPEntryInterface {
     this.period = decryptedData.period || 30;
     this.pinned = decryptedData.pinned || false;
     this.folder = decryptedData.folder || "";
+    this.archived = decryptedData.archived || false;
     this.secret = decryptedData.secret;
     // @ts-expect-error need a better way to do this
     this.type = OTPType[decryptedData.type] || OTPType.totp;

@@ -10,6 +10,7 @@
     }"
     v-on:click="copyCode(entry)"
     v-on:keydown.enter="copyCode(entry)"
+    v-on:contextmenu="openContextMenu($event)"
   >
     <div class="deleteAction" v-on:click="removeEntry(entry)">
       <IconMinusCircle />
@@ -234,6 +235,19 @@ export default Vue.extend({
     },
   },
   methods: {
+    openContextMenu(event: MouseEvent) {
+      // Right-click opens the archive/restore menu. Suppress the native menu
+      // and keep the click from reaching copyCode. Open state lives in the
+      // store keyed by this entry's hash with the cursor position; the menu
+      // itself is rendered once, centrally, in MainBody.
+      event.preventDefault();
+      event.stopPropagation();
+      this.$store.commit("accounts/setContextMenu", {
+        hash: this.entry.hash,
+        x: event.clientX,
+        y: event.clientY,
+      });
+    },
     toggleFolderPicker() {
       if (this.$store.state.accounts.openFolderPicker === this.entry.hash) {
         this.closeFolderPicker();

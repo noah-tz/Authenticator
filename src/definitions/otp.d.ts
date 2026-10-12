@@ -12,6 +12,7 @@ interface OTPEntryInterface {
   algorithm: number; // OTPAlgorithm
   pinned: boolean;
   folder: string;
+  archived: boolean;
   encData?: string;
   encryption?: EncryptionInterface;
   create(): Promise<void>;
@@ -50,6 +51,7 @@ interface RawOTPStorage {
   algorithm?: string;
   pinned?: boolean;
   folder?: string;
+  archived?: boolean;
 }
 
 interface EncOTPStorage {

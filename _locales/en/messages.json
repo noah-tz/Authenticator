@@ -536,5 +536,21 @@
   "folder_picker": {
     "message": "Choose folder",
     "description": "Label/aria for the folder picker button."
+  },
+  "archive": {
+    "message": "Archive",
+    "description": "Title of the bottom-anchored archive section."
+  },
+  "archive_move": {
+    "message": "Move to archive",
+    "description": "Context menu action to archive an account."
+  },
+  "archive_restore": {
+    "message": "Restore from archive",
+    "description": "Context menu action to unarchive an account."
+  },
+  "archive_empty": {
+    "message": "No archived accounts.",
+    "description": "Hint shown when the archive section is empty."
   }
 }

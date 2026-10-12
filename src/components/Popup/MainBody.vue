@@ -3,54 +3,63 @@
     id="codes"
     v-bind:class="{ filter: shouldFilter && filter, search: showSearch }"
   >
-    <!-- Filter -->
-    <div class="under-header" id="filter" v-on:click="clearFilter()">
-      {{ i18n.show_all_entries }}
-    </div>
-    <!-- Search -->
-    <div class="under-header" id="search">
-      <input
-        id="searchInput"
-        v-model="searchText"
-        v-bind:placeholder="i18n.search"
-        type="text"
-        tabindex="-1"
-      />
-      <div id="searchHint" v-if="searchText === ''">
-        <div></div>
-        <div id="searchHintBorder">/</div>
-        <div></div>
-      </div>
-    </div>
-    <!-- Entries (flat list, drag-reorderable) when no folders exist -->
-    <div
-      v-if="folders.length === 0"
-      v-dragula
-      drake="entryDrake"
-      v-on:keydown.down="focusNextEntry()"
-      v-on:keydown.right="focusNextEntry()"
-      v-on:keydown.up="focusLastEntry()"
-      v-on:keydown.left="focusLastEntry()"
-    >
-      <EntryComponent
-        v-for="entry in entries"
-        :key="entry.hash"
-        v-bind:filtered="!entry.pinned && !isMatchedEntry(entry)"
-        v-bind:notSearched="!isSearchedEntry(entry)"
-        v-bind:entry="entry"
-        v-bind:tabindex="getTabindex(entry)"
-      />
-      <div class="no-entry" v-if="entries.length === 0 && initComplete">
-        <IconKey />
-        <p>
-          {{ i18n.no_entires }}
-          <a href="#" v-on:click="openLink('https://otp.ee/quickstart')">{{
-            i18n.learn_more
-          }}</a>
-        </p>
-      </div>
-    </div>
     <!--
+      Scrollable content wrapper. Holds the filter/search banner and the
+      list/folder tree. It flexes to fill the frame and scrolls on its own, so
+      the Archive section below stays pinned to the bottom of #codes.
+    -->
+    <div class="codesScroll">
+      <!-- Filter -->
+      <div class="under-header" id="filter" v-on:click="clearFilter()">
+        {{ i18n.show_all_entries }}
+      </div>
+      <!-- Search -->
+      <div class="under-header" id="search">
+        <input
+          id="searchInput"
+          v-model="searchText"
+          v-bind:placeholder="i18n.search"
+          type="text"
+          tabindex="-1"
+        />
+        <div id="searchHint" v-if="searchText === ''">
+          <div></div>
+          <div id="searchHintBorder">/</div>
+          <div></div>
+        </div>
+      </div>
+      <!-- Entries (flat list, drag-reorderable) when no folders exist -->
+      <div
+        v-if="folders.length === 0"
+        v-dragula
+        drake="entryDrake"
+        v-on:keydown.down="focusNextEntry()"
+        v-on:keydown.right="focusNextEntry()"
+        v-on:keydown.up="focusLastEntry()"
+        v-on:keydown.left="focusLastEntry()"
+      >
+        <EntryComponent
+          v-for="entry in nonArchivedEntries"
+          :key="entry.hash"
+          v-bind:filtered="!entry.pinned && !isMatchedEntry(entry)"
+          v-bind:notSearched="!isSearchedEntry(entry)"
+          v-bind:entry="entry"
+          v-bind:tabindex="getTabindex(entry)"
+        />
+        <div
+          class="no-entry"
+          v-if="nonArchivedEntries.length === 0 && initComplete"
+        >
+          <IconKey />
+          <p>
+            {{ i18n.no_entires }}
+            <a href="#" v-on:click="openLink('https://otp.ee/quickstart')">{{
+              i18n.learn_more
+            }}</a>
+          </p>
+        </div>
+      </div>
+      <!--
       Entries grouped into a nested, collapsible folder TREE.
       NOTE: drag-reorder is intentionally DISABLED inside folder sections.
       v-dragula reorders by raw array index; interleaving a nested tree
@@ -59,69 +68,131 @@
       when no folders exist. Pinned-first order comes from the `entries`
       getter, which buildFolderTree preserves per node.
     -->
-    <div
-      v-else
-      class="folderSection"
-      v-on:keydown.down="focusNextEntry()"
-      v-on:keydown.right="focusNextEntry()"
-      v-on:keydown.up="focusLastEntry()"
-      v-on:keydown.left="focusLastEntry()"
-    >
-      <!-- Always-present Ungrouped group for entries with an empty folder. -->
       <div
-        class="folderHeader depth-0"
-        role="button"
-        v-on:click="toggleFolder('')"
+        v-else
+        class="folderSection"
+        v-on:keydown.down="focusNextEntry()"
+        v-on:keydown.right="focusNextEntry()"
+        v-on:keydown.up="focusLastEntry()"
+        v-on:keydown.left="focusLastEntry()"
       >
-        <span
-          v-bind:class="{ folderCaret: true, collapsed: isFolderCollapsed('') }"
-        ></span>
-        {{ i18n.ungrouped }}
-      </div>
-      <template v-if="!isFolderCollapsed('')">
-        <EntryComponent
-          v-for="entry in ungroupedEntries"
-          :key="entry.hash"
-          class="folderEntry depth-1"
-          v-bind:filtered="!entry.pinned && !isMatchedEntry(entry)"
-          v-bind:notSearched="!isSearchedEntry(entry)"
-          v-bind:entry="entry"
-          v-bind:tabindex="getTabindex(entry)"
-        />
-      </template>
-      <!--
-        Pre-order-flattened tree rows. Each row is either a folder header or
-        an entry, carrying its own depth; rows hidden by a collapsed ancestor
-        are filtered out of flatFolderTree, so no extra v-show nesting needed.
-      -->
-      <template v-for="row in flatFolderTree">
+        <!-- Always-present Ungrouped group for entries with an empty folder. -->
         <div
-          v-if="row.kind === 'header'"
-          :key="'h:' + row.path"
-          class="folderHeader"
-          v-bind:class="'depth-' + Math.min(row.depth, 4)"
+          class="folderHeader depth-0"
           role="button"
-          v-on:click="toggleFolder(row.path)"
+          v-on:click="toggleFolder('')"
         >
           <span
             v-bind:class="{
               folderCaret: true,
-              collapsed: isFolderCollapsed(row.path),
+              collapsed: isFolderCollapsed(''),
             }"
           ></span>
-          {{ row.name }}
+          {{ i18n.ungrouped }}
+        </div>
+        <template v-if="!isFolderCollapsed('')">
+          <EntryComponent
+            v-for="entry in ungroupedEntries"
+            :key="entry.hash"
+            class="folderEntry depth-1"
+            v-bind:filtered="!entry.pinned && !isMatchedEntry(entry)"
+            v-bind:notSearched="!isSearchedEntry(entry)"
+            v-bind:entry="entry"
+            v-bind:tabindex="getTabindex(entry)"
+          />
+        </template>
+        <!--
+        Pre-order-flattened tree rows. Each row is either a folder header or
+        an entry, carrying its own depth; rows hidden by a collapsed ancestor
+        are filtered out of flatFolderTree, so no extra v-show nesting needed.
+      -->
+        <template v-for="row in flatFolderTree">
+          <div
+            v-if="row.kind === 'header'"
+            :key="'h:' + row.path"
+            class="folderHeader"
+            v-bind:class="'depth-' + Math.min(row.depth, 4)"
+            role="button"
+            v-on:click="toggleFolder(row.path)"
+          >
+            <span
+              v-bind:class="{
+                folderCaret: true,
+                collapsed: isFolderCollapsed(row.path),
+              }"
+            ></span>
+            {{ row.name }}
+          </div>
+          <EntryComponent
+            v-else
+            :key="'e:' + row.entry.hash"
+            class="folderEntry"
+            v-bind:class="'depth-' + Math.min(row.depth, 4)"
+            v-bind:filtered="!row.entry.pinned && !isMatchedEntry(row.entry)"
+            v-bind:notSearched="!isSearchedEntry(row.entry)"
+            v-bind:entry="row.entry"
+            v-bind:tabindex="getTabindex(row.entry)"
+          />
+        </template>
+      </div>
+    </div>
+    <!--
+      Bottom-anchored Archive section. ALWAYS rendered (even with zero
+      archived entries) and pinned to the bottom of the #codes frame via the
+      flex layout in popup.scss. Collapsed by default; the header toggles it.
+      Archived entries reuse EntryComponent as-is, so their codes keep
+      generating (updateCodes iterates every entry in the store).
+    -->
+    <div class="archiveSection">
+      <div class="archiveHeader" role="button" v-on:click="toggleArchive()">
+        <span
+          v-bind:class="{ folderCaret: true, collapsed: archiveCollapsed }"
+        ></span>
+        {{ i18n.archive }}
+        <span class="archiveCount">({{ archivedEntries.length }})</span>
+      </div>
+      <div class="archiveBody" v-if="!archiveCollapsed">
+        <div class="archiveEmpty" v-if="archivedEntries.length === 0">
+          {{ i18n.archive_empty }}
         </div>
         <EntryComponent
-          v-else
-          :key="'e:' + row.entry.hash"
-          class="folderEntry"
-          v-bind:class="'depth-' + Math.min(row.depth, 4)"
-          v-bind:filtered="!row.entry.pinned && !isMatchedEntry(row.entry)"
-          v-bind:notSearched="!isSearchedEntry(row.entry)"
-          v-bind:entry="row.entry"
-          v-bind:tabindex="getTabindex(row.entry)"
+          v-for="entry in archivedEntries"
+          :key="entry.hash"
+          class="archiveEntry"
+          v-bind:entry="entry"
+          v-bind:tabindex="-1"
         />
-      </template>
+      </div>
+    </div>
+    <!--
+      The right-click context menu, rendered ONCE and driven entirely by store
+      state (openContextMenu). Positioned at the stored cursor coordinates.
+      Because open state lives in the store (not component data), the folder
+      tree's frequent re-renders can't dismiss it — same lesson as the folder
+      picker. Clicks inside stop propagation so choosing doesn't trip the
+      outside-close listener before the commit runs.
+    -->
+    <div
+      v-if="openContextMenu.hash"
+      class="entryContextMenu"
+      v-bind:style="{
+        left: openContextMenu.x + 'px',
+        top: openContextMenu.y + 'px',
+      }"
+      v-on:click.stop
+      v-on:contextmenu.stop.prevent
+    >
+      <button
+        type="button"
+        class="entryContextMenuItem"
+        v-on:click="toggleArchived()"
+      >
+        {{
+          contextMenuEntry && contextMenuEntry.archived
+            ? i18n.archive_restore
+            : i18n.archive_move
+        }}
+      </button>
     </div>
   </div>
 </template>
@@ -147,16 +218,28 @@ const computed: {
   showSearch: () => boolean;
   shouldFilter: () => boolean;
   entries: () => OTPEntry[];
+  nonArchivedEntries: () => OTPEntry[];
+  archivedEntries: () => OTPEntry[];
   folders: () => string[];
   collapsedFolders: () => string[];
+  archiveCollapsed: () => boolean;
+  openContextMenu: () => { hash: string; x: number; y: number };
 } = {
   ...mapState("accounts", [
     "filter",
     "showSearch",
     "initComplete",
     "collapsedFolders",
+    "archiveCollapsed",
+    "openContextMenu",
   ]),
-  ...mapGetters("accounts", ["shouldFilter", "entries", "folders"]),
+  ...mapGetters("accounts", [
+    "shouldFilter",
+    "entries",
+    "nonArchivedEntries",
+    "archivedEntries",
+    "folders",
+  ]),
 };
 
 export default Vue.extend({
@@ -168,12 +251,26 @@ export default Vue.extend({
   computed: {
     ...computed,
     // Entries with no folder — always shown under the Ungrouped group.
+    // Archived entries are excluded (they live in the Archive section).
     ungroupedEntries(): OTPEntry[] {
-      return this.entries.filter((entry) => !entry.folder);
+      return this.nonArchivedEntries.filter((entry) => !entry.folder);
     },
-    // Nested tree of the distinct full folder paths with their entries.
+    // Nested tree of the distinct full folder paths with their entries,
+    // built from non-archived entries only.
     folderTree(): FolderNode[] {
-      return buildFolderTree(this.folders, this.entries) as FolderNode[];
+      return buildFolderTree(
+        this.folders,
+        this.nonArchivedEntries
+      ) as FolderNode[];
+    },
+    // The entry targeted by the open context menu, resolved from its hash.
+    contextMenuEntry(): OTPEntry | undefined {
+      if (!this.openContextMenu.hash) {
+        return undefined;
+      }
+      return this.$store.state.accounts.entries.find(
+        (entry: OTPEntry) => entry.hash === this.openContextMenu.hash
+      );
     },
     // Pre-order flatten of folderTree. A node's header row is emitted, then
     // its direct entries (one indent step deeper), then its children. Rows
@@ -237,6 +334,35 @@ export default Vue.extend({
     toggleFolder(name: string) {
       this.$store.commit("accounts/toggleFolderCollapsed", name);
     },
+    toggleArchive() {
+      this.$store.commit("accounts/toggleArchiveCollapsed");
+    },
+    async toggleArchived() {
+      // Commit the archived flag (mirrors pin()) then persist all entries and
+      // close the menu. Resolved from the stored hash so it is robust to
+      // re-renders.
+      const entry = this.contextMenuEntry;
+      if (!entry) {
+        this.$store.commit("accounts/clearContextMenu");
+        return;
+      }
+      this.$store.commit("accounts/setArchived", {
+        entry,
+        archived: !entry.archived,
+      });
+      await EntryStorage.set(this.$store.state.accounts.entries);
+      this.$store.commit("accounts/clearContextMenu");
+    },
+    closeContextMenu() {
+      if (this.$store.state.accounts.openContextMenu.hash) {
+        this.$store.commit("accounts/clearContextMenu");
+      }
+    },
+    onWindowKeydown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        this.closeContextMenu();
+      }
+    },
     isFolderCollapsed(name: string) {
       return this.collapsedFolders.includes(name);
     },
@@ -250,7 +376,7 @@ export default Vue.extend({
       );
     },
     getTabindex(entry: OTPEntry) {
-      const firstEntry = this.entries.find((entry) =>
+      const firstEntry = this.nonArchivedEntries.find((entry) =>
         this.isEntryVisible(entry)
       );
 
@@ -270,13 +396,16 @@ export default Vue.extend({
       }
 
       // reverse modify origin array, and use slice() to make a clone first
-      const _entries = reverse ? this.entries.slice().reverse() : this.entries;
+      const _entries = reverse
+        ? this.nonArchivedEntries.slice().reverse()
+        : this.nonArchivedEntries;
 
       let nextIndex = _entries.findIndex(
         (entry, index) =>
           index >
-            (reverse ? this.entries.length - 1 - activeIndex : activeIndex) &&
-          this.isEntryVisible(entry)
+            (reverse
+              ? this.nonArchivedEntries.length - 1 - activeIndex
+              : activeIndex) && this.isEntryVisible(entry)
       );
 
       if (nextIndex === -1) {
@@ -292,7 +421,8 @@ export default Vue.extend({
         ?.focus();
     },
     focusLastEntry() {
-      const lastIndex = this.entries.length - 1 - this.findNextEntryIndex(true);
+      const lastIndex =
+        this.nonArchivedEntries.length - 1 - this.findNextEntryIndex(true);
       document
         .querySelector<HTMLLinkElement>(`.entry:nth-child(${lastIndex + 1})`)
         ?.focus();
@@ -327,6 +457,21 @@ export default Vue.extend({
         await EntryStorage.set(this.$store.state.accounts.entries);
       }
     );
+  },
+  mounted() {
+    // Outside-close for the context menu. The opening right-click calls
+    // stopPropagation in EntryComponent, so it never reaches these window
+    // listeners; any subsequent click / right-click / Escape anywhere closes
+    // the menu. Clicks on the menu itself stop propagation (template), so
+    // choosing an item commits before this fires.
+    window.addEventListener("click", this.closeContextMenu);
+    window.addEventListener("contextmenu", this.closeContextMenu);
+    window.addEventListener("keydown", this.onWindowKeydown);
+  },
+  beforeDestroy() {
+    window.removeEventListener("click", this.closeContextMenu);
+    window.removeEventListener("contextmenu", this.closeContextMenu);
+    window.removeEventListener("keydown", this.onWindowKeydown);
   },
   components: {
     EntryComponent,

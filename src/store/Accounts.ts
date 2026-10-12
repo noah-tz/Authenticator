@@ -48,6 +48,8 @@ export class Accounts implements Module {
         initComplete: false,
         collapsedFolders: [],
         openFolderPicker: "",
+        archiveCollapsed: true,
+        openContextMenu: { hash: "", x: 0, y: 0 },
       },
       getters: {
         shouldFilter(
@@ -77,10 +79,26 @@ export class Accounts implements Module {
           );
           return [...pinnedEntries, ...unpinnedEntries];
         },
+        // Visible (non-archived) entries in pinned-first order. The folder
+        // tree / ungrouped / flat list all operate on this so archived
+        // entries never appear in the main list. Archived wins over folder.
+        nonArchivedEntries(state: AccountsState) {
+          const visible = state.entries.filter((entry) => !entry.archived);
+          const pinnedEntries = visible.filter((entry) => entry.pinned);
+          const unpinnedEntries = visible.filter((entry) => !entry.pinned);
+          return [...pinnedEntries, ...unpinnedEntries];
+        },
+        // Archived entries, in their stored index order, shown only in the
+        // bottom-anchored Archive section.
+        archivedEntries(state: AccountsState) {
+          return state.entries.filter((entry) => entry.archived);
+        },
         folders(state: AccountsState) {
           const names = new Set<string>();
           for (const entry of state.entries) {
-            if (entry.folder) {
+            // Archived entries keep their folder value but are pulled out of
+            // the tree, so they must not contribute folder headers.
+            if (entry.folder && !entry.archived) {
               names.add(entry.folder);
             }
           }
@@ -180,6 +198,24 @@ export class Accounts implements Module {
         },
         setOpenFolderPicker(state: AccountsState, hash: string) {
           state.openFolderPicker = hash;
+        },
+        setArchived(
+          state: AccountsState,
+          payload: { entry: OTPEntryInterface; archived: boolean }
+        ) {
+          state.entries[payload.entry.index].archived = payload.archived;
+        },
+        toggleArchiveCollapsed(state: AccountsState) {
+          state.archiveCollapsed = !state.archiveCollapsed;
+        },
+        setContextMenu(
+          state: AccountsState,
+          payload: { hash: string; x: number; y: number }
+        ) {
+          state.openContextMenu = payload;
+        },
+        clearContextMenu(state: AccountsState) {
+          state.openContextMenu = { hash: "", x: 0, y: 0 };
         },
         updateExport(
           state: AccountsState,
