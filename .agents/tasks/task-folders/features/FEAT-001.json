@@ -1,0 +1,32 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Shared model + persistence plumbing: add a per-entry `folder?: string` field end-to-end, mirroring the existing `pinned` field. This leaves the codebase buildable and is independently testable via a storage round-trip test. FEAT-002 (store + UI) depends on this. Add ONLY `folder` now — do NOT add `archived`.",
+  "status": "completed",
+  "steps": [
+    "In c:\\Users\\Noah\\Documents\\projects\\Authenticator\\.worktrees\\folders\\src\\definitions\\otp.d.ts: add `folder?: string;` to OTPEntryInterface (next to `pinned: boolean;`) and `folder?: string;` to RawOTPStorage (next to `pinned?: boolean;`).",
+    "In c:\\Users\\Noah\\Documents\\projects\\Authenticator\\.worktrees\\folders\\src\\models\\otp.ts: add `folder: string;` class property (next to `pinned`); add optional `folder?: string;` to the non-encrypted branch of the constructor's `entry` param type; in the encrypted/keyId branch defaults block set `this.folder = \"\";` (next to `this.pinned = false;`); in the main constructor body add `if (entry.folder) { this.folder = entry.folder; } else { this.folder = \"\"; }` mirroring the pinned block; in applyEncryption add `this.folder = decryptedData.folder || \"\";` next to `this.pinned = decryptedData.pinned || false;`.",
+    "In c:\\Users\\Noah\\Documents\\projects\\Authenticator\\.worktrees\\folders\\src\\models\\storage.ts getOTPStorageFromEntry: after the `if (entry.pinned) { storageItem.pinned = true; }` block add `if (entry.folder) { storageItem.folder = entry.folder; }`.",
+    "In the same file EntryStorage.get: in the `new OTPEntry({...})` call add `folder: entryData.folder,` next to `pinned: entryData.pinned,`.",
+    "In the same file EntryStorage.import: add `folder: string;` to the local `entryData` object type and set `folder: data[hash].folder || \"\",` next to the `pinned` mapping.",
+    "In the same file backupGetExport: do NOT add any `delete entry.folder;` line (leave folder intact so backups round-trip). Confirm getExport needs no change (it round-trips folder for free via getOTPStorageFromEntry).",
+    "Add new test file c:\\Users\\Noah\\Documents\\projects\\Authenticator\\.worktrees\\folders\\src\\test\\models\\storage.test.ts following the mocha/chai/sinon-chrome pattern in src/test/components/Popup/MenuPage.test.ts: build an OTPEntry with a non-empty `folder`, use sinon-chrome to back chrome.storage.sync.get/set with an in-memory object, call `EntryStorage.set([entry])` then `EntryStorage.get()`, and assert the returned entry's `folder` equals the input. Add a second case: an entry with empty `folder` reads back as falsy/\"\" and does not throw. (require.context in src/test.ts auto-discovers this file; no wiring needed.)"
+  ],
+  "acceptance_criteria": [
+    "`folder?: string` exists on both OTPEntryInterface and RawOTPStorage.",
+    "OTPEntry has a `folder` property defaulting to \"\", preserved through applyEncryption.",
+    "getOTPStorageFromEntry writes `folder` only when truthy; EntryStorage.get and import read it back.",
+    "backupGetExport does NOT strip `folder`.",
+    "A storage round-trip test asserting an entry's `folder` survives set->get exists under src/test/models/.",
+    "`npx webpack --config ./webpack.config.js` builds with zero fork-ts-checker TypeScript errors, including the new test file in the test bundle.",
+    "`npx eslint . --ext .js,.ts` reports no errors; changed files pass `npx prettier --check`."
+  ],
+  "verification": [
+    "From the worktree root run `npx webpack --config ./webpack.config.js` and confirm a successful build with no TypeScript errors reported by ForkTsCheckerWebpackPlugin (paste the summary lines).",
+    "Run `npx eslint . --ext .js,.ts` and confirm no errors.",
+    "Run `npx prettier --check` on each changed file (otp.d.ts, otp.ts, storage.ts, storage.test.ts); if it reports diffs run `--write` then re-check.",
+    "If Puppeteer + Chrome are available: build the test bundle (`npx webpack --config ./webpack.dev.js`) and run `node scripts/test-runner.js`, reporting pass/fail for the new storage round-trip test. If unavailable on Windows, state so and rely on the compile proving the test file builds."
+  ],
+  "blocked_reason": null,
+  "findings": "Implemented. New field name is `folder` (string). Field names/shapes FEAT-002 should use: OTPEntry.folder (REQUIRED string, defaults to \"\"), OTPEntryInterface.folder (string, REQUIRED), RawOTPStorage.folder (optional string). NOTE/deviation from the pinned template: the spec said add `folder?: string` (optional) to OTPEntryInterface, but that broke the build with TS2345 at src/store/Accounts.ts:445/519/554 and src/models/otp.ts (OTPEntryInterface not assignable to OTPEntry, since OTPEntry.folder is required). The existing `pinned` field is REQUIRED on OTPEntryInterface (`pinned: boolean`), so to truly mirror it and keep the build green I made OTPEntryInterface.folder REQUIRED (`folder: string`). RawOTPStorage.folder stays optional (mirrors `pinned?`). This is a types-only change, no runtime/user-facing behavior change. getOTPStorageFromEntry writes folder only when truthy; EntryStorage.get and import read it back; backupGetExport does NOT delete folder (backups round-trip). Encryption: applyEncryption restores folder via `this.folder = decryptedData.folder || \"\"`, so folder is included inside the encrypted OTPStorage blob automatically (no extra encryption plumbing needed for FEAT-002). Store/UI (store/Accounts.ts setFolder mutation, folders getter, collapsedFolders in AccountsState, MainBody.vue accordion, EntryComponent.vue/AddAccountPage.vue inputs, i18n keys) remain for FEAT-002 and were intentionally NOT touched. Test added at src/test/models/storage.test.ts (sinon-chrome in-memory sync store, round-trips folder through EntryStorage.set/get; auto-discovered by src/test.ts require.context). Puppeteer test-runner not run (non-headless, hardcoded ext id, unreliable on Windows); compile in webpack build proves the test file type-checks."
+}

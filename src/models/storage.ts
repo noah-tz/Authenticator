@@ -230,6 +230,10 @@ export class EntryStorage {
       storageItem.pinned = true;
     }
 
+    if (entry.folder) {
+      storageItem.folder = entry.folder;
+    }
+
     if (entry.type === OTPType.hotp || entry.type === OTPType.hhex) {
       storageItem.counter = entry.counter;
     }
@@ -477,6 +481,7 @@ export class EntryStorage {
         digits: number;
         algorithm: OTPAlgorithm;
         pinned: boolean;
+        folder: string;
       } = {
         type: (parseInt(data[hash].type) as OTPType) || OTPType[OTPType.totp],
         index: data[hash].index || 0,
@@ -491,6 +496,7 @@ export class EntryStorage {
           ? (parseInt(rawAlgorithm) as OTPAlgorithm)
           : OTPAlgorithm.SHA1,
         pinned: data[hash].pinned || false,
+        folder: data[hash].folder || "",
         hash: data[hash].hash || hash,
       };
 
@@ -660,6 +666,7 @@ export class EntryStorage {
         // @ts-expect-error - it's fine if this ends up undefined
         algorithm: OTPAlgorithm[entryData.algorithm],
         pinned: entryData.pinned,
+        folder: entryData.folder,
       });
 
       data.push(entry);
