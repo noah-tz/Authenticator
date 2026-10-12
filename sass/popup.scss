@@ -296,6 +296,50 @@ svg {
   }
 }
 
+// Folder tree — always visible (does NOT rely on .under-header's display:none).
+.folderSection {
+  .folderHeader {
+    // Own display so folder headers show in normal (non-filter/search) use.
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    margin-left: 10px;
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
+    cursor: pointer;
+    @include themify($themes) {
+      color: themed("grey-1");
+    }
+  }
+
+  // Indent nested headers: padding-left = min(depth, 4) * 12px.
+  @for $depth from 0 through 4 {
+    .folderHeader.depth-#{$depth} {
+      padding-left: 10px + $depth * 12px;
+    }
+  }
+  .folderHeader.depth-5,
+  .folderHeader.depth-6,
+  .folderHeader.depth-7 {
+    padding-left: 10px + 4 * 12px;
+  }
+}
+
+.folderCaret {
+  display: inline-block;
+  margin-right: 4px;
+  transition: transform 0.15s ease;
+  // Points down (expanded) by default.
+  &::before {
+    content: "\25BE";
+  }
+  // Collapsed: rotate to point right.
+  &.collapsed {
+    transform: rotate(-90deg);
+  }
+}
+
 .entry {
   margin: 10px;
   margin-right: 0;
@@ -397,6 +441,14 @@ svg {
       @include themify($themes) {
         background: themed("grey-3");
       }
+    }
+  }
+
+  // Folder input: widen the field and reserve room on the right so a later
+  // picker button clears pin (right:10px) / showqr (right:35px) / movehandle.
+  .folderEdit {
+    input {
+      width: calc(80% - 35px);
     }
   }
 

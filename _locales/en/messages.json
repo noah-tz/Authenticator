@@ -530,7 +530,11 @@
     "description": "Default section header for accounts without a folder."
   },
   "folder_placeholder": {
-    "message": "Folder name",
+    "message": "Folder (use / for nesting)",
     "description": "Placeholder for the folder name input."
+  },
+  "folder_picker": {
+    "message": "Choose folder",
+    "description": "Label/aria for the folder picker button."
   }
 }

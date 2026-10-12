@@ -106,6 +106,17 @@ describe("EntryStorage folder round-trip", () => {
     assert.equal(stored?.folder, "Work");
   });
 
+  it("preserves a nested folder path through set -> get", async () => {
+    const entry = buildEntry("a/b/c");
+    await EntryStorage.set([entry]);
+
+    const entries = await EntryStorage.get();
+    const stored = entries.find((e) => e.hash === entry.hash);
+
+    assert.ok(stored, "stored entry should be returned");
+    assert.equal(stored?.folder, "a/b/c");
+  });
+
   it("reads an empty folder back as falsy and does not throw", async () => {
     const entry = buildEntry("");
     await EntryStorage.set([entry]);

@@ -69,14 +69,17 @@
         v-on:change="entry.update(encryption)"
       />
     </div>
-    <div class="issuerEdit">
+    <div class="issuerEdit folderEdit">
       <input
         v-bind:placeholder="i18n.folder_placeholder"
         v-bind:aria-label="i18n.folder"
         type="text"
         list="folderList"
         v-model="entry.folder"
-        v-on:change="setFolder(entry)"
+        v-on:input="setFolder(entry)"
+        v-on:change="setFolder(entry, true)"
+        v-on:click.stop
+        v-on:keydown.stop
       />
       <datalist id="folderList">
         <option v-for="name in folders" :key="name" :value="name"></option>
@@ -103,6 +106,7 @@ import { mapState, mapGetters } from "vuex";
 import * as QRGen from "qrcode-generator";
 import { OTPEntry, OTPType, CodeState, OTPAlgorithm } from "../../models/otp";
 import { EntryStorage } from "../../models/storage";
+import { normalizeFolderPath } from "../../models/folders";
 import { getCurrentTab, okToInjectContentScript } from "../../utils";
 
 import IconMinusCircle from "../../../svg/minus-circle.svg";
@@ -193,10 +197,16 @@ export default Vue.extend({
       const codesEl = document.getElementById("codes") as HTMLDivElement;
       codesEl.scrollTop = 0;
     },
-    async setFolder(entry: OTPEntry) {
+    async setFolder(entry: OTPEntry, commit = false) {
+      // Clean up stray slashes/whitespace only when saving (blur/Enter), so
+      // nested paths like "a/" remain typable live on each input event.
+      const folder = commit ? normalizeFolderPath(entry.folder) : entry.folder;
+      if (commit) {
+        entry.folder = folder;
+      }
       this.$store.commit("accounts/setFolder", {
         entry,
-        folder: entry.folder,
+        folder,
       });
       await EntryStorage.set(this.$store.state.accounts.entries);
     },
