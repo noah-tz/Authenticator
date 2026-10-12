@@ -22,8 +22,9 @@
         <div></div>
       </div>
     </div>
-    <!-- Entries -->
+    <!-- Entries (flat list, drag-reorderable) when no folders exist -->
     <div
+      v-if="folders.length === 0"
       v-dragula
       drake="entryDrake"
       v-on:keydown.down="focusNextEntry()"
@@ -49,6 +50,45 @@
         </p>
       </div>
     </div>
+    <!-- Entries grouped into collapsible folder sections -->
+    <div
+      v-else
+      v-on:keydown.down="focusNextEntry()"
+      v-on:keydown.right="focusNextEntry()"
+      v-on:keydown.up="focusLastEntry()"
+      v-on:keydown.left="focusLastEntry()"
+    >
+      <div
+        class="folderSection"
+        v-for="section in folderSections"
+        :key="section.name"
+      >
+        <div
+          class="folderHeader under-header"
+          role="button"
+          v-on:click="toggleFolder(section.name)"
+        >
+          <span
+            v-bind:class="{
+              folderCaret: true,
+              collapsed: isFolderCollapsed(section.name),
+            }"
+            >▾</span
+          >
+          {{ section.label }}
+        </div>
+        <div v-show="!isFolderCollapsed(section.name)">
+          <EntryComponent
+            v-for="entry in section.entries"
+            :key="entry.hash"
+            v-bind:filtered="!entry.pinned && !isMatchedEntry(entry)"
+            v-bind:notSearched="!isSearchedEntry(entry)"
+            v-bind:entry="entry"
+            v-bind:tabindex="getTabindex(entry)"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -67,9 +107,16 @@ const computed: {
   showSearch: () => boolean;
   shouldFilter: () => boolean;
   entries: () => OTPEntry[];
+  folders: () => string[];
+  collapsedFolders: () => string[];
 } = {
-  ...mapState("accounts", ["filter", "showSearch", "initComplete"]),
-  ...mapGetters("accounts", ["shouldFilter", "entries"]),
+  ...mapState("accounts", [
+    "filter",
+    "showSearch",
+    "initComplete",
+    "collapsedFolders",
+  ]),
+  ...mapGetters("accounts", ["shouldFilter", "entries", "folders"]),
 };
 
 export default Vue.extend({
@@ -78,7 +125,30 @@ export default Vue.extend({
       searchText: "",
     };
   },
-  computed,
+  computed: {
+    ...computed,
+    folderSections(): { name: string; label: string; entries: OTPEntry[] }[] {
+      const sections: {
+        name: string;
+        label: string;
+        entries: OTPEntry[];
+      }[] = [];
+      const ungrouped = this.entries.filter((entry) => !entry.folder);
+      sections.push({
+        name: "",
+        label: this.i18n.ungrouped,
+        entries: ungrouped,
+      });
+      for (const name of this.folders) {
+        sections.push({
+          name,
+          label: name,
+          entries: this.entries.filter((entry) => entry.folder === name),
+        });
+      }
+      return sections;
+    },
+  },
   methods: {
     openLink(url: string) {
       window.open(url, "_blank");
@@ -107,6 +177,12 @@ export default Vue.extend({
     },
     clearFilter() {
       this.$store.dispatch("accounts/clearFilter");
+    },
+    toggleFolder(name: string) {
+      this.$store.commit("accounts/toggleFolderCollapsed", name);
+    },
+    isFolderCollapsed(name: string) {
+      return this.collapsedFolders.includes(name);
     },
     isEntryVisible(entry: OTPEntry) {
       return (

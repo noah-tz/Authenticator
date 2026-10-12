@@ -46,6 +46,7 @@ export class Accounts implements Module {
         keys: await BrowserStorage.getKeys(),
         wrongPassword: false,
         initComplete: false,
+        collapsedFolders: [],
       },
       getters: {
         shouldFilter(
@@ -74,6 +75,15 @@ export class Accounts implements Module {
             (entry) => !entry.pinned
           );
           return [...pinnedEntries, ...unpinnedEntries];
+        },
+        folders(state: AccountsState) {
+          const names = new Set<string>();
+          for (const entry of state.entries) {
+            if (entry.folder) {
+              names.add(entry.folder);
+            }
+          }
+          return Array.from(names).sort((a, b) => a.localeCompare(b));
         },
       },
       mutations: {
@@ -152,6 +162,20 @@ export class Accounts implements Module {
         },
         pinEntry(state: AccountsState, entry: OTPEntryInterface) {
           state.entries[entry.index].pinned = !entry.pinned;
+        },
+        setFolder(
+          state: AccountsState,
+          payload: { entry: OTPEntryInterface; folder: string }
+        ) {
+          state.entries[payload.entry.index].folder = payload.folder;
+        },
+        toggleFolderCollapsed(state: AccountsState, folderName: string) {
+          const index = state.collapsedFolders.indexOf(folderName);
+          if (index > -1) {
+            state.collapsedFolders.splice(index, 1);
+          } else {
+            state.collapsedFolders.push(folderName);
+          }
         },
         updateExport(
           state: AccountsState,

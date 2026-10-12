@@ -520,5 +520,17 @@
   },
   "activate_auto_filter": {
     "message": "Warning: Smart filter loosely matches the domain name to an account. Always verify that you are on the correct website before entering a code!"
+  },
+  "folder": {
+    "message": "Folder",
+    "description": "Folder label for grouping accounts."
+  },
+  "ungrouped": {
+    "message": "Ungrouped",
+    "description": "Default section header for accounts without a folder."
+  },
+  "folder_placeholder": {
+    "message": "Folder name",
+    "description": "Placeholder for the folder name input."
   }
 }

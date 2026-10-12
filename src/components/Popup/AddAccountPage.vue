@@ -39,13 +39,24 @@
         <option :value="OTPType.battle">Battle.net</option>
         <option :value="OTPType.steam">Steam</option>
       </a-select-input>
+      <label>{{ i18n.folder }}</label>
+      <input
+        type="text"
+        class="input"
+        list="newAccountFolderList"
+        :placeholder="i18n.folder_placeholder"
+        v-model="newAccount.folder"
+      />
+      <datalist id="newAccountFolderList">
+        <option v-for="name in folders" :key="name" :value="name"></option>
+      </datalist>
     </details>
     <a-button type="small" @click="addNewAccount()">{{ i18n.ok }}</a-button>
   </div>
 </template>
 <script lang="ts">
 import Vue from "vue";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { OTPType, OTPEntry, OTPAlgorithm } from "../../models/otp";
 
 export default Vue.extend({
@@ -58,6 +69,7 @@ export default Vue.extend({
       period: number | undefined;
       digits: number;
       algorithm: OTPAlgorithm;
+      folder: string;
     };
   } {
     return {
@@ -69,10 +81,14 @@ export default Vue.extend({
         period: undefined,
         digits: 6,
         algorithm: OTPAlgorithm.SHA1,
+        folder: "",
       },
     };
   },
-  computed: mapState("accounts", ["OTPType", "OTPAlgorithm"]),
+  computed: {
+    ...mapState("accounts", ["OTPType", "OTPAlgorithm"]),
+    ...mapGetters("accounts", ["folders"]),
+  },
   methods: {
     async addNewAccount() {
       this.newAccount.secret = this.newAccount.secret.replace(/ /g, "");
@@ -132,6 +148,7 @@ export default Vue.extend({
           period: this.newAccount.period,
           digits: this.newAccount.digits,
           algorithm: this.newAccount.algorithm,
+          folder: this.newAccount.folder,
         },
         encryption
       );

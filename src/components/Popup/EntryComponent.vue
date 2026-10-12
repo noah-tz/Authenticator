@@ -69,6 +69,19 @@
         v-on:change="entry.update(encryption)"
       />
     </div>
+    <div class="issuerEdit">
+      <input
+        v-bind:placeholder="i18n.folder_placeholder"
+        v-bind:aria-label="i18n.folder"
+        type="text"
+        list="folderList"
+        v-model="entry.folder"
+        v-on:change="setFolder(entry)"
+      />
+      <datalist id="folderList">
+        <option v-for="name in folders" :key="name" :value="name"></option>
+      </datalist>
+    </div>
     <div
       class="showqr"
       v-if="shouldShowQrIcon(entry)"
@@ -86,7 +99,7 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import * as QRGen from "qrcode-generator";
 import { OTPEntry, OTPType, CodeState, OTPAlgorithm } from "../../models/otp";
 import { EntryStorage } from "../../models/storage";
@@ -115,6 +128,8 @@ let computed = {};
 for (const module of computedPrototype) {
   Object.assign(computed, module);
 }
+
+Object.assign(computed, mapGetters("accounts", ["folders"]));
 
 export default Vue.extend({
   computed,
@@ -177,6 +192,13 @@ export default Vue.extend({
       await EntryStorage.set(this.$store.state.accounts.entries);
       const codesEl = document.getElementById("codes") as HTMLDivElement;
       codesEl.scrollTop = 0;
+    },
+    async setFolder(entry: OTPEntry) {
+      this.$store.commit("accounts/setFolder", {
+        entry,
+        folder: entry.folder,
+      });
+      await EntryStorage.set(this.$store.state.accounts.entries);
     },
     showQr(entry: OTPEntry) {
       this.$store.commit("qr/setQr", getQrUrl(entry));
