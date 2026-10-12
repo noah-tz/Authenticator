@@ -340,6 +340,15 @@ svg {
   }
 }
 
+// Entries nested under a folder header. Indent one step per depth, capped at
+// min(depth, 4) * 12px so a deep chain never overflows the ~300px popup
+// (#codes keeps overflow-x: hidden). Entry depth = its folder depth + 1.
+@for $depth from 0 through 4 {
+  .folderEntry.depth-#{$depth} {
+    margin-left: 10px + $depth * 12px;
+  }
+}
+
 .entry {
   margin: 10px;
   margin-right: 0;
@@ -444,11 +453,78 @@ svg {
     }
   }
 
-  // Folder input: widen the field and reserve room on the right so a later
+  // Folder input: widen the field and reserve room on the right so the
   // picker button clears pin (right:10px) / showqr (right:35px) / movehandle.
   .folderEdit {
+    position: relative;
+
     input {
       width: calc(80% - 35px);
+    }
+
+    // Picker button: a bars/list icon that sits in the reserved right gutter,
+    // clear of pin/showqr/movehandle (all absolute at right:10px/35px).
+    .folderPicker {
+      @include themify($themes) {
+        @include icon-special(16px, themed("grey-1"));
+      }
+      @include hover-black;
+      position: absolute;
+      right: 0;
+      top: -2px;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    // Dropdown of existing full folder paths.
+    .folderPickerMenu {
+      position: absolute;
+      right: 0;
+      top: 20px;
+      z-index: 20;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      min-width: 120px;
+      max-width: 180px;
+      max-height: 160px;
+      overflow-y: auto;
+      border-radius: 2px;
+      @include themify($themes) {
+        background: themed("white-1");
+        border: themed("grey-2") 1px solid;
+        box-shadow: 1px 1px 3px themed("grey-1");
+      }
+
+      li {
+        padding: 4px 10px;
+        font-size: 12px;
+        cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        @include themify($themes) {
+          color: themed("black-1");
+        }
+
+        &:hover {
+          @include themify($themes) {
+            background: themed("grey-3");
+          }
+        }
+
+        &.folderPickerEmpty {
+          cursor: default;
+          @include themify($themes) {
+            color: themed("grey-1");
+          }
+
+          &:hover {
+            background: none;
+          }
+        }
+      }
     }
   }
 

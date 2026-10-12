@@ -84,6 +84,32 @@
       <datalist id="folderList">
         <option v-for="name in folders" :key="name" :value="name"></option>
       </datalist>
+      <!--
+        Explicit folder picker: lists every distinct full folder path so the
+        user can pick instead of typing. .stop keeps the row's copyCode from
+        firing. Free-typing in the input above still works independently.
+      -->
+      <div
+        class="folderPicker"
+        role="button"
+        v-bind:aria-label="i18n.folder_picker"
+        v-bind:title="i18n.folder_picker"
+        v-on:click.stop="toggleFolderPicker()"
+      >
+        <IconBars />
+      </div>
+      <ul class="folderPickerMenu" v-show="showFolderPicker" v-on:click.stop>
+        <li v-if="folders.length === 0" class="folderPickerEmpty">
+          {{ i18n.ungrouped }}
+        </li>
+        <li
+          v-for="name in folders"
+          :key="name"
+          v-on:click.stop="chooseFolder(name)"
+        >
+          {{ name }}
+        </li>
+      </ul>
     </div>
     <div
       class="showqr"
@@ -141,7 +167,21 @@ export default Vue.extend({
     entry: OTPEntry,
     tabindex: Number,
   },
+  data() {
+    return {
+      showFolderPicker: false,
+    };
+  },
   methods: {
+    toggleFolderPicker() {
+      this.showFolderPicker = !this.showFolderPicker;
+    },
+    chooseFolder(folder: string) {
+      // Picking persists exactly like free-typing: set the model then commit.
+      this.entry.folder = folder;
+      this.setFolder(this.entry, true);
+      this.showFolderPicker = false;
+    },
     noCopy(code: string) {
       return (
         code === CodeState.Encrypted ||
