@@ -1,14 +1,14 @@
 {
   "extName": {
-    "message": "Authenticator",
+    "message": "Authenticator Folders",
     "description": "Extension Name."
   },
   "extShortName": {
-    "message": "Authenticator",
+    "message": "Authenticator Folders",
     "description": "Extension Short Name."
   },
   "extDesc": {
-    "message": "Authenticator generates two-factor authentication codes in your browser.",
+    "message": "Two-factor authentication codes in your browser, organized into nested folders with an archive.",
     "description": "Extension Description."
   },
   "added": {
