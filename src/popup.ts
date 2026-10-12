@@ -139,6 +139,15 @@ async function init() {
         if (instance.$store.getters["style/isMenuShown"]) {
           return;
         }
+        // Don't hijack '/' when the user is typing in a field (e.g. the folder
+        // input, where '/' creates a nested path like "server/files").
+        const active = document.activeElement;
+        if (
+          active &&
+          (active.tagName === "INPUT" || active.tagName === "TEXTAREA")
+        ) {
+          return;
+        }
         instance.$store.commit("accounts/stopFilter");
         // It won't focus the texfield if vue unhides the div
         instance.$store.commit("accounts/showSearch");
