@@ -1,0 +1,7 @@
+{
+  "task_id": "task-folders",
+  "task_description": "Add a per-entry `folder` field and an accordion folder-grouping UI to the Authenticator MV3 extension fork. Mirror the existing `pinned` field for storage/sync safety (additive, defensive reads, no migration). Group accounts into collapsible folder sections in a single screen; one account belongs to exactly one folder; folderless accounts appear under an 'Ungrouped' section. Add inline + add-page assign-to-folder UI and new en i18n strings. Do NOT add archive, do NOT rebrand, do NOT touch cloud credentials, preserve MIT LICENSE.",
+  "status": "pending",
+  "feature_order": ["FEAT-001", "FEAT-002"],
+  "blocked_reason": null
+}
