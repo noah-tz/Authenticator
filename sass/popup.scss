@@ -453,79 +453,96 @@ svg {
     }
   }
 
-  // Folder input: widen the field and reserve room on the right so the
-  // picker button clears pin (right:10px) / showqr (right:35px) / movehandle.
+  // Folder input: a small caret sits INSIDE the field's right edge (like a
+  // native <select>), so the user never has to leave the field. The field
+  // keeps the same width as the issuer/account inputs; the caret overlays its
+  // right end just before the showqr(35px)/pin(10px)/movehandle gutter.
   .folderEdit {
     position: relative;
 
     input {
-      width: calc(80% - 60px);
+      // leave room on the right for the caret, within the usual 70% field.
+      width: calc(70% - 20px);
+      padding-right: 20px;
     }
 
-    // Picker button: a bars/list icon that sits in the reserved right gutter.
-    // The .movehandle is absolute right:10px, full entry height, display:block
-    // in edit mode, and paints after this block in the DOM, so a picker at the
-    // content-right edge would be covered by the movehandle's clickable column
-    // (~right:10-34px). Place the picker at right:35px — past that gutter and
-    // matching the showqr right:35px convention — so it never overlaps the
-    // drag handle (nor pin at right:10px).
-    .folderPicker {
-      @include themify($themes) {
-        @include icon-special(16px, themed("grey-1"));
-      }
-      @include hover-black;
+    // ▾ caret sitting INSIDE the field's right edge (like a native <select>).
+    // Clearly visible: larger glyph, darker colour, hover feedback. The 70%
+    // input starts at the content-left, so this is well clear of the
+    // showqr/pin/movehandle gutter on the far right of the row.
+    .folderCaretBtn {
       position: absolute;
-      right: 35px;
-      top: -2px;
-      width: 20px;
-      height: 20px;
+      left: calc(70% - 18px);
+      top: -1px;
+      width: 18px;
+      height: 18px;
+      line-height: 18px;
+      text-align: center;
+      font-size: 12px;
       cursor: pointer;
+      @include themify($themes) {
+        color: themed("black-1");
+      }
+
+      &:hover {
+        @include themify($themes) {
+          color: themed("blue-1");
+        }
+      }
     }
 
-    // Dropdown of existing full folder paths. Align its right edge with the
-    // picker button (right:35px) rather than the entry edge under the handle.
+    // Dark, rounded dropdown styled to match the browser's native datalist
+    // popup the user liked — but fully controlled by us (closes only on
+    // choose / the × / Escape), unlike the native one that vanished.
     .folderPickerMenu {
       position: absolute;
-      right: 35px;
+      left: 0;
       top: 20px;
       z-index: 20;
       margin: 0;
-      padding: 0;
+      padding: 4px 0;
       list-style: none;
-      min-width: 120px;
-      max-width: 180px;
-      max-height: 160px;
+      min-width: 130px;
+      max-width: 200px;
+      max-height: 200px;
       overflow-y: auto;
-      border-radius: 2px;
-      @include themify($themes) {
-        background: themed("white-1");
-        border: themed("grey-2") 1px solid;
-        box-shadow: 1px 1px 3px themed("grey-1");
-      }
+      background: #3a3a3a;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
 
       li {
-        padding: 4px 10px;
-        font-size: 12px;
+        padding: 7px 16px;
+        font-size: 13px;
         cursor: pointer;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        @include themify($themes) {
-          color: themed("black-1");
-        }
+        color: #f0f0f0;
 
         &:hover,
         &.folderPickerActive {
-          @include themify($themes) {
-            background: themed("grey-3");
+          background: rgba(255, 255, 255, 0.12);
+        }
+
+        // Close (×) row: pinned at the top-right as an explicit dismiss
+        // affordance. One of the three ways to close (choose / this / Escape).
+        &.folderPickerClose {
+          text-align: right;
+          font-size: 18px;
+          line-height: 14px;
+          padding: 2px 10px 6px;
+          color: #bbb;
+
+          &:hover {
+            color: #fff;
+            background: none;
           }
         }
 
         &.folderPickerEmpty {
           cursor: default;
-          @include themify($themes) {
-            color: themed("grey-1");
-          }
+          color: #999;
 
           &:hover {
             background: none;

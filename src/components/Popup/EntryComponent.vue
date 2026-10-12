@@ -74,23 +74,24 @@
         v-bind:placeholder="i18n.folder_placeholder"
         v-bind:aria-label="i18n.folder"
         type="text"
-        list="folderList"
         v-model="draftFolder"
         v-on:change="commitDraftFolder()"
-        v-on:click.stop
+        v-on:input="onFolderInput()"
+        v-on:focus="openFolderPicker()"
+        v-on:click.stop="openFolderPicker()"
         v-on:keydown.stop
         v-on:keydown.enter="commitFolder($event)"
+        v-on:keydown.down.prevent="onFolderPickerKeydown($event)"
+        v-on:keydown.up.prevent="onFolderPickerKeydown($event)"
+        v-on:keydown.esc="closeFolderPicker()"
       />
-      <datalist id="folderList">
-        <option v-for="name in folders" :key="name" :value="name"></option>
-      </datalist>
       <!--
-        Explicit folder picker: lists every distinct full folder path so the
-        user can pick instead of typing. .stop keeps the row's copyCode from
-        firing. Free-typing in the input above still works independently.
+        Small caret inside the field's right edge. Opens the controlled
+        dropdown of matching folders. .stop keeps the row's copyCode from
+        firing. Free-typing in the input still works independently.
       -->
       <div
-        class="folderPicker"
+        class="folderCaretBtn"
         role="button"
         tabindex="0"
         v-bind:aria-label="i18n.folder_picker"
@@ -98,19 +99,30 @@
         v-on:click.stop="toggleFolderPicker()"
         v-on:keydown.stop="onFolderPickerKeydown($event)"
       >
-        <IconBars />
+        &#9662;
       </div>
       <ul
         class="folderPickerMenu"
         v-show="showFolderPicker"
+        tabindex="-1"
         v-on:click.stop
         v-on:mousedown.stop
+        v-on:keydown.stop="onFolderPickerKeydown($event)"
       >
-        <li v-if="folders.length === 0" class="folderPickerEmpty">
+        <li
+          class="folderPickerClose"
+          role="button"
+          v-bind:aria-label="i18n.close"
+          v-bind:title="i18n.close"
+          v-on:click.stop="closeFolderPicker()"
+        >
+          &times;
+        </li>
+        <li v-if="matchingFolders.length === 0" class="folderPickerEmpty">
           {{ i18n.ungrouped }}
         </li>
         <li
-          v-for="(name, i) in folders"
+          v-for="(name, i) in matchingFolders"
           :key="name"
           v-bind:class="{ folderPickerActive: i === folderPickerIndex }"
           v-on:click.stop="chooseFolder(name)"
@@ -170,6 +182,31 @@ for (const module of computedPrototype) {
 
 Object.assign(computed, mapGetters("accounts", ["folders"]));
 
+// Whether THIS entry's folder picker is the one currently open. Reads the
+// store (keyed by hash) so it is immune to component rebuilds on re-render.
+Object.assign(computed, {
+  showFolderPicker(this: {
+    entry: OTPEntry;
+    $store: { state: { accounts: { openFolderPicker: string } } };
+  }) {
+    return this.$store.state.accounts.openFolderPicker === this.entry.hash;
+  },
+  // Existing folder paths filtered by what the user has typed, so the
+  // controlled dropdown doubles as the autocomplete the native datalist used
+  // to provide. Case-insensitive substring match; empty draft shows all.
+  matchingFolders(this: {
+    draftFolder: string;
+    $store: { getters: { [k: string]: string[] } };
+  }): string[] {
+    const all = this.$store.getters["accounts/folders"];
+    const q = (this.draftFolder || "").trim().toLowerCase();
+    if (!q) {
+      return all;
+    }
+    return all.filter((name) => name.toLowerCase().includes(q));
+  },
+});
+
 export default Vue.extend({
   computed,
   props: {
@@ -178,7 +215,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      showFolderPicker: false,
       // Highlighted item index for keyboard navigation inside the picker.
       folderPickerIndex: -1,
       // Local draft decoupled from the store. Typing updates only this, so the
@@ -199,35 +235,52 @@ export default Vue.extend({
   },
   methods: {
     toggleFolderPicker() {
-      if (this.showFolderPicker) {
+      if (this.$store.state.accounts.openFolderPicker === this.entry.hash) {
         this.closeFolderPicker();
       } else {
         this.openFolderPicker();
       }
     },
-    openFolderPicker() {
-      this.showFolderPicker = true;
+    onFolderInput() {
+      // Typing opens the controlled dropdown so matching existing folders are
+      // suggested live (replacing the removed native datalist autocomplete).
+      // Only open when there is actually something to suggest.
+      const all: string[] = this.$store.getters["accounts/folders"];
+      const q = (this.draftFolder || "").trim().toLowerCase();
+      const hasMatch = q
+        ? all.some((name) => name.toLowerCase().includes(q))
+        : all.length > 0;
+      if (hasMatch) {
+        if (this.$store.state.accounts.openFolderPicker !== this.entry.hash) {
+          this.$store.commit("accounts/setOpenFolderPicker", this.entry.hash);
+        }
+      } else {
+        this.closeFolderPicker();
+      }
       this.folderPickerIndex = -1;
-      // Close only on a genuine outside click, never on re-render or mouse
-      // movement. Registered on the next tick so the opening click itself
-      // doesn't immediately close it.
-      this.$nextTick(() => {
-        document.addEventListener("click", this.onDocumentClick);
-      });
+    },
+    openFolderPicker() {
+      // Open state lives in the store keyed by this entry's stable hash, so
+      // the frequent folder-tree re-render (which rebuilds EntryComponent
+      // instances) can never reset it. The dropdown closes ONLY on an explicit
+      // user action: choosing an item, clicking its close icon, or Escape.
+      // There is deliberately no outside-click / blur / timer close, because
+      // those were what closed it spuriously on re-render and mouse movement.
+      this.$store.commit("accounts/setOpenFolderPicker", this.entry.hash);
+      this.folderPickerIndex = -1;
     },
     closeFolderPicker() {
-      this.showFolderPicker = false;
+      if (this.$store.state.accounts.openFolderPicker === this.entry.hash) {
+        this.$store.commit("accounts/setOpenFolderPicker", "");
+      }
       this.folderPickerIndex = -1;
-      document.removeEventListener("click", this.onDocumentClick);
-    },
-    onDocumentClick() {
-      // Any click not stopped by the menu/button (both use .stop) is outside.
-      this.closeFolderPicker();
     },
     onFolderPickerKeydown(event: KeyboardEvent) {
       // Keep arrow/enter/escape inside the picker so MainBody's entry
       // navigation never steals them (which was closing the dropdown).
-      if (!this.showFolderPicker) {
+      const isOpen =
+        this.$store.state.accounts.openFolderPicker === this.entry.hash;
+      if (!isOpen) {
         if (event.key === "ArrowDown" || event.key === "ArrowUp") {
           this.openFolderPicker();
           event.preventDefault();
@@ -235,7 +288,11 @@ export default Vue.extend({
         }
         return;
       }
-      const folderList: string[] = this.$store.getters["accounts/folders"];
+      const all: string[] = this.$store.getters["accounts/folders"];
+      const q = (this.draftFolder || "").trim().toLowerCase();
+      const folderList = q
+        ? all.filter((name) => name.toLowerCase().includes(q))
+        : all;
       const count = folderList.length;
       if (event.key === "ArrowDown") {
         this.folderPickerIndex = count
@@ -409,11 +466,6 @@ export default Vue.extend({
 
       return;
     },
-  },
-  beforeDestroy() {
-    // Avoid leaking the outside-click listener if a row unmounts while its
-    // picker is open (e.g. the tree re-renders).
-    document.removeEventListener("click", this.onDocumentClick);
   },
   components: {
     IconMinusCircle,

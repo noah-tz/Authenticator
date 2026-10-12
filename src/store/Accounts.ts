@@ -47,6 +47,7 @@ export class Accounts implements Module {
         wrongPassword: false,
         initComplete: false,
         collapsedFolders: [],
+        openFolderPicker: "",
       },
       getters: {
         shouldFilter(
@@ -176,6 +177,9 @@ export class Accounts implements Module {
           } else {
             state.collapsedFolders.push(folderName);
           }
+        },
+        setOpenFolderPicker(state: AccountsState, hash: string) {
+          state.openFolderPicker = hash;
         },
         updateExport(
           state: AccountsState,

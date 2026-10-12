@@ -77,6 +77,10 @@ interface AccountsState {
   wrongPassword: boolean;
   initComplete: boolean;
   collapsedFolders: string[];
+  // hash of the entry whose folder-picker dropdown is open, or "" if none.
+  // Kept in the store (not component data) so it survives the folder tree's
+  // frequent re-renders, which rebuild EntryComponent instances.
+  openFolderPicker: string;
 }
 
 interface NotificationState {
