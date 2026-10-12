@@ -104,6 +104,24 @@ export class Accounts implements Module {
           }
           return Array.from(names).sort((a, b) => a.localeCompare(b));
         },
+        // Every collapsible path in the tree: the Ungrouped group ("") plus
+        // each folder path AND all of its ancestor prefixes (so "a/b/c" also
+        // yields "a" and "a/b"). Used by collapse-all / expand-all.
+        allFolderPaths(state: AccountsState) {
+          const paths = new Set<string>([""]);
+          for (const entry of state.entries) {
+            if (!entry.folder || entry.archived) {
+              continue;
+            }
+            const segments = entry.folder.split("/").filter((s) => s.trim());
+            let prefix = "";
+            for (const seg of segments) {
+              prefix = prefix ? prefix + "/" + seg : seg;
+              paths.add(prefix);
+            }
+          }
+          return Array.from(paths);
+        },
       },
       mutations: {
         stopFilter(state: AccountsState) {
@@ -195,6 +213,12 @@ export class Accounts implements Module {
           } else {
             state.collapsedFolders.push(folderName);
           }
+        },
+        collapseAllFolders(state: AccountsState, paths: string[]) {
+          state.collapsedFolders = [...paths];
+        },
+        expandAllFolders(state: AccountsState) {
+          state.collapsedFolders = [];
         },
         setOpenFolderPicker(state: AccountsState, hash: string) {
           state.openFolderPicker = hash;

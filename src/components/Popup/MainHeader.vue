@@ -43,6 +43,15 @@
       </div>
       <div
         class="icon"
+        id="i-folders"
+        v-bind:title="i18n.toggle_folders"
+        v-show="!style.isEditing && folders.length > 0"
+        v-on:click="toggleAllFolders()"
+      >
+        <IconExchange />
+      </div>
+      <div
+        class="icon"
         id="i-qr"
         v-bind:title="i18n.add_qr"
         v-show="!style.isEditing"
@@ -73,7 +82,7 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { getCurrentTab, okToInjectContentScript } from "../../utils";
 
 // Icons
@@ -84,6 +93,7 @@ import IconScan from "../../../svg/scan.svg";
 import IconPencil from "../../../svg/pencil.svg";
 import IconCheck from "../../../svg/check.svg";
 import IconPlus from "../../../svg/plus.svg";
+import IconExchange from "../../../svg/exchange.svg";
 import { isFirefox } from "../../browser";
 
 const computedPrototype = [
@@ -97,6 +107,8 @@ let computed = {};
 for (const module of computedPrototype) {
   Object.assign(computed, module);
 }
+
+Object.assign(computed, mapGetters("accounts", ["folders"]));
 
 export default Vue.extend({
   computed,
@@ -138,6 +150,17 @@ export default Vue.extend({
     editEntry() {
       this.$store.commit("style/toggleEdit");
       this.$store.commit("accounts/stopFilter");
+    },
+    toggleAllFolders() {
+      // If anything is currently collapsed, expand everything; otherwise
+      // collapse every folder (and the Ungrouped group).
+      const collapsed = this.$store.state.accounts.collapsedFolders as string[];
+      if (collapsed.length > 0) {
+        this.$store.commit("accounts/expandAllFolders");
+      } else {
+        const paths = this.$store.getters["accounts/allFolderPaths"];
+        this.$store.commit("accounts/collapseAllFolders", paths);
+      }
     },
     lock() {
       chrome.runtime.sendMessage({ action: "lock" }, window.close);
@@ -201,6 +224,7 @@ export default Vue.extend({
     IconPencil,
     IconCheck,
     IconPlus,
+    IconExchange,
   },
 });
 </script>

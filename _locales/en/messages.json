@@ -537,6 +537,10 @@
     "message": "Choose folder",
     "description": "Label/aria for the folder picker button."
   },
+  "toggle_folders": {
+    "message": "Expand / collapse all folders",
+    "description": "Title for the header button that expands or collapses all folders."
+  },
   "archive": {
     "message": "Archive",
     "description": "Title of the bottom-anchored archive section."
