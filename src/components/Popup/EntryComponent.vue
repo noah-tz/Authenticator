@@ -75,8 +75,8 @@
         v-bind:aria-label="i18n.folder"
         type="text"
         list="folderList"
-        v-model="entry.folder"
-        v-on:change="setFolder(entry, true)"
+        v-model="draftFolder"
+        v-on:change="commitDraftFolder()"
         v-on:click.stop
         v-on:keydown.stop
         v-on:keydown.enter="commitFolder($event)"
@@ -170,16 +170,30 @@ export default Vue.extend({
   data() {
     return {
       showFolderPicker: false,
+      // Local draft decoupled from the store. Typing updates only this, so the
+      // folder tree (built from entry.folder in the store) does NOT re-render
+      // on each keystroke and never steals focus mid-edit. Committed on
+      // blur/Enter via commitDraftFolder().
+      draftFolder: this.entry.folder || "",
     };
+  },
+  watch: {
+    // Keep the local draft in sync if the entry's folder changes from
+    // elsewhere (e.g. sync update), but never clobber what the user is typing.
+    "entry.folder"(newVal: string) {
+      if (newVal !== this.draftFolder) {
+        this.draftFolder = newVal || "";
+      }
+    },
   },
   methods: {
     toggleFolderPicker() {
       this.showFolderPicker = !this.showFolderPicker;
     },
     chooseFolder(folder: string) {
-      // Picking persists exactly like free-typing: set the model then commit.
-      this.entry.folder = folder;
-      this.setFolder(this.entry, true);
+      // Picking a path from the dropdown commits immediately.
+      this.draftFolder = folder;
+      this.commitDraftFolder();
       this.showFolderPicker = false;
     },
     noCopy(code: string) {
@@ -238,21 +252,19 @@ export default Vue.extend({
       codesEl.scrollTop = 0;
     },
     commitFolder(event: KeyboardEvent) {
-      // Enter confirms the typed path by blurring, which triggers the
-      // input's `change` handler (setFolder with commit=true). This avoids
-      // saving/normalizing on every keystroke, so the user can freely type a
-      // full nested path like "a/b/c" before it is persisted.
+      // Enter confirms the typed path by blurring, which fires `change` ->
+      // commitDraftFolder(). Typing never touches the store until this point,
+      // so the user can type a full nested path like "a/b/c" uninterrupted.
       (event.target as HTMLInputElement)?.blur();
     },
-    async setFolder(entry: OTPEntry, commit = false) {
-      // Persist only on commit (blur/Enter), never on each keystroke, so
-      // typing never steals focus mid-edit via a store-driven re-render.
-      const folder = commit ? normalizeFolderPath(entry.folder) : entry.folder;
-      if (commit) {
-        entry.folder = folder;
-      }
+    async commitDraftFolder() {
+      // Normalize the typed draft and persist it to the store exactly once,
+      // on blur/Enter. This is the only place typing reaches entry.folder.
+      const folder = normalizeFolderPath(this.draftFolder);
+      this.draftFolder = folder;
+      this.entry.folder = folder;
       this.$store.commit("accounts/setFolder", {
-        entry,
+        entry: this.entry,
         folder,
       });
       await EntryStorage.set(this.$store.state.accounts.entries);
