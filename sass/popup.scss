@@ -514,7 +514,8 @@ svg {
           color: themed("black-1");
         }
 
-        &:hover {
+        &:hover,
+        &.folderPickerActive {
           @include themify($themes) {
             background: themed("grey-3");
           }

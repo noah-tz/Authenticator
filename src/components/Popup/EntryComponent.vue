@@ -92,20 +92,29 @@
       <div
         class="folderPicker"
         role="button"
+        tabindex="0"
         v-bind:aria-label="i18n.folder_picker"
         v-bind:title="i18n.folder_picker"
         v-on:click.stop="toggleFolderPicker()"
+        v-on:keydown.stop="onFolderPickerKeydown($event)"
       >
         <IconBars />
       </div>
-      <ul class="folderPickerMenu" v-show="showFolderPicker" v-on:click.stop>
+      <ul
+        class="folderPickerMenu"
+        v-show="showFolderPicker"
+        v-on:click.stop
+        v-on:mousedown.stop
+      >
         <li v-if="folders.length === 0" class="folderPickerEmpty">
           {{ i18n.ungrouped }}
         </li>
         <li
-          v-for="name in folders"
+          v-for="(name, i) in folders"
           :key="name"
+          v-bind:class="{ folderPickerActive: i === folderPickerIndex }"
           v-on:click.stop="chooseFolder(name)"
+          v-on:mouseenter="folderPickerIndex = i"
         >
           {{ name }}
         </li>
@@ -170,6 +179,8 @@ export default Vue.extend({
   data() {
     return {
       showFolderPicker: false,
+      // Highlighted item index for keyboard navigation inside the picker.
+      folderPickerIndex: -1,
       // Local draft decoupled from the store. Typing updates only this, so the
       // folder tree (built from entry.folder in the store) does NOT re-render
       // on each keystroke and never steals focus mid-edit. Committed on
@@ -188,13 +199,73 @@ export default Vue.extend({
   },
   methods: {
     toggleFolderPicker() {
-      this.showFolderPicker = !this.showFolderPicker;
+      if (this.showFolderPicker) {
+        this.closeFolderPicker();
+      } else {
+        this.openFolderPicker();
+      }
+    },
+    openFolderPicker() {
+      this.showFolderPicker = true;
+      this.folderPickerIndex = -1;
+      // Close only on a genuine outside click, never on re-render or mouse
+      // movement. Registered on the next tick so the opening click itself
+      // doesn't immediately close it.
+      this.$nextTick(() => {
+        document.addEventListener("click", this.onDocumentClick);
+      });
+    },
+    closeFolderPicker() {
+      this.showFolderPicker = false;
+      this.folderPickerIndex = -1;
+      document.removeEventListener("click", this.onDocumentClick);
+    },
+    onDocumentClick() {
+      // Any click not stopped by the menu/button (both use .stop) is outside.
+      this.closeFolderPicker();
+    },
+    onFolderPickerKeydown(event: KeyboardEvent) {
+      // Keep arrow/enter/escape inside the picker so MainBody's entry
+      // navigation never steals them (which was closing the dropdown).
+      if (!this.showFolderPicker) {
+        if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+          this.openFolderPicker();
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        return;
+      }
+      const folderList: string[] = this.$store.getters["accounts/folders"];
+      const count = folderList.length;
+      if (event.key === "ArrowDown") {
+        this.folderPickerIndex = count
+          ? (this.folderPickerIndex + 1) % count
+          : -1;
+        event.preventDefault();
+        event.stopPropagation();
+      } else if (event.key === "ArrowUp") {
+        this.folderPickerIndex = count
+          ? (this.folderPickerIndex - 1 + count) % count
+          : -1;
+        event.preventDefault();
+        event.stopPropagation();
+      } else if (event.key === "Enter") {
+        if (this.folderPickerIndex >= 0 && this.folderPickerIndex < count) {
+          this.chooseFolder(folderList[this.folderPickerIndex]);
+        }
+        event.preventDefault();
+        event.stopPropagation();
+      } else if (event.key === "Escape") {
+        this.closeFolderPicker();
+        event.preventDefault();
+        event.stopPropagation();
+      }
     },
     chooseFolder(folder: string) {
       // Picking a path from the dropdown commits immediately.
       this.draftFolder = folder;
       this.commitDraftFolder();
-      this.showFolderPicker = false;
+      this.closeFolderPicker();
     },
     noCopy(code: string) {
       return (
@@ -338,6 +409,11 @@ export default Vue.extend({
 
       return;
     },
+  },
+  beforeDestroy() {
+    // Avoid leaking the outside-click listener if a row unmounts while its
+    // picker is open (e.g. the tree re-renders).
+    document.removeEventListener("click", this.onDocumentClick);
   },
   components: {
     IconMinusCircle,
