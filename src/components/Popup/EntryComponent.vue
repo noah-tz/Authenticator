@@ -76,10 +76,10 @@
         type="text"
         list="folderList"
         v-model="entry.folder"
-        v-on:input="setFolder(entry)"
         v-on:change="setFolder(entry, true)"
         v-on:click.stop
         v-on:keydown.stop
+        v-on:keydown.enter="commitFolder($event)"
       />
       <datalist id="folderList">
         <option v-for="name in folders" :key="name" :value="name"></option>
@@ -237,9 +237,16 @@ export default Vue.extend({
       const codesEl = document.getElementById("codes") as HTMLDivElement;
       codesEl.scrollTop = 0;
     },
+    commitFolder(event: KeyboardEvent) {
+      // Enter confirms the typed path by blurring, which triggers the
+      // input's `change` handler (setFolder with commit=true). This avoids
+      // saving/normalizing on every keystroke, so the user can freely type a
+      // full nested path like "a/b/c" before it is persisted.
+      (event.target as HTMLInputElement)?.blur();
+    },
     async setFolder(entry: OTPEntry, commit = false) {
-      // Clean up stray slashes/whitespace only when saving (blur/Enter), so
-      // nested paths like "a/" remain typable live on each input event.
+      // Persist only on commit (blur/Enter), never on each keystroke, so
+      // typing never steals focus mid-edit via a store-driven re-render.
       const folder = commit ? normalizeFolderPath(entry.folder) : entry.folder;
       if (commit) {
         entry.folder = folder;
