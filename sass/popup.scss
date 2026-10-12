@@ -459,28 +459,34 @@ svg {
     position: relative;
 
     input {
-      width: calc(80% - 35px);
+      width: calc(80% - 60px);
     }
 
-    // Picker button: a bars/list icon that sits in the reserved right gutter,
-    // clear of pin/showqr/movehandle (all absolute at right:10px/35px).
+    // Picker button: a bars/list icon that sits in the reserved right gutter.
+    // The .movehandle is absolute right:10px, full entry height, display:block
+    // in edit mode, and paints after this block in the DOM, so a picker at the
+    // content-right edge would be covered by the movehandle's clickable column
+    // (~right:10-34px). Place the picker at right:35px — past that gutter and
+    // matching the showqr right:35px convention — so it never overlaps the
+    // drag handle (nor pin at right:10px).
     .folderPicker {
       @include themify($themes) {
         @include icon-special(16px, themed("grey-1"));
       }
       @include hover-black;
       position: absolute;
-      right: 0;
+      right: 35px;
       top: -2px;
       width: 20px;
       height: 20px;
       cursor: pointer;
     }
 
-    // Dropdown of existing full folder paths.
+    // Dropdown of existing full folder paths. Align its right edge with the
+    // picker button (right:35px) rather than the entry edge under the handle.
     .folderPickerMenu {
       position: absolute;
-      right: 0;
+      right: 35px;
       top: 20px;
       z-index: 20;
       margin: 0;
