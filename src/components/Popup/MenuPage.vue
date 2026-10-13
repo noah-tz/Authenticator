@@ -57,7 +57,7 @@
         </p>
         <p
           v-bind:title="i18n.source"
-          v-on:click="openLink('https://otp.ee/sourcecode')"
+          v-on:click="openLink('https://github.com/noah-tzit/authenticator-folders')"
         >
           <span><IconCode /></span>{{ i18n.source }}
         </p>
