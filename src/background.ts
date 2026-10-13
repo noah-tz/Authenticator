@@ -9,7 +9,7 @@ import {
 import { CodeState } from "./models/otp";
 
 import { getOTPAuthPerLineFromOPTAuthMigration } from "./models/migration";
-import { isChrome, isFirefox } from "./browser";
+import { isFirefox } from "./browser";
 import { UserSettings } from "./models/settings";
 
 let contentTab: chrome.tabs.Tab | undefined;
@@ -244,15 +244,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     return;
   }
 
-  let url: string | null = null;
-
-  if (isChrome) {
-    url = "https://otp.ee/chromeissues";
-  }
-
-  if (url) {
-    chrome.tabs.create({ url, active: true });
-  }
+  const url = "https://github.com/noah-tzit/authenticator-folders";
+  chrome.tabs.create({ url, active: true });
 
   // https://stackoverflow.com/a/56483156
   return true;

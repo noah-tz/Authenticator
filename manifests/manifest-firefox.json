@@ -7,7 +7,7 @@
   "description": "__MSG_extDesc__",
   "browser_specific_settings": {
     "gecko": {
-      "id": "authenticator@mymindstorm",
+      "id": "authenticator-folders@noah-tzit",
       "strict_min_version": "126.0"
     }
   },
