@@ -55,9 +55,7 @@
             {{ i18n.no_entires }}
             <a
               href="#"
-              v-on:click="
-                openLink('https://github.com/noah-tzit/authenticator-folders')
-              "
+              v-on:click="openLink('https://github.com/noah-tz/Authenticator')"
               >{{ i18n.learn_more }}</a
             >
           </p>

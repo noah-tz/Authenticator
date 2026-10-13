@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/noah-tzit/authenticator-folders.git"
+    "url": "git+https://github.com/noah-tz/Authenticator.git"
   },
-  "author": "noah-tzit",
+  "author": "noah-tz",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/noah-tzit/authenticator-folders/issues"
+    "url": "https://github.com/noah-tz/Authenticator/issues"
   },
-  "homepage": "https://github.com/noah-tzit/authenticator-folders#readme",
+  "homepage": "https://github.com/noah-tz/Authenticator#readme",
   "devDependencies": {
     "@types/argon2-browser": "^1.18.1",
     "@types/chai": "^4.2.14",

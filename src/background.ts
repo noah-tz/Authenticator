@@ -244,7 +244,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     return;
   }
 
-  const url = "https://github.com/noah-tzit/authenticator-folders";
+  const url = "https://github.com/noah-tz/Authenticator";
   chrome.tabs.create({ url, active: true });
 
   // https://stackoverflow.com/a/56483156

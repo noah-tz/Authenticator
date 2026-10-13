@@ -27,11 +27,9 @@
       <div>
         <p id="import_info">
           {{ i18n.otp_backup_inform }}
-          <a
-            href="https://github.com/noah-tzit/authenticator-folders"
-            target="_blank"
-            >{{ i18n.otp_backup_learn }}</a
-          >
+          <a href="https://github.com/noah-tz/Authenticator" target="_blank">{{
+            i18n.otp_backup_learn
+          }}</a>
         </p>
       </div>
       <component v-bind:is="importType" />
