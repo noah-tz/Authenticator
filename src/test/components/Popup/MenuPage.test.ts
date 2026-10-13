@@ -10,7 +10,6 @@ import MenuPage from "../../../components/Popup/MenuPage.vue";
 
 import { Style } from "../../../store/Style";
 import { Accounts } from "../../../store/Accounts";
-import { Backup } from "../../../store/Backup";
 import { CurrentView } from "../../../store/CurrentView";
 import { Menu } from "../../../store/Menu";
 import { Notification } from "../../../store/Notification";
@@ -138,7 +137,6 @@ describe("MenuPage", () => {
 
           store = new Vuex.Store({
             modules: {
-              backup: await new Backup().getModule(),
               currentView: new CurrentView().getModule(),
               notification: new Notification().getModule(),
               qr: new Qr().getModule(),
