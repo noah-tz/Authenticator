@@ -15,3 +15,6 @@ view/licenses.html
 scripts/authenticator-build-key
 scripts/test-runner.js
 .agents
+.playwright-mcp
+authenticator-folders.zip
+*.zip
