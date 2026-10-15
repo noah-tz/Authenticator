@@ -223,7 +223,7 @@ const computed: {
   nonArchivedEntries: () => OTPEntry[];
   archivedEntries: () => OTPEntry[];
   folders: () => string[];
-  collapsedFolders: () => string[];
+  expandedFolders: () => string[];
   archiveCollapsed: () => boolean;
   openContextMenu: () => { hash: string; x: number; y: number };
 } = {
@@ -231,7 +231,7 @@ const computed: {
     "filter",
     "showSearch",
     "initComplete",
-    "collapsedFolders",
+    "expandedFolders",
     "archiveCollapsed",
     "openContextMenu",
   ]),
@@ -334,7 +334,7 @@ export default Vue.extend({
       this.$store.dispatch("accounts/clearFilter");
     },
     toggleFolder(name: string) {
-      this.$store.commit("accounts/toggleFolderCollapsed", name);
+      this.$store.commit("accounts/toggleFolderExpanded", name);
     },
     toggleArchive() {
       this.$store.commit("accounts/toggleArchiveCollapsed");
@@ -366,7 +366,8 @@ export default Vue.extend({
       }
     },
     isFolderCollapsed(name: string) {
-      return this.collapsedFolders.includes(name);
+      // Collapsed unless the user has explicitly expanded this path.
+      return !this.expandedFolders.includes(name);
     },
     isEntryVisible(entry: OTPEntry) {
       return (

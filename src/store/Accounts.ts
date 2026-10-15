@@ -46,7 +46,9 @@ export class Accounts implements Module {
         keys: await BrowserStorage.getKeys(),
         wrongPassword: false,
         initComplete: false,
-        collapsedFolders: [],
+        // Folders are collapsed by default; this lists the ones the user has
+        // explicitly expanded. Empty = everything closed on each popup open.
+        expandedFolders: [],
         openFolderPicker: "",
         archiveCollapsed: true,
         openContextMenu: { hash: "", x: 0, y: 0 },
@@ -206,19 +208,19 @@ export class Accounts implements Module {
         ) {
           state.entries[payload.entry.index].folder = payload.folder;
         },
-        toggleFolderCollapsed(state: AccountsState, folderName: string) {
-          const index = state.collapsedFolders.indexOf(folderName);
+        toggleFolderExpanded(state: AccountsState, folderName: string) {
+          const index = state.expandedFolders.indexOf(folderName);
           if (index > -1) {
-            state.collapsedFolders.splice(index, 1);
+            state.expandedFolders.splice(index, 1);
           } else {
-            state.collapsedFolders.push(folderName);
+            state.expandedFolders.push(folderName);
           }
         },
-        collapseAllFolders(state: AccountsState, paths: string[]) {
-          state.collapsedFolders = [...paths];
+        expandAllFolders(state: AccountsState, paths: string[]) {
+          state.expandedFolders = [...paths];
         },
-        expandAllFolders(state: AccountsState) {
-          state.collapsedFolders = [];
+        collapseAllFolders(state: AccountsState) {
+          state.expandedFolders = [];
         },
         setOpenFolderPicker(state: AccountsState, hash: string) {
           state.openFolderPicker = hash;

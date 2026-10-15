@@ -5,6 +5,7 @@ import * as sinonChai from "sinon-chai";
 
 import { EntryStorage } from "../../models/storage";
 import { OTPEntry, OTPType, OTPAlgorithm } from "../../models/otp";
+import { Encryption } from "../../models/encryption";
 
 import chrome from "sinon-chrome";
 
@@ -126,6 +127,35 @@ describe("EntryStorage folder round-trip", () => {
 
     assert.ok(stored, "stored entry should be returned");
     assert.notOk(stored?.folder);
+  });
+
+  it("preserves the folder through the backup export -> import path", async () => {
+    // Reproduces the real user flow: export to a backup file, then import it
+    // (e.g. on another machine). getExport builds the file payload; import()
+    // consumes it. Both must carry `folder`.
+    const entry = buildEntry("Work/Clients");
+
+    const exportData = EntryStorage.getExport([entry]) as {
+      [hash: string]: RawOTPStorage;
+    };
+    assert.equal(
+      exportData[entry.hash].folder,
+      "Work/Clients",
+      "exported backup payload must include the folder"
+    );
+
+    // Fresh store, as if importing on another machine.
+    store = { UserSettings: { storageLocation: "sync" } };
+    await EntryStorage.import(new Encryption("", ""), exportData);
+
+    const entries = await EntryStorage.get();
+    const imported = entries.find((e) => e.account === "user@example.com");
+    assert.ok(imported, "imported entry should exist");
+    assert.equal(
+      imported?.folder,
+      "Work/Clients",
+      "imported entry must keep its folder"
+    );
   });
 });
 

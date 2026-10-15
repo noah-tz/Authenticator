@@ -75,7 +75,8 @@ interface AccountsState {
   keys: OldKey | Key[];
   wrongPassword: boolean;
   initComplete: boolean;
-  collapsedFolders: string[];
+  // Folders the user has explicitly expanded (collapsed is the default).
+  expandedFolders: string[];
   // hash of the entry whose folder-picker dropdown is open, or "" if none.
   // Kept in the store (not component data) so it survives the folder tree's
   // frequent re-renders, which rebuild EntryComponent instances.

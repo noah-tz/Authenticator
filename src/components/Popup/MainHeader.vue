@@ -138,14 +138,14 @@ export default Vue.extend({
       this.$store.commit("accounts/stopFilter");
     },
     toggleAllFolders() {
-      // If anything is currently collapsed, expand everything; otherwise
-      // collapse every folder (and the Ungrouped group).
-      const collapsed = this.$store.state.accounts.collapsedFolders as string[];
-      if (collapsed.length > 0) {
-        this.$store.commit("accounts/expandAllFolders");
+      // If anything is currently expanded, collapse everything; otherwise
+      // expand every folder (and the Ungrouped group).
+      const expanded = this.$store.state.accounts.expandedFolders as string[];
+      if (expanded.length > 0) {
+        this.$store.commit("accounts/collapseAllFolders");
       } else {
         const paths = this.$store.getters["accounts/allFolderPaths"];
-        this.$store.commit("accounts/collapseAllFolders", paths);
+        this.$store.commit("accounts/expandAllFolders", paths);
       }
     },
     lock() {

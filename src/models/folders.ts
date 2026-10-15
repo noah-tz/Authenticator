@@ -5,7 +5,7 @@ export const FOLDER_SEPARATOR = "/";
 
 export interface FolderNode {
   name: string; // segment name
-  path: string; // full path, the collapsedFolders key
+  path: string; // full path, the expandedFolders key
   depth: number; // 0 for top-level
   children: FolderNode[];
   entries: OTPEntryInterface[]; // entries whose full path === node.path
