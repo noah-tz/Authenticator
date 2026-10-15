@@ -217,6 +217,10 @@
     "message": "Download Backup File",
     "description": "Download backup file."
   },
+  "download_backup_otpauth": {
+    "message": "Export for other apps (otpauth, no folders)",
+    "description": "Download otpauth one-line backup, which does not include folders."
+  },
   "import_backup": {
     "message": "Import Backup",
     "description": "Import backup."

@@ -14,28 +14,21 @@
       <div class="text warning" v-if="currentlyEncrypted">
         {{ i18n.phrase_incorrect_export }}
       </div>
-      <a-button-link
-        download="authenticator.txt"
-        :href="exportOneLineOtpAuthFile"
-        v-if="!unsupportedAccounts && isDataLinkSupported"
-        >{{ i18n.download_backup }}</a-button-link
-      >
-      <button
-        v-on:click="downloadBackUpOneLineOtpAuthFile()"
-        v-if="!unsupportedAccounts && !isDataLinkSupported"
-        class="button"
-      >
-        {{ i18n.download_backup }}
-      </button>
+      <!--
+        Primary backup is always the full JSON export, which preserves folders
+        and the archive flag. (The upstream default was a one-line otpauth .txt
+        that silently drops folders — kept below as a separate option for
+        exporting to other authenticator apps.)
+      -->
       <a-button-link
         download="authenticator.json"
         :href="exportFile"
-        v-if="unsupportedAccounts && isDataLinkSupported"
+        v-if="isDataLinkSupported"
         >{{ i18n.download_backup }}</a-button-link
       >
       <button
         v-on:click="downloadBackUpExportFile()"
-        v-if="unsupportedAccounts && !isDataLinkSupported"
+        v-if="!isDataLinkSupported"
         class="button"
       >
         {{ i18n.download_backup }}
@@ -52,6 +45,20 @@
         class="button"
       >
         {{ i18n.download_enc_backup }}
+      </button>
+      <!-- Standard otpauth export (no folders) for other apps. -->
+      <a-button-link
+        download="authenticator.txt"
+        :href="exportOneLineOtpAuthFile"
+        v-if="!unsupportedAccounts && isDataLinkSupported"
+        >{{ i18n.download_backup_otpauth }}</a-button-link
+      >
+      <button
+        v-on:click="downloadBackUpOneLineOtpAuthFile()"
+        v-if="!unsupportedAccounts && !isDataLinkSupported"
+        class="button"
+      >
+        {{ i18n.download_backup_otpauth }}
       </button>
     </div>
     <a-button-link href="import.html">{{ i18n.import_backup }}</a-button-link>
