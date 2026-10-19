@@ -8,7 +8,7 @@
     "description": "Extension Short Name."
   },
   "extDesc": {
-    "message": "Two-factor authentication codes in your browser, organized into nested folders with an archive.",
+    "message": "The only authenticator that organizes your 2FA codes into nested folders, with an archive. Generates two-factor codes in your browser.",
     "description": "Extension Description."
   },
   "added": {
