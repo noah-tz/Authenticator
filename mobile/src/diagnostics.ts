@@ -2,6 +2,8 @@
 // failure shows on screen instead of leaving a blank page.
 import { redact } from "../../src/models/driveApi";
 export function showStartupError(e: unknown): void {
+  // full stack in DevTools; the on-screen text below is redacted
+  console.error(e);
   const text = redact(
     e instanceof Error ? `${e.name}: ${e.message}` : String(e)
   );

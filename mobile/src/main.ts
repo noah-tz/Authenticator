@@ -2,6 +2,7 @@ import "./styles.css";
 import "./diagnostics";
 import { redact } from "../../src/models/driveApi";
 import { createSecureStore } from "./core/kvstore";
+import { isWeb } from "./core/platform";
 import { Vault, VaultCorruptError } from "./core/vault";
 import { startApp } from "./ui/app";
 import { createAuth } from "./ui/auth";
@@ -39,7 +40,19 @@ function showLoadError(e: unknown): void {
   );
 }
 
+function showDevBanner(): void {
+  const banner = h(
+    "div",
+    { class: "dev-banner", role: "note" },
+    "Browser dev mode: secrets are stored unencrypted in this browser. Use test accounts only."
+  );
+  document.body.insertBefore(banner, root);
+}
+
 async function main(): Promise<void> {
+  if (isWeb()) {
+    showDevBanner();
+  }
   const store = createSecureStore();
   const vault = new Vault(store);
   try {

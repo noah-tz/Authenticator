@@ -6,6 +6,7 @@ import {
 import { redact } from "../../../src/models/driveApi";
 import { SyncAccount } from "../../../src/models/syncCrypto";
 import { parseOtpauth } from "../core/otpauth";
+import { isWeb } from "../core/platform";
 
 export type ScanOutcome =
   | { kind: "account"; account: SyncAccount }
@@ -44,8 +45,31 @@ async function installModule(): Promise<boolean> {
   });
 }
 
+// Parses a pasted otpauth:// URI.
+export function parseOtpauthText(text: string): ScanOutcome {
+  const account = parseOtpauth(text.trim());
+  return account
+    ? { kind: "account", account }
+    : fail("This is not an otpauth:// URI for a time-based or counter-based account.");
+}
+
+// Browser dev mode: webcam scan through jsQR (lazy chunk).
+async function scanWeb(): Promise<ScanOutcome> {
+  try {
+    const { scanWithWebcam } = await import("./webScan");
+    const raw = await scanWithWebcam();
+    return raw === null ? fail("Scan cancelled.") : parseOtpauthText(raw);
+  } catch (e) {
+    console.error(e);
+    return fail("Webcam unavailable. Paste the otpauth:// URI or enter the account manually.");
+  }
+}
+
 // Opens the scanner and parses the first QR code as an otpauth:// URI.
 export async function scanOtpauth(): Promise<ScanOutcome> {
+  if (isWeb()) {
+    return scanWeb();
+  }
   try {
     const { supported } = await BarcodeScanner.isSupported();
     if (!supported) {

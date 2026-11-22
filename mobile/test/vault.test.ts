@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { createSecureStore, MemoryStore } from "../src/core/kvstore";
+import { createSecureStore, InsecureLocalStorageStore, MemoryStore } from "../src/core/kvstore";
 import { Vault, VAULT_KEY, VaultCorruptError } from "../src/core/vault";
 import { makeAccount } from "./helpers";
 
@@ -77,21 +77,25 @@ describe("Vault", () => {
 });
 
 describe("createSecureStore", () => {
-  it("returns an in-memory store off-device and never touches localStorage", async () => {
-    const ls = {
-      getItem: vi.fn(),
-      setItem: vi.fn(),
-      removeItem: vi.fn(),
-    };
-    vi.stubGlobal("localStorage", ls);
+  it("uses the labelled insecure localStorage adapter in a browser", async () => {
+    const data = new Map<string, string>();
+    vi.stubGlobal("localStorage", {
+      getItem: (k: string) => data.get(k) ?? null,
+      setItem: (k: string, v: string) => void data.set(k, v),
+      removeItem: (k: string) => void data.delete(k),
+    });
+    const store = createSecureStore();
+    expect(store).toBeInstanceOf(InsecureLocalStorageStore);
+    await store.set("k", "v");
+    expect(await store.get("k")).toBe("v");
+    expect([...data.keys()]).toEqual(["insecure-dev:k"]);
+    await store.remove("k");
+    expect(await store.get("k")).toBeNull();
+  });
+  it("falls back to memory when there is no localStorage", async () => {
     const store = createSecureStore();
     expect(store).toBeInstanceOf(MemoryStore);
     await store.set("k", "v");
     expect(await store.get("k")).toBe("v");
-    await store.remove("k");
-    expect(await store.get("k")).toBeNull();
-    expect(ls.getItem).not.toHaveBeenCalled();
-    expect(ls.setItem).not.toHaveBeenCalled();
-    expect(ls.removeItem).not.toHaveBeenCalled();
   });
 });

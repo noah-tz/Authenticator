@@ -20,11 +20,27 @@ export class MemoryStore implements KeyValueStore {
   }
 }
 
-// Android Keystore-backed storage on the device. Off-device (browser, tests)
-// secrets are kept in memory only, never in localStorage.
+// Browser dev storage. NOT secure: values sit unencrypted in localStorage.
+// Only used by `npm run dev` (web platform), never on the device.
+export class InsecureLocalStorageStore implements KeyValueStore {
+  private static PREFIX = "insecure-dev:";
+  async get(key: string): Promise<string | null> {
+    return localStorage.getItem(InsecureLocalStorageStore.PREFIX + key);
+  }
+  async set(key: string, value: string): Promise<void> {
+    localStorage.setItem(InsecureLocalStorageStore.PREFIX + key, value);
+  }
+  async remove(key: string): Promise<void> {
+    localStorage.removeItem(InsecureLocalStorageStore.PREFIX + key);
+  }
+}
+// Android Keystore-backed storage on the device. In a browser (dev mode) the
+// insecure localStorage adapter is used; with no localStorage (tests) memory.
 export function createSecureStore(): KeyValueStore {
   if (!Capacitor.isNativePlatform()) {
-    return new MemoryStore();
+    return typeof localStorage !== "undefined"
+      ? new InsecureLocalStorageStore()
+      : new MemoryStore();
   }
   return new SecureStoreImpl();
 }

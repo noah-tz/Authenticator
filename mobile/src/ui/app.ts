@@ -1,8 +1,8 @@
-import { Clipboard } from "@capacitor/clipboard";
 import { FolderNode, normalizeFolderPath } from "../../../src/models/folders";
 import { redact } from "../../../src/models/driveApi";
 import { SyncAccount } from "../../../src/models/syncCrypto";
 import { normalizeSecret } from "../../../src/models/syncDiff";
+import { copyText } from "../core/clipboard";
 import { DriveAuthHandle } from "../core/driveAuth";
 import { t } from "../core/i18n";
 import {
@@ -14,7 +14,8 @@ import {
 import { Vault } from "../core/vault";
 import { buildView, createExpandedState } from "../core/viewModel";
 import { h, mount } from "./dom";
-import { scanOtpauth } from "./scan";
+import { isWeb } from "../core/platform";
+import { parseOtpauthText, scanOtpauth } from "./scan";
 import { openSync } from "./sync";
 
 export const APP_VERSION = "1.0.0";
@@ -125,7 +126,7 @@ export function startApp(deps: AppDeps): void {
 
   async function copy(code: string): Promise<void> {
     try {
-      await Clipboard.write({ string: code.replace(/\s/g, "") });
+      await copyText(code.replace(/\s/g, ""));
       toast(t("copied"));
     } catch (e) {
       toast("Could not copy");
@@ -155,7 +156,7 @@ export function startApp(deps: AppDeps): void {
         class: "main",
         onclick: () => void copy(code.textContent || ""),
       },
-      h("span", { class: "name" }, [a.issuer, a.account].filter(Boolean).join(" ֲ· ") || a.type),
+      h("span", { class: "name" }, [a.issuer, a.account].filter(Boolean).join(" · ") || a.type),
       code,
       bar ? h("div", { class: "bar" }, bar) : null
     );
@@ -188,7 +189,7 @@ export function startApp(deps: AppDeps): void {
             render();
           },
         },
-        "ג‹®"
+        "⋮"
       )
     );
   }
@@ -208,7 +209,7 @@ export function startApp(deps: AppDeps): void {
             render();
           },
         },
-        open ? "ג–¾" : "ג–¸",
+        open ? "▾" : "▸",
         ` ${node.name}`
       ),
       open
@@ -252,7 +253,7 @@ export function startApp(deps: AppDeps): void {
           "aria-label": "Expand all",
           onclick: () => setAllFolders(true, paths),
         },
-        "ג"
+        "⊞"
       ),
       h(
         "button",
@@ -261,12 +262,12 @@ export function startApp(deps: AppDeps): void {
           "aria-label": "Collapse all",
           onclick: () => setAllFolders(false, paths),
         },
-        "ג"
+        "⊟"
       ),
       h(
         "button",
         { class: "icon", "aria-label": t("add_code"), onclick: () => void go("add") },
-        "ן¼‹"
+        "＋"
       ),
       h(
         "button",
@@ -283,12 +284,12 @@ export function startApp(deps: AppDeps): void {
             });
           },
         },
-        "ג³"
+        "⟳"
       ),
       h(
         "button",
         { class: "icon", "aria-label": "About", onclick: () => void go("about") },
-        "ג“˜"
+        "ⓘ"
       )
     );
     const content = h("div", { class: "content" });
@@ -311,7 +312,7 @@ export function startApp(deps: AppDeps): void {
               render();
             },
           },
-          archiveOpen ? "ג–¾" : "ג–¸",
+          archiveOpen ? "▾" : "▸",
           ` ${t("archive")} (${view.archived.length})`
         )
       );
@@ -456,7 +457,7 @@ export function startApp(deps: AppDeps): void {
       h(
         "button",
         { class: "icon", "aria-label": t("sync_back"), onclick: () => void go("list") },
-        "ג†"
+        "←"
       ),
       h("h1", null, title)
     );
@@ -477,6 +478,12 @@ export function startApp(deps: AppDeps): void {
           },
           t("add_qr")
         ),
+        isWeb()
+          ? [
+              ...fieldInput("f-uri", "Paste otpauth:// URI", "", { autocapitalize: "off", spellcheck: "false" }),
+              h("button", { class: "block", onclick: () => void addFromUri() }, "Add from URI"),
+            ]
+          : null,
         h("div", { class: "text muted" }, t("add_secret")),
         formError ? h("div", { class: "text warning", role: "alert" }, formError) : null,
         ...fieldInput("f-issuer", t("issuer")),
@@ -562,7 +569,12 @@ export function startApp(deps: AppDeps): void {
   }
 
   async function scan(): Promise<void> {
-    const result = await scanOtpauth();
+    await addScanned(await scanOtpauth());
+  }
+  async function addFromUri(): Promise<void> {
+    await addScanned(parseOtpauthText(val("f-uri")));
+  }
+  async function addScanned(result: Awaited<ReturnType<typeof scanOtpauth>>): Promise<void> {
     if (result.kind === "error") {
       formError = result.message;
       await keepForm();

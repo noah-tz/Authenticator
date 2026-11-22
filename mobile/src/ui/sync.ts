@@ -287,7 +287,7 @@ export function openSync(deps: SyncDeps): void {
             deps.exit();
           },
         },
-        "ג†"
+        "←"
       ),
       h("h1", null, t("sync_title"))
     );

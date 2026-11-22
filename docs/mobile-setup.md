@@ -64,6 +64,16 @@ There is no "Enable custom URI scheme" option on Android clients and none is nee
 - Sign out calls `revokeAccess`, which removes the app's Drive access, so the next sync asks for consent again. Nothing is stored on the phone for sign-in.
 - Code: `mobile/src/core/driveAuth.ts`, `mobile/src/ui/auth.ts`, `mobile/android/app/src/main/java/il/co/dinains/authenticatorfolders/GoogleAuthorizationPlugin.java`.
 
+## Run in the browser
+
+Start the Vite dev server from the `mobile` folder with the `dev` npm script (`npm run` followed by `dev`), then open http://localhost:5173 in Chrome. The port is fixed (`strictPort`): if it is taken the server stops instead of picking another, because the Google OAuth origin must match. Edits hot-reload. Startup and unhandled errors are also written to the DevTools console with full stacks.
+
+**Warning:** in the browser, secrets are stored unencrypted in `localStorage` (keys prefixed `insecure-dev:`). A banner says so. Use test accounts only. This data is separate from the phone's.
+
+Works on web: list, folders, manual add, pasting an `otpauth://` URI, webcam QR scan (needs camera permission), edit, move, archive, remove, copy code (browser clipboard), and Google Drive sync through Google Identity Services (web OAuth client in project `authenticator-folders`, scope `drive.appdata`, so it sees the same sync file as the extension and the phone). Sign-in opens a Google popup; allow popups for localhost.
+
+Native-only (not available in the browser): Android Keystore storage, the MLKit scanner, the native Google authorization plugin. The Android build is unchanged and keeps its strict Content-Security-Policy; only the dev server relaxes it.
+
 ## Hand-test checklist (phone)
 
 1. Install the debug APK; the app opens, the list is empty, the warranty text is visible in Sync.
