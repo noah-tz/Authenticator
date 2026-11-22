@@ -43,7 +43,7 @@
   "permissions": ["activeTab", "storage", "alarms", "scripting"],
   "optional_permissions": ["clipboardWrite", "contextMenus", "identity"],
   "oauth2": {
-    "client_id": "YOUR_CLIENT_ID.apps.googleusercontent.com",
+    "client_id": "952154291785-57rtr17aa5ob9isisr6d87cuga1scesf.apps.googleusercontent.com",
     "scopes": ["https://www.googleapis.com/auth/drive.appdata"]
   },
   "optional_host_permissions": ["https://www.google.com/"],
