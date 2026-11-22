@@ -1,0 +1,48 @@
+{
+  "passphrase": "pässｗord１ﬁ",
+  "payload": {
+    "version": 1,
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "accounts": [
+      {
+        "type": "totp",
+        "secret": "JBSWY3DPEHPK3PXP",
+        "issuer": "GitHub",
+        "account": "alice@example.com",
+        "folder": "Work/Dev",
+        "archived": false,
+        "pinned": true,
+        "digits": 6,
+        "period": 30,
+        "algorithm": "SHA1",
+        "counter": 0
+      },
+      {
+        "type": "totp",
+        "secret": "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ",
+        "issuer": "Old Service",
+        "account": "bob",
+        "folder": "",
+        "archived": true,
+        "pinned": false,
+        "digits": 8,
+        "period": 30,
+        "algorithm": "SHA1",
+        "counter": 0
+      },
+      {
+        "type": "totp",
+        "secret": "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZA",
+        "issuer": "Bank",
+        "account": "carol",
+        "folder": "Personal",
+        "archived": false,
+        "pinned": false,
+        "digits": 6,
+        "period": 60,
+        "algorithm": "SHA256",
+        "counter": 0
+      }
+    ]
+  }
+}

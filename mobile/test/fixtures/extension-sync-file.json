@@ -1,0 +1,19 @@
+{
+  "format": "authenticator-folders-sync",
+  "version": 1,
+  "kdf": {
+    "name": "argon2id",
+    "version": 19,
+    "timeCost": 2,
+    "memoryKiB": 19456,
+    "parallelism": 1,
+    "hashLength": 32,
+    "salt": "UUW8tAoHYK10IYtiEVBiMQ=="
+  },
+  "cipher": {
+    "name": "AES-256-GCM",
+    "iv": "veAQ4ZtBRD5sew8Q",
+    "tagLength": 128
+  },
+  "ciphertext": "2INxqMv1r0Ed0HePyxkGZSHC0tFjPtl6fJQl7lQvBzSNpbSuzoYSXXASPMdOWAflboAd0qFJh5dhe3m+e1fp91sTDmJG2orOBtuTcYyUO+Izm0LfUD4rwkUKD69wO+0p70TSKPL7aoGV2Dkiz8ESPK7ix8RRU6dZjkPOl91BYHuxe4npnYYXSgTU/FikSkzpy1MeEEQGJ7INyRYbZO8TC70PS57nT4Nb6AKQ0IMCsRdg2jmrwlSFTCmLtJeEdj9bciHsAOhPdcAHWLGO4s3QDpFz2g3EuAn2Tw66lS98wCB+InpXGP2GXzn8YbQ1cOjaqXm4K6uxXH0+9ALoMpECBBI/QPu+63y2uhvi8tbwQFjCUm0YXgqSO8ySchPXs3Vxz1Sd2CMhKiSlSu5mS6sXay8MAXCBVDIZk++M7hZlIxUY3XKS2WztcYYVeQDuH64MUZ2XUfR+6VAjPgHqer5K2teG5Smryk9n7ga/XDBPbR/QvkuZhUjcAadqOW5zXNAXIIHhE1a2sC75e989BYFCsOVMdlhjsJr7mKZLMO5Y5r1BXnOShNYU8KD6zm7dc4Y1Ei9dmb+OnX0AiXxs53KoL1tbqF19w9e8lg0yHn/dCpn+7h0WihxaJtqGC1wHQnR8x9giNzlljbRzXXceDKhSA/snFvwLb0gXh56iaCjKZqpuL9uPRT0VrTu2J3VaukITRcgytYJmpJJokCoTNvx0sgdQvgnKIavhtna4U05drggrS3Lx++GMe7wC6WQ7ANvARlVlo2C/Kh31fRl1PVc1kEgA2wfFraKB1BvHa3BOKFU7WIJBBUL1anOmIqp9mXyKxwpNenC2H4K/+zcXRg+rNAIFIz6Qo0mAlW+vuS1t/BmYKIy+6+2DRJeeFp6tJE3v8ljmewLDVlSswRWNilUuiQomKDqiunRj"
+}
