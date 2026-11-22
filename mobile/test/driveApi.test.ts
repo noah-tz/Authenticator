@@ -3,6 +3,7 @@ import {
   createDriveApi,
   DriveAuth,
   DriveError,
+  redact,
   SYNC_FILE_NAME,
 } from "../../src/models/driveApi";
 
@@ -142,5 +143,17 @@ describe("createDriveApi", () => {
     expect(url).toContain("/abc?uploadType=media");
     expect(init.method).toBe("PATCH");
     expect(init.body).toBe("text");
+  });
+});
+describe("redact", () => {
+  it("removes refresh tokens, auth codes and keeps other text", () => {
+    expect(redact('{"refresh_token":"1//0gAbC-d_e"}')).not.toContain("0gAbC");
+    const url = redact("GET /cb?state=x&code=4/0AbCdEf-gHiJk_l&scope=a");
+    expect(url).not.toContain("0AbCdEf");
+    expect(url).toContain("state=x");
+    expect(url).toContain("scope=a");
+    expect(redact("auth failed 4/0AbCdEf-gHiJk_l now")).toBe("auth failed [code] now");
+    expect(redact("ya29.a0Abc Bearer xyz")).toBe("[token] Bearer [token]");
+    expect(redact("see https://example.com/v1//x and 4/5")).toContain("https://example.com/v1//x");
   });
 });

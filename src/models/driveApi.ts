@@ -19,6 +19,9 @@ export function redact(text: string): string {
   return text
     .replace(/ya29\.[\w.-]+/g, "[token]")
     .replace(/Bearer\s+\S+/gi, "Bearer [token]")
+    .replace(/(?<![\w/])1\/\/[\w-]+/g, "[token]")
+    .replace(/\bcode=[^&\s"'<>]+/gi, "code=[code]")
+    .replace(/(?<![\w/])4\/[\w-]{10,}/g, "[code]")
     .slice(0, 300);
 }
 export class DriveError extends Error {

@@ -595,7 +595,7 @@
     "message": "Add only what is missing"
   },
   "sync_choice_overwrite": {
-    "message": "Overwrite changed accounts"
+    "message": "Overwrite changed accounts on the side being changed"
   },
   "sync_choice_mirror": {
     "message": "Delete what is missing"
