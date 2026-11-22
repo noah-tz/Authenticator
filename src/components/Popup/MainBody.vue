@@ -343,7 +343,8 @@ export default Vue.extend({
     }) {
       const next = { ...this.$store.state.accounts.ratingPrompt, ...patch };
       this.$store.commit("accounts/setRatingPrompt", next);
-      await RatingPromptStorage.set(next);
+      const saved = await RatingPromptStorage.set(next);
+      this.$store.commit("accounts/setRatingPrompt", saved);
     },
     async rateNow() {
       window.open(RATING_REVIEWS_URL, "_blank");

@@ -18,6 +18,8 @@ interface UserSettingsData {
   smartFilter?: boolean;
   theme?: string;
   zoom?: number;
+  ratingNeverAsk?: boolean;
+  ratingSnoozedUntil?: number;
 }
 
 // Maybe we can have a better way to define this
