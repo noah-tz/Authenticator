@@ -51,11 +51,51 @@ An Android app (Capacitor 8 + plain TypeScript, in `mobile/`) that shows TOTP/HO
    - Enable Developer options and USB debugging, connect the phone, then `adb install -r app-debug.apk`; or
    - copy the APK to the phone and open it, allowing installs from that source.
 
+## Release build (GitHub Releases)
+The app is distributed as a signed APK on GitHub Releases (users can follow it with Obtainium). Every release must be signed with the same key, or Android refuses to install it over an existing install.
+
+### Signing key
+- Keystore: `%USERPROFILE%\AuthenticatorFolders-signing\release.jks` (PKCS12, RSA 4096, alias `authenticator-folders`, DN `CN=Authenticator Folders, O=noah-tz`), outside the repo.
+- Password, alias and fingerprints: `%USERPROFILE%\AuthenticatorFolders-signing\README-BACKUP.txt`.
+- Release certificate SHA-1: `DC:9A:BC:6C:E0:70:97:65:FB:71:12:36:DE:10:D0:07:4D:3C:72:57`
+- Release certificate SHA-256: `CB:C5:76:AF:59:B5:E0:BF:47:2A:6F:BB:76:C5:B5:A1:51:45:D4:56:C3:A0:35:75:92:A3:A7:9F:6A:4B:8E:AF`
+
+**Back up `release.jks` and `README-BACKUP.txt` (for example in a password manager).** If the keystore or its password is lost, no future update can be installed over existing installs. Users would have to uninstall, which deletes the accounts stored on the phone.
+
+Gradle reads the signing settings from `mobile\android\keystore.properties`, which is git-ignored (as are `*.jks` and `*.keystore`). Create it on a new machine:
+```properties
+storeFile=C:/Users/<you>/AuthenticatorFolders-signing/release.jks
+storePassword=<password from README-BACKUP.txt>
+keyAlias=authenticator-folders
+keyPassword=<password from README-BACKUP.txt>
+```
+Without this file `assembleRelease` still runs but writes an unsigned `app-release-unsigned.apk` (with a warning). Debug builds do not use it.
+
+The release build type sets `debuggable false`. Capacitor turns WebView debugging on only for debuggable builds, so it is off in release. Minification stays off (`minifyEnabled false`, the Capacitor default).
+
+### Version numbers
+Both live in `mobile\android\app\build.gradle` under `defaultConfig`:
+- `versionCode`: an integer that must grow by at least 1 for every release, or Android and Obtainium will not offer the update.
+- `versionName`: the version shown to users, for example `1.0.1`. Use the same number in the GitHub release tag and the APK name.
+
+### Steps
+```powershell
+cd mobile
+npm run typecheck
+npm test
+npm run build
+npx cap sync android
+cd android
+.\gradlew.bat assembleRelease
+& "$env:ANDROID_HOME\build-tools\36.0.0\apksigner.bat" verify --print-certs app\build\outputs\apk\release\app-release.apk
+```
+The SHA-1 printed by apksigner must match the release SHA-1 above. Rename `app\build\outputs\apk\release\app-release.apk` to `AuthenticatorFolders-<versionName>.apk` and attach it to the GitHub release, with notes in `docs/release-notes/`.
+
 ## Google Cloud setup (needed for Drive sync)
 Use the same project as the extension (`authenticator-folders`) so the app sees the same app-data file. The Drive API, the consent screen (External, In production) and the `drive.appdata` scope are already set up.
 The only extra setup is an **Android** OAuth client with the package name and the signing SHA-1. Its client ID is **not** copied into the code: Google matches the app by package name and SHA-1.
 1. Debug build (done): client of type Android, package `il.co.dinains.authenticatorfolders`, debug SHA-1 `50:8D:CE:24:B8:07:DA:A0:76:1E:9E:94:CD:C6:F1:7B:93:86:95:70`. Get a SHA-1 yourself with `cd mobile\android; .\gradlew.bat signingReport`.
-2. **Release build**: create another Android client (Credentials > Create credentials > OAuth client ID > Android) with the same package name and the SHA-1 of the release keystore. If the app is published on Google Play with Play App Signing, also add the SHA-1 of the app signing key shown in Play Console > App integrity. Without it, sign-in fails on release builds.
+2. **Release build**: create another Android client (Credentials > Create credentials > OAuth client ID > Android) with the same package name and the SHA-1 of the release keystore (`DC:9A:BC:6C:E0:70:97:65:FB:71:12:36:DE:10:D0:07:4D:3C:72:57`, see Release build above). If the app is published on Google Play with Play App Signing, also add the SHA-1 of the app signing key shown in Play Console > App integrity. Without it, sign-in fails on release builds.
 3. Changes can take a few hours to apply. Nothing changes on the consent screen.
 There is no "Enable custom URI scheme" option on Android clients and none is needed.
 ### How sign-in works

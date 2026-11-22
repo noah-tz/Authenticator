@@ -18,3 +18,7 @@ scripts/test-runner.js
 .playwright-mcp
 authenticator-folders.zip
 *.zip
+release-artifacts/
+
+*.jks
+*.keystore

@@ -9,3 +9,6 @@ android/local.properties
 !/build/
 !/src/chrome/
 !/test/chrome-*.test.ts
+# release signing secrets (see docs/mobile-setup.md)
+android/keystore.properties
+
