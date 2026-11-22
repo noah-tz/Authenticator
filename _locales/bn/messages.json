@@ -1,14 +1,14 @@
 {
   "extName": {
-    "message": "অথেন্টিকেটর",
+    "message": "Authenticator Folders - 2FA with Android Sync",
     "description": "Extension Name."
   },
   "extShortName": {
-    "message": "অথেন্টিকেটর",
+    "message": "Auth Folders",
     "description": "Extension Short Name."
   },
   "extDesc": {
-    "message": "অথেন্টিকেটর আপনার ব্রাউজারে টু-ফ্যাক্টর অথেন্টিকেশন কোড উৎপন্ন করে।",
+    "message": "2FA codes in nested folders with an archive. Encrypted sync with your Android phone through your own Google Drive.",
     "description": "Extension Description."
   },
   "added": {

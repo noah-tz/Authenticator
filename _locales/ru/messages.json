@@ -1,14 +1,14 @@
 {
   "extName": {
-    "message": "Аутентификатор",
+    "message": "Authenticator Folders - 2FA with Android Sync",
     "description": "Extension Name."
   },
   "extShortName": {
-    "message": "Аутентификатор",
+    "message": "Auth Folders",
     "description": "Extension Short Name."
   },
   "extDesc": {
-    "message": "Аутентификатор генерирует коды двухфакторной аутентификации в вашем браузере.",
+    "message": "2FA codes in nested folders with an archive. Encrypted sync with your Android phone through your own Google Drive.",
     "description": "Extension Description."
   },
   "added": {

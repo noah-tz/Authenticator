@@ -1,14 +1,14 @@
 {
   "extName": {
-    "message": "인증 도구",
+    "message": "Authenticator Folders - 2FA with Android Sync",
     "description": "Extension Name."
   },
   "extShortName": {
-    "message": "인증 도구",
+    "message": "Auth Folders",
     "description": "Extension Short Name."
   },
   "extDesc": {
-    "message": "인증 도구는 브라우저에서 2단계 인증 코드를 생성합니다.",
+    "message": "2FA codes in nested folders with an archive. Encrypted sync with your Android phone through your own Google Drive.",
     "description": "Extension Description."
   },
   "added": {

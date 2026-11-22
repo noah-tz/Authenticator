@@ -1,14 +1,14 @@
 {
   "extName": {
-    "message": "Kimlik Doğrulayıcı",
+    "message": "Authenticator Folders - 2FA with Android Sync",
     "description": "Extension Name."
   },
   "extShortName": {
-    "message": "Kimlik Doğrulayıcı",
+    "message": "Auth Folders",
     "description": "Extension Short Name."
   },
   "extDesc": {
-    "message": "Kimlik Doğrulayıcı, tarayıcınızda iki faktörlü kimlik doğrulama kodları oluşturur.",
+    "message": "2FA codes in nested folders with an archive. Encrypted sync with your Android phone through your own Google Drive.",
     "description": "Extension Description."
   },
   "added": {
