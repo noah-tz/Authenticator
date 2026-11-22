@@ -1,3 +1,4 @@
+import { SecureStorage } from "@aparajita/capacitor-secure-storage";
 import { Capacitor } from "@capacitor/core";
 
 export interface KeyValueStore {
@@ -29,31 +30,27 @@ export function createSecureStore(): KeyValueStore {
 }
 
 class SecureStoreImpl implements KeyValueStore {
-  private plugin?: Promise<
-    typeof import("@aparajita/capacitor-secure-storage")["SecureStorage"]
-  >;
-  private load() {
-    if (!this.plugin) {
-      this.plugin = import("@aparajita/capacitor-secure-storage").then(
-        async (m) => {
-          await m.SecureStorage.setSynchronize(false);
-          return m.SecureStorage;
-        }
-      );
+  // Capacitor plugin objects are Proxies: reading `.then` is treated as a
+  // native call. Never return, await or resolve the plugin itself; only
+  // await its method calls. The init promise therefore resolves to void.
+  private ready?: Promise<void>;
+  private init(): Promise<void> {
+    if (!this.ready) {
+      this.ready = SecureStorage.setSynchronize(false).then(() => undefined);
     }
-    return this.plugin;
+    return this.ready;
   }
   async get(key: string): Promise<string | null> {
-    const storage = await this.load();
-    const value = await storage.get(key, false, false);
+    await this.init();
+    const value = await SecureStorage.get(key, false, false);
     return typeof value === "string" ? value : null;
   }
   async set(key: string, value: string): Promise<void> {
-    const storage = await this.load();
-    await storage.set(key, value, false, false);
+    await this.init();
+    await SecureStorage.set(key, value, false, false);
   }
   async remove(key: string): Promise<void> {
-    const storage = await this.load();
-    await storage.remove(key, false);
+    await this.init();
+    await SecureStorage.remove(key, false);
   }
 }
