@@ -7,6 +7,7 @@ import { getSiteName, getMatchedEntriesHash } from "../utils";
 import { isChromium } from "../browser";
 import { StorageLocation, UserSettings } from "../models/settings";
 import { DataType } from "../models/otp";
+import { RatingPromptStorage, RatingPromptState } from "../models/ratingPrompt";
 
 const LegacyEncryption = "LegacyEncryption";
 export class Accounts implements Module {
@@ -52,6 +53,7 @@ export class Accounts implements Module {
         openFolderPicker: "",
         archiveCollapsed: true,
         openContextMenu: { hash: "", x: 0, y: 0 },
+        ratingPrompt: await RatingPromptStorage.load(Date.now()),
       },
       getters: {
         shouldFilter(
@@ -271,6 +273,9 @@ export class Accounts implements Module {
         },
         initComplete(state: AccountsState) {
           state.initComplete = true;
+        },
+        setRatingPrompt(state: AccountsState, payload: RatingPromptState) {
+          state.ratingPrompt = payload;
         },
       },
       actions: {

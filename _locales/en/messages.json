@@ -502,5 +502,21 @@
   "archive_empty": {
     "message": "No archived accounts.",
     "description": "Hint shown when the archive section is empty."
+  },
+  "rating_prompt_text": {
+    "message": "Enjoying Authenticator Folders? Please consider leaving a review.",
+    "description": "One-time banner asking the user to rate the extension."
+  },
+  "rating_prompt_rate": {
+    "message": "Rate",
+    "description": "Rating banner button that opens the store reviews page."
+  },
+  "rating_prompt_later": {
+    "message": "Remind me later",
+    "description": "Rating banner button that hides the banner for 30 days."
+  },
+  "rating_prompt_no": {
+    "message": "No thanks",
+    "description": "Rating banner button that hides the banner permanently."
   }
 }

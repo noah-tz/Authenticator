@@ -1619,3 +1619,23 @@ svg {
     }
   }
 }
+
+.ratingPrompt {
+  padding: 8px 10px;
+  font-size: 13px;
+  @include themify($themes) {
+    border-bottom: 1px solid themed("grey-2");
+    background: themed("grey-background");
+  }
+
+  .ratingPromptActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+
+    button {
+      cursor: pointer;
+    }
+  }
+}

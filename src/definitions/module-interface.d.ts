@@ -89,6 +89,9 @@ interface AccountsState {
   // the store (not component data) so the folder tree's frequent re-renders
   // cannot dismiss it — same pattern as openFolderPicker.
   openContextMenu: { hash: string; x: number; y: number };
+  // Per-device rating prompt state (chrome.storage.local), mirrored here so
+  // the banner survives re-renders.
+  ratingPrompt: import("../models/ratingPrompt").RatingPromptState;
 }
 
 interface NotificationState {

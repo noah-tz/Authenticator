@@ -9,6 +9,21 @@
       the Archive section below stays pinned to the bottom of #codes.
     -->
     <div class="codesScroll">
+      <!-- One-time rating request; visibility derived from store + storage. -->
+      <div class="ratingPrompt" v-if="showRatingPrompt">
+        <div class="ratingPromptText">{{ i18n.rating_prompt_text }}</div>
+        <div class="ratingPromptActions">
+          <button type="button" v-on:click="rateNow()">
+            {{ i18n.rating_prompt_rate }}
+          </button>
+          <button type="button" v-on:click="remindLater()">
+            {{ i18n.rating_prompt_later }}
+          </button>
+          <button type="button" v-on:click="noThanks()">
+            {{ i18n.rating_prompt_no }}
+          </button>
+        </div>
+      </div>
       <!-- Filter -->
       <div class="under-header" id="filter" v-on:click="clearFilter()">
         {{ i18n.show_all_entries }}
@@ -204,6 +219,12 @@ import { mapState, mapGetters } from "vuex";
 import { OTPEntry } from "../../models/otp";
 import { EntryStorage } from "../../models/storage";
 import { buildFolderTree, FolderNode } from "../../models/folders";
+import {
+  RatingPromptStorage,
+  RATING_REVIEWS_URL,
+  RATING_PROMPT_DELAY_MS,
+  shouldShowRatingPrompt,
+} from "../../models/ratingPrompt";
 
 import EntryComponent from "./EntryComponent.vue";
 
@@ -265,6 +286,17 @@ export default Vue.extend({
         this.nonArchivedEntries
       ) as FolderNode[];
     },
+    // Never while editing, on the password/loading screens, or with no accounts.
+    showRatingPrompt(): boolean {
+      const state = this.$store.state;
+      return (
+        !state.style.style.isEditing &&
+        state.currentView.info !== "EnterPasswordPage" &&
+        state.currentView.info !== "LoadingPage" &&
+        state.accounts.entries.length > 0 &&
+        shouldShowRatingPrompt(Date.now(), state.accounts.ratingPrompt)
+      );
+    },
     // The entry targeted by the open context menu, resolved from its hash.
     contextMenuEntry(): OTPEntry | undefined {
       if (!this.openContextMenu.hash) {
@@ -305,6 +337,26 @@ export default Vue.extend({
     },
   },
   methods: {
+    async saveRatingPrompt(patch: {
+      snoozedUntil?: number;
+      dismissed?: boolean;
+    }) {
+      const next = { ...this.$store.state.accounts.ratingPrompt, ...patch };
+      this.$store.commit("accounts/setRatingPrompt", next);
+      await RatingPromptStorage.set(next);
+    },
+    async rateNow() {
+      window.open(RATING_REVIEWS_URL, "_blank");
+      await this.saveRatingPrompt({ dismissed: true });
+    },
+    async remindLater() {
+      await this.saveRatingPrompt({
+        snoozedUntil: Date.now() + RATING_PROMPT_DELAY_MS,
+      });
+    },
+    async noThanks() {
+      await this.saveRatingPrompt({ dismissed: true });
+    },
     openLink(url: string) {
       window.open(url, "_blank");
       return;
