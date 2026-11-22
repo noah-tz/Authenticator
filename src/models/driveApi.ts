@@ -1,6 +1,6 @@
 // Minimal Google Drive client for the app-data folder only.
-// The OAuth client ID is read from the manifest (oauth2.client_id); that is
-// the only place it is stored.
+// Platform-neutral: tokens come from a DriveAuth adapter supplied by the
+// caller (Chrome identity on the extension, PKCE on mobile).
 
 export const SYNC_FILE_NAME = "authenticator-folders-sync.json";
 export const DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.appdata";

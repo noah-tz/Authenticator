@@ -1,4 +1,5 @@
 import "./styles.css";
+import { redact } from "../../src/models/driveApi";
 import { createSecureStore } from "./core/kvstore";
 import { Vault, VaultCorruptError } from "./core/vault";
 import { startApp } from "./ui/app";
@@ -25,7 +26,7 @@ function showLoadError(e: unknown): void {
       h(
         "div",
         { class: "text muted" },
-        e instanceof Error ? e.message : String(e)
+        redact(e instanceof Error ? e.message : String(e))
       ),
       h(
         "button",

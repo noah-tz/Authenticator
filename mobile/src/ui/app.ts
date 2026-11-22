@@ -1,5 +1,6 @@
 import { Clipboard } from "@capacitor/clipboard";
 import { FolderNode, normalizeFolderPath } from "../../../src/models/folders";
+import { redact } from "../../../src/models/driveApi";
 import { SyncAccount } from "../../../src/models/syncCrypto";
 import { normalizeSecret } from "../../../src/models/syncDiff";
 import { DriveAuthHandle } from "../core/driveAuth";
@@ -79,7 +80,7 @@ export function startApp(deps: AppDeps): void {
     try {
       await action();
     } catch (e) {
-      toast("Could not save: " + (e instanceof Error ? e.message : "error"));
+      toast("Could not save: " + (e instanceof Error ? redact(e.message) : "error"));
     }
   }
 
@@ -505,7 +506,7 @@ export function startApp(deps: AppDeps): void {
         return false;
       }
     } catch (e) {
-      formError = "Could not save: " + (e instanceof Error ? e.message : "error");
+      formError = "Could not save: " + (e instanceof Error ? redact(e.message) : "error");
       return false;
     }
     return true;

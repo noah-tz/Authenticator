@@ -3,6 +3,7 @@ import {
   BarcodeScanner,
   GoogleBarcodeScannerModuleInstallState,
 } from "@capacitor-mlkit/barcode-scanning";
+import { redact } from "../../../src/models/driveApi";
 import { SyncAccount } from "../../../src/models/syncCrypto";
 import { parseOtpauth } from "../core/otpauth";
 
@@ -74,7 +75,7 @@ export async function scanOtpauth(): Promise<ScanOutcome> {
     }
     return { kind: "account", account };
   } catch (e) {
-    const text = e instanceof Error ? e.message : String(e);
+    const text = redact(e instanceof Error ? e.message : String(e));
     if (/cancel/i.test(text)) {
       return fail("Scan cancelled.");
     }

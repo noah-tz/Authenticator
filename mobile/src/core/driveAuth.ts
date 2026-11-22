@@ -176,6 +176,8 @@ export function createDriveAuth(deps: DriveAuthDeps): DriveAuthHandle {
     return authorize();
   }
 
+  // Concurrent callers share one in-flight request, whatever their
+  // interactive flag; fine while the UI runs a single auth flow at a time.
   function getToken(interactive: boolean): Promise<string> {
     if (!pending) {
       pending = obtain(interactive).finally(() => {
