@@ -1,0 +1,15 @@
+{
+  "password": "correct horse",
+  "salt": "somesaltvalue1234",
+  "encoded": "$argon2id$v=19$m=19456,t=2,p=1$c29tZXNhbHR2YWx1ZTEyMzQ$pEK37sd031Hfag+HM6LeiE+Abqmpg5kBgShfBh9mRdg",
+  "derive": {
+    "pass": "pw",
+    "saltByte": 7,
+    "saltLen": 16,
+    "time": 1,
+    "mem": 1024,
+    "parallelism": 1,
+    "hashLen": 32,
+    "hashHex": "c720c0b03ec62d344389d59f101aad865cb773798539e894f52a774d02023e18"
+  }
+}

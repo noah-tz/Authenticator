@@ -82,6 +82,7 @@ import IconCheck from "../../../svg/check.svg";
 import IconPlus from "../../../svg/plus.svg";
 import IconExchange from "../../../svg/exchange.svg";
 import { isFirefox } from "../../browser";
+import { platform } from "../../platform";
 
 const computedPrototype = [
   mapState("style", ["style"]),
@@ -104,6 +105,9 @@ export default Vue.extend({
       return params.get("popup");
     },
     popOut() {
+      if (platform.isMobile) {
+        return;
+      }
       let windowType;
       if (isFirefox) {
         windowType = "detached_panel";
@@ -167,6 +171,17 @@ export default Vue.extend({
         return;
       }
 
+      if (platform.isMobile) {
+        const text = platform.scanQr ? await platform.scanQr() : null;
+        if (text) {
+          chrome.runtime.sendMessage({
+            action: "updateContentTab",
+            data: { id: 1 },
+          });
+          chrome.runtime.sendMessage({ action: "getTotp", info: text });
+        }
+        return;
+      }
       const tab = await getCurrentTab();
       // Insert content script
       if (okToInjectContentScript(tab)) {

@@ -4,3 +4,8 @@ android/local.properties
 *.keystore
 *.jks
 
+
+# the root .gitignore ignores build* and chrome* (extension build outputs)
+!/build/
+!/src/chrome/
+!/test/chrome-*.test.ts

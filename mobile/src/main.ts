@@ -1,68 +1,48 @@
-import "./styles.css";
-import "./diagnostics";
-import { redact } from "../../src/models/driveApi";
-import { createSecureStore } from "./core/kvstore";
-import { isWeb } from "./core/platform";
-import { Vault, VaultCorruptError } from "./core/vault";
-import { startApp } from "./ui/app";
-import { createAuth } from "./ui/auth";
-import { h, mount } from "./ui/dom";
+// diagnostics first: a failure in any later module shows on screen
 import { showStartupError } from "./diagnostics";
+import "../../sass/popup.scss";
+import "./mobile.css";
+import type { PlatformServices } from "../../src/platform";
+import { isWeb } from "./core/platform";
+import { installChrome } from "./chrome/install";
 
-const root = document.getElementById("app") as HTMLElement;
+type Ready = Parameters<NonNullable<PlatformServices["ready"]>>[0];
 
-function showLoadError(e: unknown): void {
-  const corrupt = e instanceof VaultCorruptError;
-  mount(
-    root,
-    h(
-      "div",
-      { class: "content" },
-      h("h1", null, "Authenticator Folders"),
-      h(
-        "div",
-        { class: "text warning", role: "alert" },
-        corrupt
-          ? "The saved accounts could not be read. Nothing has been changed or deleted."
-          : "The saved accounts could not be loaded. Nothing has been changed or deleted."
-      ),
-      h(
-        "div",
-        { class: "text muted" },
-        redact(e instanceof Error ? e.message : String(e))
-      ),
-      h(
-        "button",
-        { class: "block primary", onclick: () => location.reload() },
-        "Try again"
-      )
-    )
-  );
+// Handle on the popup's store, for the app integrations (scan results, sync).
+export let popupContext: Ready | undefined;
+
+function installPlatform(): void {
+  const services: PlatformServices = {
+    isMobile: true,
+    ready: (ctx) => {
+      popupContext = ctx;
+    },
+  };
+  ((globalThis as unknown) as {
+    __authenticatorPlatform: PlatformServices;
+  }).__authenticatorPlatform = services;
 }
 
 function showDevBanner(): void {
-  const banner = h(
-    "div",
-    { class: "dev-banner", role: "note" },
-    "Browser dev mode: secrets are stored unencrypted in this browser. Use test accounts only."
-  );
-  document.body.insertBefore(banner, root);
+  const banner = document.createElement("div");
+  banner.className = "dev-banner";
+  banner.setAttribute("role", "note");
+  banner.textContent =
+    "Browser dev mode: secrets are stored unencrypted in this browser. Use test accounts only.";
+  document.body.insertBefore(banner, document.body.firstChild);
 }
 
 async function main(): Promise<void> {
   if (isWeb()) {
     showDevBanner();
   }
-  const store = createSecureStore();
-  const vault = new Vault(store);
-  try {
-    // surfaces unreadable data before any screen can overwrite it
-    await vault.list();
-  } catch (e) {
-    showLoadError(e);
-    return;
-  }
-  startApp({ root, vault, auth: createAuth() });
+  installPlatform();
+  await installChrome();
+  // The extension's background handlers (lock, autolock, getTotp, Drive
+  // token) run in the same page; then the popup itself.
+  await import("../../src/background");
+  document.getElementById("authenticator")!.textContent = "";
+  await import("../../src/popup");
 }
 
 main().catch((e) => showStartupError(e));

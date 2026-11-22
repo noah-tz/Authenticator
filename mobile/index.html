@@ -9,12 +9,14 @@
     <meta name="color-scheme" content="light dark" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com"
+      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; frame-src 'self'; connect-src 'self' https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com"
     />
+    <link rel="icon" href="data:," />
     <title>Authenticator Folders</title>
   </head>
   <body>
-    <div id="app"><p class="boot">Loading…</p></div>
+    <div id="authenticator"><p class="boot">Loading&hellip;</p></div>
+    <iframe src="argon.html" id="argon-sandbox" style="display: none"></iframe>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

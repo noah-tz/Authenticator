@@ -1,6 +1,8 @@
 <template>
   <div>
-    <a-button @click="beginCapture()">{{ i18n.add_qr }}</a-button>
+    <a-button v-if="!isMobile" @click="beginCapture()">{{
+      i18n.add_qr
+    }}</a-button>
     <a-button @click="showInfo('AddAccountPage')">
       {{ i18n.add_secret }}
     </a-button>
@@ -15,7 +17,11 @@
 <script lang="ts">
 import Vue from "vue";
 import { getCurrentTab, okToInjectContentScript } from "../../utils";
+import { platform } from "../../platform";
 export default Vue.extend({
+  data() {
+    return { isMobile: platform.isMobile };
+  },
   methods: {
     showInfo(page: string) {
       if (this.$store.getters["accounts/currentlyEncrypted"]) {

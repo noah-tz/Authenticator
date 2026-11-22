@@ -13,7 +13,10 @@
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["node"]
+    "types": ["node", "chrome", "vite/client"],
+    // ../src resolves vuex from the root node_modules; its package.json
+    // "exports" hides the typings from Bundler resolution.
+    "paths": { "vuex": ["../node_modules/vuex/types/index.d.ts"] }
   },
   "include": [
     "src",
@@ -21,8 +24,7 @@
     "scripts",
     "vite.config.ts",
     "capacitor.config.ts",
-    "../src/definitions/otp.d.ts",
-    "../src/definitions/gost.d.ts"
+    "../src/definitions/*.d.ts"
   ]
 }
 

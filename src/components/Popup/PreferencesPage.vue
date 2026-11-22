@@ -13,6 +13,7 @@
       <option value="flat">{{ i18n.theme_flat }}</option>
     </a-select-input>
     <a-select-input
+      v-if="!isMobile"
       :label="i18n.scale"
       v-model="zoom"
       style="margin-left: 10px"
@@ -29,7 +30,11 @@
       <option value="25">25%</option>
       <option value="20">20%</option>
     </a-select-input>
-    <a-toggle-input :label="i18n.use_autofill" v-model="useAutofill" />
+    <a-toggle-input
+      v-if="!isMobile"
+      :label="i18n.use_autofill"
+      v-model="useAutofill"
+    />
     <a-toggle-input
       :label="i18n.browser_sync"
       v-model="browserSync"
@@ -57,13 +62,14 @@
         i18n.minutes
       }}</span>
     </div>
-    <a-button @click="popOut()">{{ i18n.popout }}</a-button>
+    <a-button v-if="!isMobile" @click="popOut()">{{ i18n.popout }}</a-button>
   </div>
 </template>
 <script lang="ts">
 import Vue from "vue";
 import { isFirefox, isSafari } from "../../browser";
 import { UserSettings } from "../../models/settings";
+import { platform } from "../../platform";
 
 export default Vue.extend({
   computed: {
@@ -141,9 +147,12 @@ export default Vue.extend({
         this.newStorageLocation = value ? "sync" : "local";
       },
     },
+    isMobile(): boolean {
+      return platform.isMobile;
+    },
     isSupported: {
       get(): boolean {
-        return !isFirefox && !isSafari;
+        return !isFirefox && !isSafari && !platform.isMobile;
       },
     },
   },

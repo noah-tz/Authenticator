@@ -17,6 +17,7 @@ import { Notification } from "./store/Notification";
 import { Qr } from "./store/Qr";
 import { Advisor } from "./store/Advisor";
 import { syncTimeWithGoogle } from "./syncTime";
+import { platform } from "./platform";
 import { StorageLocation, UserSettings } from "./models/settings";
 
 async function migrateLocalStorageToBrowserStorage() {
@@ -69,6 +70,7 @@ async function init() {
       }, 1000);
     },
   }).$mount("#authenticator");
+  platform.ready?.({ store: instance.$store, i18n: instance.i18n });
 
   // Prompt for password if needed
   if (instance.$store.state.accounts.shouldShowPassphrase) {

@@ -1,0 +1,128 @@
+/* Full-screen layout for the shared popup (sass/popup.scss is sized for a
+   fixed 320x480 browser popup). Loaded after popup.scss; sass/ is not edited. */
+
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+}
+
+body {
+  /* the zoom option is hidden on the phone; ignore a value synced from desktop */
+  transform: none !important;
+  margin: 0 !important;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+/* Vue replaces #authenticator with the popup root (the div with the theme class) */
+#authenticator,
+body > div[class*="theme-"] {
+  width: 100%;
+  height: 100%;
+}
+
+body > div[class*="theme-"] {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.header {
+  flex: 0 0 auto;
+  box-sizing: content-box;
+  padding-top: env(safe-area-inset-top);
+}
+
+#codes {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+  /* the extension only scrolls while the mouse is over the list */
+  padding-right: 0;
+}
+
+#codes .codesScroll {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Pages that cover the whole popup */
+#qr,
+#menu {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+}
+
+#menu {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+#menu #menuBody {
+  position: relative;
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+}
+
+#info {
+  width: calc(100vw - 20px);
+  height: calc(100vh - 20px);
+  height: calc(
+    100dvh - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+  );
+  margin-top: env(safe-area-inset-top);
+  display: flex;
+  flex-direction: column;
+}
+
+#info #infoContent {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+}
+
+.message-box {
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100vw - 20px);
+}
+
+/* Touch screens have no hover: keep the hover-only entry controls visible. */
+@media (hover: none) {
+  #codes .entry .showqr,
+  #codes .entry .pin {
+    opacity: 1;
+  }
+}
+
+/* Browser dev mode only (npm run dev) */
+.dev-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+  pointer-events: none;
+  opacity: 0.85;
+  padding: 6px 12px;
+  background: #b45309;
+  color: #fff;
+  font-size: 13px;
+  text-align: center;
+}
+
+.boot {
+  padding: 16px;
+}
+
+.boot-error {
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #b91c1c;
+}

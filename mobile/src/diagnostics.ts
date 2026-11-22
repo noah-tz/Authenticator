@@ -7,7 +7,7 @@ export function showStartupError(e: unknown): void {
   const text = redact(
     e instanceof Error ? `${e.name}: ${e.message}` : String(e)
   );
-  const app = document.getElementById("app");
+  const app = document.getElementById("authenticator");
   if (!app) return;
   const box = document.createElement("div");
   box.className = "content";

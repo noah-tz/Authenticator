@@ -12,6 +12,7 @@
           <span><IconAdvisor /></span>{{ i18n.advisor }}
         </p>
         <a
+          v-if="!isMobile"
           href="permissions.html"
           target="_blank"
           style="text-decoration: none"
@@ -62,7 +63,12 @@
         >
           <span><IconCode /></span>{{ i18n.source }}
         </p>
-        <a href="licenses.html" target="_blank" style="text-decoration: none">
+        <a
+          v-if="!isMobile"
+          href="licenses.html"
+          target="_blank"
+          style="text-decoration: none"
+        >
           <p v-bind:title="i18n.about">
             <span><IconInfo /></span>{{ i18n.about }}
           </p>
@@ -90,6 +96,7 @@ import IconCode from "../../../svg/code.svg";
 import IconClipboardCheck from "../../../svg/clipboard-check.svg";
 import { isChrome, isFirefox, isSafari } from "../../browser";
 import { UserSettings } from "../../models/settings";
+import { platform } from "../../platform";
 
 export default Vue.extend({
   components: {
@@ -107,6 +114,9 @@ export default Vue.extend({
     IconClipboardCheck,
   },
   computed: {
+    isMobile(): boolean {
+      return platform.isMobile;
+    },
     isChrome(): boolean {
       return isChrome;
     },
@@ -118,7 +128,7 @@ export default Vue.extend({
     },
     isSupported: {
       get(): boolean {
-        return !isSafari;
+        return !isSafari && !platform.isMobile;
       },
     },
   },
