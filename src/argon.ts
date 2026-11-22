@@ -21,6 +21,15 @@ window.addEventListener("message", (event) => {
       });
       break;
 
+    case "derive":
+      Argon.derive(message)
+        .then((hash) => {
+          source.postMessage({ id: message.id, response: hash }, event.origin);
+        })
+        .catch(() => {
+          source.postMessage({ id: message.id, error: true }, event.origin);
+        });
+      break;
     default:
       break;
   }
