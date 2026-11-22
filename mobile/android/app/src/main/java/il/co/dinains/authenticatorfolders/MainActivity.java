@@ -8,6 +8,7 @@ public class MainActivity extends BridgeActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        registerPlugin(GoogleAuthorizationPlugin.class);
         // Block screenshots, screen recording and the recents thumbnail (codes are secrets).
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_SECURE,

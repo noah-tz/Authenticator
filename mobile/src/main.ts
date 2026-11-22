@@ -47,7 +47,7 @@ async function main(): Promise<void> {
     showLoadError(e);
     return;
   }
-  startApp({ root, vault, auth: createAuth(store) });
+  startApp({ root, vault, auth: createAuth() });
 }
 
 void main();

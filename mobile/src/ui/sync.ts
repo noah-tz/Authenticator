@@ -8,7 +8,6 @@ import {
   isInSync,
   SyncChoice,
 } from "../../../src/models/syncDiff";
-import { isConfigured } from "../config";
 import { argonDeriveKey } from "../core/argon";
 import { DriveAuthHandle } from "../core/driveAuth";
 import { t } from "../core/i18n";
@@ -299,29 +298,23 @@ export function openSync(deps: SyncDeps): void {
     if (view === "intro") {
       body.push(h("div", { class: "text" }, t("sync_intro")), ...warnings);
       body.push(h("div", { class: "text" }, t("sync_no_warranty")));
-      if (!isConfigured()) {
-        body.push(
-          h("div", { class: "text warning" }, t("sync_error_not_configured"))
-        );
-      } else {
-        body.push(
-          h(
-            "button",
-            { class: "block primary", onclick: () => start("upload") },
-            t("sync_upload")
-          ),
-          h(
-            "button",
-            { class: "block", onclick: () => start("download") },
-            t("sync_download")
-          ),
-          h(
-            "button",
-            { class: "block danger", onclick: () => void erase() },
-            t("sync_erase")
-          )
-        );
-      }
+      body.push(
+        h(
+          "button",
+          { class: "block primary", onclick: () => start("upload") },
+          t("sync_upload")
+        ),
+        h(
+          "button",
+          { class: "block", onclick: () => start("download") },
+          t("sync_download")
+        ),
+        h(
+          "button",
+          { class: "block danger", onclick: () => void erase() },
+          t("sync_erase")
+        )
+      );
     } else if (view === "passphrase") {
       body.push(...warnings);
       if (needConfirm) {

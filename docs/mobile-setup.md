@@ -19,7 +19,7 @@ An Android app (Capacitor 8 + plain TypeScript, in `mobile/`) that shows TOTP/HO
 | UI | Plain TypeScript with a small DOM helper, no Vue | The extension's Vue components depend on Vuex and `chrome.*`. Vue 2 is end of life. About six screens do not need a framework. Text is set with `textContent` only, because names come from scanned QR codes. |
 | Bundler and tests | Vite and Vitest in `mobile/` | Own `package.json`; shared files in `../src/models` are compiled by Vite. |
 | Argon2 | `hash-wasm` (Argon2id) | `argon2-browser` needs wasm loader overrides that do not fit Vite. Argon2id v1.3 is a fixed standard. A test decrypts a file written by the extension's own code. |
-| Google sign-in | OAuth 2.0 authorization code with PKCE through the system browser, **Android** client type, custom URI scheme redirect `il.co.dinains.authenticatorfolders:/oauth2redirect` | Needs only the official `@capacitor/browser` and `@capacitor/app` plugins and is fully unit-testable. No client secret. The refresh token is kept in Keystore-backed secure storage. |
+| Google sign-in | Google Identity Services for Android: `AuthorizationClient` from `com.google.android.gms:play-services-auth`, wrapped in a small local Capacitor plugin (`GoogleAuthorizationPlugin.java`) | Google no longer lets new Android OAuth clients use a custom URI scheme redirect ([blog, Oct 2023](https://developers.googleblog.com/en/improving-user-safety-in-oauth-flows-through-new-oauth-custom-uri-scheme-restrictions/)) and recommends this SDK. It returns an access token directly and identifies the app by package name and signing SHA-1, so the code holds no client ID, redirect or secret. There is no refresh token: on a missing or rejected (401) token the app asks again silently, then with the consent screen. |
 | Package name | `il.co.dinains.authenticatorfolders` | Cannot change after a Google Play release. App name: Authenticator Folders. |
 | App lock | None in v1 | Secrets are encrypted with a Keystore key, backup is disabled (`allowBackup="false"`), `FLAG_SECURE` blocks screenshots and the recents thumbnail. A lock adds a plugin and a lockout-recovery path. Candidate for v2. |
 | QR scan | `@capacitor-mlkit/barcode-scanning` `scan()` (Google code scanner) | Per the plugin README, `scan()` needs no camera permission, so neither `CAMERA` nor the `barcode_ui` meta-data is added. It needs the Google Barcode Scanner module from Google Play services, which the app installs on first use. Devices without Google Play services cannot scan; manual entry still works. |
@@ -52,27 +52,17 @@ An Android app (Capacitor 8 + plain TypeScript, in `mobile/`) that shows TOTP/HO
    - copy the APK to the phone and open it, allowing installs from that source.
 
 ## Google Cloud setup (needed for Drive sync)
-
 Use the same project as the extension (`authenticator-folders`) so the app sees the same app-data file. The Drive API, the consent screen (External, In production) and the `drive.appdata` scope are already set up.
-
-1. Get the debug SHA-1. After the first Gradle build: `cd mobile\android; .\gradlew.bat signingReport`. Or, once `~\.android\debug.keystore` exists:
-
-   ```powershell
-   keytool -list -v -alias androiddebugkey -keystore "$env:USERPROFILE\.android\debug.keystore" -storepass android -keypass android
-   ```
-
-   Copy the `SHA1:` line.
-2. Google Cloud console > APIs & Services > Credentials > Create credentials > OAuth client ID > Application type **Android**. Name: `Authenticator Folders Android (debug)`. Package name `il.co.dinains.authenticatorfolders`. SHA-1 from step 1. Create.
-3. Open the new client > **Advanced settings** > tick **Enable custom URI scheme**. Save.
-4. Copy the client ID (`NNN-xxxx.apps.googleusercontent.com`) into `mobile/src/config.ts`, constant `GOOGLE_ANDROID_CLIENT_ID`. This is the only place. Rebuild (`npm run build; npx cap sync android`, then Gradle).
-5. For a release build, create a second Android client with the release keystore's SHA-1 (and the Play App Signing SHA-1 if published on Google Play). Changes can take a few hours to apply.
-6. Nothing changes on the consent screen.
-
-Until step 4 is done, the Sync screen shows a "not configured" message and hides its buttons.
-
-### Fallback if Google rejects the custom URI scheme redirect
-
-This is the riskiest untested part: it cannot be tried without a phone and a real client. If the browser shows `redirect_uri` or "custom scheme" errors even with "Enable custom URI scheme" ticked, switch to the Credential Manager route: a Google sign-in plugin such as `@capgo/capacitor-social-login` (needs a Web client plus the Android client and a `MainActivity` change; check that it supports Capacitor 8). Only `mobile/src/core/driveAuth.ts` and `mobile/src/ui/auth.ts` would change; the Drive and sync code stay the same.
+The only extra setup is an **Android** OAuth client with the package name and the signing SHA-1. Its client ID is **not** copied into the code: Google matches the app by package name and SHA-1.
+1. Debug build (done): client of type Android, package `il.co.dinains.authenticatorfolders`, debug SHA-1 `50:8D:CE:24:B8:07:DA:A0:76:1E:9E:94:CD:C6:F1:7B:93:86:95:70`. Get a SHA-1 yourself with `cd mobile\android; .\gradlew.bat signingReport`.
+2. **Release build**: create another Android client (Credentials > Create credentials > OAuth client ID > Android) with the same package name and the SHA-1 of the release keystore. If the app is published on Google Play with Play App Signing, also add the SHA-1 of the app signing key shown in Play Console > App integrity. Without it, sign-in fails on release builds.
+3. Changes can take a few hours to apply. Nothing changes on the consent screen.
+There is no "Enable custom URI scheme" option on Android clients and none is needed.
+### How sign-in works
+- Sync > Upload or Download calls the plugin's `authorize`. If Google already has consent, it returns an access token silently. Otherwise the app calls it again with `interactive: true` and Google shows its consent screen.
+- Access tokens are cached in memory for 50 minutes. When Drive answers 401, the app drops the token (`clearToken`) and authorizes again, silently first, then with the consent screen.
+- Sign out calls `revokeAccess`, which removes the app's Drive access, so the next sync asks for consent again. Nothing is stored on the phone for sign-in.
+- Code: `mobile/src/core/driveAuth.ts`, `mobile/src/ui/auth.ts`, `mobile/android/app/src/main/java/il/co/dinains/authenticatorfolders/GoogleAuthorizationPlugin.java`.
 
 ## Hand-test checklist (phone)
 
@@ -81,7 +71,7 @@ This is the riskiest untested part: it cannot be tried without a phone and a rea
 3. Scan a QR code from any site's 2FA setup page; the account appears. Cancel the scanner: no crash.
 4. Create the nested folder `Work/Email`; folders are collapsed by default and nest. Archive an account; it moves to the Archive section.
 5. Close the app from recents and reopen: accounts are still there. The recents thumbnail is blank and screenshots are blocked.
-6. Sync > Upload with Google sign-in (the first time asks for consent in a browser tab and returns to the app). Then in the extension use Download with the same passphrase; the accounts match.
+6. Sync > Upload with Google sign-in (the first time Google shows its consent screen over the app). Then in the extension use Download with the same passphrase; the accounts match.
 7. Add an account in the extension, upload from the extension, download on the phone. All three conflict choices behave as in the extension.
 8. Wrong passphrase on download: "Wrong passphrase", nothing changed.
 9. Time the passphrase step (19 MiB Argon2) on this phone.
@@ -89,7 +79,7 @@ This is the riskiest untested part: it cannot be tried without a phone and a rea
 
 ## Not testable on this machine
 
-Camera scan, the Google sign-in redirect and consent, Keystore on real hardware, `FLAG_SECURE`, and the Gradle build (no JDK/SDK). All are covered by the checklist above.
+Camera scan, the Google sign-in and consent, Keystore on real hardware, `FLAG_SECURE`, and the Gradle build (no JDK/SDK). All are covered by the checklist above.
 
 ## No warranty
 
