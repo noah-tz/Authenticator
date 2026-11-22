@@ -4,6 +4,8 @@
 import { UserSettings } from "./settings";
 export const RATING_REVIEWS_URL =
   "https://chromewebstore.google.com/detail/jkfgpemjlahodaicadgfkeehlglbieei/reviews";
+// The Android app is not on the Play Store; Rate opens the GitHub repo instead.
+export const RATING_MOBILE_URL = "https://github.com/noah-tz/Authenticator";
 export const RATING_PROMPT_DELAY_MS = 30 * 24 * 60 * 60 * 1000;
 
 const STORAGE_KEY = "ratingPrompt";

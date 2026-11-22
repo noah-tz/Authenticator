@@ -507,6 +507,10 @@
     "message": "Enjoying Authenticator Folders? Please consider leaving a review.",
     "description": "One-time banner asking the user to rate the extension."
   },
+  "rating_prompt_text_mobile": {
+    "message": "Enjoying Authenticator Folders? Please consider giving the project a star on GitHub.",
+    "description": "Android app only: one-time banner inviting a GitHub star. The Rate button opens the GitHub repo."
+  },
   "rating_prompt_rate": {
     "message": "Rate",
     "description": "Rating banner button that opens the store reviews page."

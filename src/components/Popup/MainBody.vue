@@ -11,7 +11,7 @@
     <div class="codesScroll">
       <!-- One-time rating request; visibility derived from store + storage. -->
       <div class="ratingPrompt" v-if="showRatingPrompt">
-        <div class="ratingPromptText">{{ i18n.rating_prompt_text }}</div>
+        <div class="ratingPromptText">{{ ratingText }}</div>
         <div class="ratingPromptActions">
           <button type="button" v-on:click="rateNow()">
             {{ i18n.rating_prompt_rate }}
@@ -222,10 +222,12 @@ import { buildFolderTree, FolderNode } from "../../models/folders";
 import {
   RatingPromptStorage,
   RATING_REVIEWS_URL,
+  RATING_MOBILE_URL,
   RATING_PROMPT_DELAY_MS,
   shouldShowRatingPrompt,
 } from "../../models/ratingPrompt";
 
+import { platform } from "../../platform";
 import EntryComponent from "./EntryComponent.vue";
 
 // A single pre-order-flattened tree row: a folder header or an entry.
@@ -285,6 +287,11 @@ export default Vue.extend({
         this.folders,
         this.nonArchivedEntries
       ) as FolderNode[];
+    },
+    ratingText(): string {
+      return platform.isMobile
+        ? this.i18n.rating_prompt_text_mobile
+        : this.i18n.rating_prompt_text;
     },
     // Never while editing, on the password/loading screens, or with no accounts.
     showRatingPrompt(): boolean {
@@ -347,7 +354,10 @@ export default Vue.extend({
       this.$store.commit("accounts/setRatingPrompt", saved);
     },
     async rateNow() {
-      window.open(RATING_REVIEWS_URL, "_blank");
+      window.open(
+        platform.isMobile ? RATING_MOBILE_URL : RATING_REVIEWS_URL,
+        "_blank"
+      );
       await this.saveRatingPrompt({ dismissed: true });
     },
     async remindLater() {
