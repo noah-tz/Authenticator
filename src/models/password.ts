@@ -89,3 +89,62 @@ export async function verifyPasswordUsingKey(
   // hash of their password's hash
   return await argonVerify(possibleHash, key.hash);
 }
+
+export interface DeriveParams {
+  timeCost: number;
+  memoryKiB: number;
+  parallelism: number;
+  hashLength: number;
+}
+
+// Derives a raw key with Argon2id in the sandbox. Unlike argonHash this
+// takes explicit parameters and returns the raw hash bytes.
+export function argonDeriveKey(
+  passphrase: string,
+  salt: Uint8Array,
+  p: DeriveParams
+): Promise<Uint8Array> {
+  const iframe = document.getElementById(
+    "argon-sandbox"
+  ) as HTMLIFrameElement | null;
+  if (!iframe || !iframe.contentWindow) {
+    return Promise.reject(new Error("argon-sandbox missing!"));
+  }
+  const target = iframe.contentWindow;
+  const id = crypto.randomUUID();
+  return new Promise((resolve, reject) => {
+    const cleanup = () => {
+      window.removeEventListener("message", listener);
+      clearTimeout(timer);
+    };
+    const listener = (event: MessageEvent) => {
+      if (!event.data || event.data.id !== id) {
+        return;
+      }
+      cleanup();
+      if (event.data.error || !event.data.response) {
+        reject(new Error("argon2 did not return a key"));
+        return;
+      }
+      resolve(new Uint8Array(event.data.response));
+    };
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error("argon2 timed out"));
+    }, 60000);
+    window.addEventListener("message", listener);
+    target.postMessage(
+      {
+        action: "derive",
+        id,
+        pass: passphrase,
+        salt,
+        time: p.timeCost,
+        mem: p.memoryKiB,
+        parallelism: p.parallelism,
+        hashLen: p.hashLength,
+      },
+      "*"
+    );
+  });
+}

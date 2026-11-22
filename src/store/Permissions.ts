@@ -32,6 +32,11 @@ const permissions: Permission[] = [
     revocable: true,
   },
   {
+    id: "identity",
+    description: chrome.i18n.getMessage("permission_identity"),
+    revocable: true,
+  },
+  {
     id: "https://www.google.com/*",
     description: chrome.i18n.getMessage("permission_sync_clock"),
     revocable: true,

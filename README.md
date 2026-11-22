@@ -11,6 +11,8 @@ Authenticator Folders is a fork of the open-source [Authenticator](https://githu
 
 Accounts continue to sync across your Chrome profiles via Chrome's built-in `chrome.storage.sync` (Google-account sync). The cloud-backup integrations (Google Drive / Dropbox / OneDrive) from upstream have been removed; manual file export/import and QR import remain.
 
+Optional, user-initiated, end-to-end encrypted sync through the Drive app-data folder is available in Chrome (the Sync menu item). The file format is in [docs/sync-format.md](docs/sync-format.md); owner setup is in [docs/drive-sync-setup.md](docs/drive-sync-setup.md).
+
 ## Build
 
 ```bash

@@ -20,6 +20,7 @@ import AddMethodPage from "./AddMethodPage.vue";
 import SetPasswordPage from "./SetPasswordPage.vue";
 import EnterPasswordPage from "./EnterPasswordPage.vue";
 import BackupPage from "./BackupPage.vue";
+import SyncPage from "./SyncPage.vue";
 import PreferencesPage from "./PreferencesPage.vue";
 import AdvisorPage from "./AdvisorPage.vue";
 import LoadingPage from "./LoadingPage.vue";
@@ -42,6 +43,7 @@ export default Vue.extend({
     SetPasswordPage,
     EnterPasswordPage,
     BackupPage,
+    SyncPage,
     PreferencesPage,
     AdvisorPage,
     LoadingPage,

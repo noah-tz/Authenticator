@@ -518,5 +518,161 @@
   "rating_prompt_no": {
     "message": "No thanks",
     "description": "Rating banner button that hides the banner permanently."
+  },
+  "sync_title": {
+    "message": "Sync with Google Drive"
+  },
+  "sync_menu": {
+    "message": "Sync (Drive)"
+  },
+  "sync_intro": {
+    "message": "Upload your accounts to your own Google Drive, or download them from it. The data is encrypted on this device with a sync passphrase before it leaves, and is stored in a hidden app-data folder that only this extension can see."
+  },
+  "sync_warning_unrecoverable": {
+    "message": "Only you know the sync passphrase. If you forget it, the data on Drive cannot be recovered by anyone, including the developer."
+  },
+  "sync_no_warranty": {
+    "message": "No warranty: this feature is provided as is. The developer never receives or stores your data. It lives only in your own Google Drive, encrypted with your passphrase. You are responsible for keeping your own backups."
+  },
+  "sync_upload": {
+    "message": "Upload to Drive"
+  },
+  "sync_download": {
+    "message": "Download from Drive"
+  },
+  "sync_passphrase": {
+    "message": "Sync passphrase"
+  },
+  "sync_passphrase_confirm": {
+    "message": "Repeat sync passphrase"
+  },
+  "sync_passphrase_new_info": {
+    "message": "There is no sync file on Drive yet. Choose a sync passphrase. It is different from the password that protects this extension."
+  },
+  "sync_passphrase_mismatch": {
+    "message": "The two passphrases do not match."
+  },
+  "sync_passphrase_empty": {
+    "message": "Enter a sync passphrase."
+  },
+  "sync_continue": {
+    "message": "Continue"
+  },
+  "sync_cancel": {
+    "message": "Cancel"
+  },
+  "sync_working": {
+    "message": "Working. Deriving the key can take a few seconds."
+  },
+  "sync_unlock_first": {
+    "message": "Unlock the extension with your password first. Locked accounts cannot be synced."
+  },
+  "sync_conflict_title": {
+    "message": "The two sides differ"
+  },
+  "sync_conflict_info": {
+    "message": "Nothing has been changed yet. Choose what to do."
+  },
+  "sync_this_device": {
+    "message": "this device"
+  },
+  "sync_drive": {
+    "message": "Google Drive"
+  },
+  "sync_only_here": {
+    "message": "Only on this device"
+  },
+  "sync_only_drive": {
+    "message": "Only on Google Drive"
+  },
+  "sync_changed": {
+    "message": "Differ between the two"
+  },
+  "sync_changed_fields": {
+    "message": "differs"
+  },
+  "sync_choice_add": {
+    "message": "Add only what is missing"
+  },
+  "sync_choice_overwrite": {
+    "message": "Overwrite changed accounts"
+  },
+  "sync_choice_mirror": {
+    "message": "Delete what is missing"
+  },
+  "sync_choice_add_info": {
+    "message": "Adds accounts that the target does not have. Nothing is overwritten or deleted."
+  },
+  "sync_choice_overwrite_info": {
+    "message": "Also copies the changed values (name, folder, archive, and so on) over matching accounts on the target. Nothing is deleted."
+  },
+  "sync_choice_mirror_info": {
+    "message": "Also deletes accounts on the target that are not on the other side, so the target becomes identical."
+  },
+  "sync_target_changes": {
+    "message": "The following side will be changed:"
+  },
+  "sync_confirm_mirror": {
+    "message": "This deletes accounts that the other side does not have. Continue?"
+  },
+  "sync_result_added": {
+    "message": "Added"
+  },
+  "sync_result_updated": {
+    "message": "Updated"
+  },
+  "sync_result_removed": {
+    "message": "Removed"
+  },
+  "sync_result_done": {
+    "message": "Done."
+  },
+  "sync_in_sync": {
+    "message": "Already in sync. Nothing was changed."
+  },
+  "sync_nothing_on_drive": {
+    "message": "There is nothing on Drive yet. Upload first."
+  },
+  "sync_uploaded": {
+    "message": "Uploaded to Drive."
+  },
+  "sync_erase": {
+    "message": "Erase Drive copy"
+  },
+  "sync_erase_confirm": {
+    "message": "Delete the sync file from your Drive? Your accounts on this device are not touched."
+  },
+  "sync_erased": {
+    "message": "The Drive copy was deleted."
+  },
+  "sync_error_not_configured": {
+    "message": "Sync is not set up in this build (no Google OAuth client ID)."
+  },
+  "sync_error_auth": {
+    "message": "Google sign-in was not completed or was denied."
+  },
+  "sync_error_network": {
+    "message": "Could not reach Google Drive. Check your connection."
+  },
+  "sync_error_http": {
+    "message": "Google Drive returned an error."
+  },
+  "sync_error_wrong_passphrase": {
+    "message": "Wrong passphrase, or the file on Drive is damaged. Nothing was changed."
+  },
+  "sync_error_bad_file": {
+    "message": "The file on Drive is not readable by this version."
+  },
+  "sync_error_permission": {
+    "message": "The permission needed to sign in with Google was not granted."
+  },
+  "sync_error_generic": {
+    "message": "Sync failed. Nothing was changed."
+  },
+  "sync_back": {
+    "message": "Back"
+  },
+  "permission_identity": {
+    "message": "Allows sign-in with Google for optional Drive sync."
   }
 }

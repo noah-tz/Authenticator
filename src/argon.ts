@@ -28,6 +28,25 @@ window.addEventListener("message", (event) => {
 });
 
 class Argon {
+  static async derive(message: {
+    pass: string;
+    salt: Uint8Array;
+    time: number;
+    mem: number;
+    parallelism: number;
+    hashLen: number;
+  }) {
+    const result = await argon2.hash({
+      pass: message.pass,
+      salt: message.salt,
+      time: message.time,
+      mem: message.mem,
+      parallelism: message.parallelism,
+      hashLen: message.hashLen,
+      type: argon2.ArgonType.Argon2id,
+    });
+    return result.hash;
+  }
   static async hash(value: string, salt: string | Uint8Array) {
     const hash = await argon2.hash({
       pass: value,

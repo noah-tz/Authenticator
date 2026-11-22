@@ -26,6 +26,13 @@
           <span><IconExchange /></span>{{ i18n.backup }}
         </p>
         <p
+          v-bind:title="i18n.sync_menu"
+          v-on:click="showInfo('SyncPage')"
+          v-if="isChrome && !exportDisabled"
+        >
+          <span><IconDatabase /></span>{{ i18n.sync_menu }}
+        </p>
+        <p
           v-bind:title="i18n.security"
           v-on:click="showInfo('SetPasswordPage')"
         >
@@ -81,7 +88,7 @@ import IconComments from "../../../svg/comments.svg";
 import IconGlobe from "../../../svg/globe.svg";
 import IconCode from "../../../svg/code.svg";
 import IconClipboardCheck from "../../../svg/clipboard-check.svg";
-import { isFirefox, isSafari } from "../../browser";
+import { isChrome, isFirefox, isSafari } from "../../browser";
 import { UserSettings } from "../../models/settings";
 
 export default Vue.extend({
@@ -100,6 +107,12 @@ export default Vue.extend({
     IconClipboardCheck,
   },
   computed: {
+    isChrome(): boolean {
+      return isChrome;
+    },
+    exportDisabled(): boolean {
+      return this.$store.state.menu.exportDisabled === true;
+    },
     version: function () {
       return this.$store.state.menu.version;
     },

@@ -41,10 +41,14 @@
     "pages": ["view/argon.html"]
   },
   "permissions": ["activeTab", "storage", "alarms", "scripting"],
-  "optional_permissions": ["clipboardWrite", "contextMenus"],
+  "optional_permissions": ["clipboardWrite", "contextMenus", "identity"],
+  "oauth2": {
+    "client_id": "YOUR_CLIENT_ID.apps.googleusercontent.com",
+    "scopes": ["https://www.googleapis.com/auth/drive.appdata"]
+  },
   "optional_host_permissions": ["https://www.google.com/"],
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; font-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src https://www.google.com/; default-src 'none'",
+    "extension_pages": "script-src 'self'; font-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src https://www.google.com/ https://www.googleapis.com/; default-src 'none'",
     "sandbox": "sandbox allow-scripts; script-src 'self' 'unsafe-eval';"
   }
 }
