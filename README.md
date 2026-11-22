@@ -24,6 +24,10 @@ The built, loadable extension is written to the `chrome/` directory. Load it via
 
 > Windows users need [Git Bash](https://git-scm.com/download/win) to run the build scripts, or build the webpack/sass steps directly with Node.
 
+## Mobile app (Android)
+
+The `mobile/` folder holds an Android app (Capacitor) that shows the same folders and syncs through the same encrypted Drive file as the extension. Install, build, Google Cloud setup and the hand-test checklist are in [docs/mobile-setup.md](docs/mobile-setup.md).
+
 ## License
 
 MIT. See [LICENSE](LICENSE). This project retains the original copyright notice as required by the MIT license of the upstream Authenticator project.
