@@ -197,3 +197,13 @@ select {
 .indent {
   margin-left: 16px;
 }
+
+.boot {
+  padding: 16px;
+  color: var(--fg);
+}
+.boot-error {
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--warn);
+}

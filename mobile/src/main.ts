@@ -1,10 +1,12 @@
 import "./styles.css";
+import "./diagnostics";
 import { redact } from "../../src/models/driveApi";
 import { createSecureStore } from "./core/kvstore";
 import { Vault, VaultCorruptError } from "./core/vault";
 import { startApp } from "./ui/app";
 import { createAuth } from "./ui/auth";
 import { h, mount } from "./ui/dom";
+import { showStartupError } from "./diagnostics";
 
 const root = document.getElementById("app") as HTMLElement;
 
@@ -50,4 +52,4 @@ async function main(): Promise<void> {
   startApp({ root, vault, auth: createAuth() });
 }
 
-void main();
+main().catch((e) => showStartupError(e));
