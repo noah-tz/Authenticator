@@ -21,7 +21,7 @@ An Android app (Capacitor 8 + plain TypeScript, in `mobile/`) that shows TOTP/HO
 | Argon2 | `hash-wasm` (Argon2id) | `argon2-browser` needs wasm loader overrides that do not fit Vite. Argon2id v1.3 is a fixed standard. A test decrypts a file written by the extension's own code. |
 | Google sign-in | Google Identity Services for Android: `AuthorizationClient` from `com.google.android.gms:play-services-auth`, wrapped in a small local Capacitor plugin (`GoogleAuthorizationPlugin.java`) | Google no longer lets new Android OAuth clients use a custom URI scheme redirect ([blog, Oct 2023](https://developers.googleblog.com/en/improving-user-safety-in-oauth-flows-through-new-oauth-custom-uri-scheme-restrictions/)) and recommends this SDK. It returns an access token directly and identifies the app by package name and signing SHA-1, so the code holds no client ID, redirect or secret. There is no refresh token: on a missing or rejected (401) token the app asks again silently, then with the consent screen. |
 | Package name | `il.co.dinains.authenticatorfolders` | Cannot change after a Google Play release. App name: Authenticator Folders. |
-| App lock | None in v1 | Secrets are encrypted with a Keystore key, backup is disabled (`allowBackup="false"`), `FLAG_SECURE` blocks screenshots and the recents thumbnail. A lock adds a plugin and a lockout-recovery path. Candidate for v2. |
+| App lock | None in v1 | Secrets are encrypted with a Keystore key, backup is disabled (`allowBackup="false"`). Screenshots and the recents thumbnail are allowed by the owner's choice (no `FLAG_SECURE`), so the codes and account names are visible in them. A lock adds a plugin and a lockout-recovery path. Candidate for v2. |
 | QR scan | `@capacitor-mlkit/barcode-scanning` `scan()` (Google code scanner) | Per the plugin README, `scan()` needs no camera permission, so neither `CAMERA` nor the `barcode_ui` meta-data is added. It needs the Google Barcode Scanner module from Google Play services, which the app installs on first use. Devices without Google Play services cannot scan; manual entry still works. |
 
 ## Build environment on this machine (checked when the platform was added)
@@ -80,7 +80,7 @@ Native-only (not available in the browser): Android Keystore storage, the MLKit 
 2. Add an account by manual entry; the code shows, refreshes every 30 s, tapping copies it (paste elsewhere).
 3. Scan a QR code from any site's 2FA setup page; the account appears. Cancel the scanner: no crash.
 4. Create the nested folder `Work/Email`; folders are collapsed by default and nest. Archive an account; it moves to the Archive section.
-5. Close the app from recents and reopen: accounts are still there. The recents thumbnail is blank and screenshots are blocked.
+5. Close the app from recents and reopen: accounts are still there. Screenshots work, and the recents thumbnail shows the app.
 6. Sync > Upload with Google sign-in (the first time Google shows its consent screen over the app). Then in the extension use Download with the same passphrase; the accounts match.
 7. Add an account in the extension, upload from the extension, download on the phone. All three conflict choices behave as in the extension.
 8. Wrong passphrase on download: "Wrong passphrase", nothing changed.
@@ -89,7 +89,7 @@ Native-only (not available in the browser): Android Keystore storage, the MLKit 
 
 ## Not testable on this machine
 
-Camera scan, the Google sign-in and consent, Keystore on real hardware, `FLAG_SECURE`, and the Gradle build (no JDK/SDK). All are covered by the checklist above.
+Camera scan, the Google sign-in and consent, Keystore on real hardware, and the Gradle build (no JDK/SDK). All are covered by the checklist above.
 
 ## No warranty
 

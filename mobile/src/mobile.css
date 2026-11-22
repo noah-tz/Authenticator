@@ -1,14 +1,14 @@
 /* Full-screen layout for the shared popup (sass/popup.scss is sized for a
    fixed 320x480 browser popup). Loaded after popup.scss; sass/ is not edited. */
 
-html,
-body {
+html.is-mobile,
+html.is-mobile body {
   width: 100vw;
   height: 100vh;
   height: 100dvh;
 }
 
-body {
+html.is-mobile body {
   /* the zoom option is hidden on the phone; ignore a value synced from desktop */
   transform: none !important;
   margin: 0 !important;
@@ -18,25 +18,25 @@ body {
 }
 
 /* Vue replaces #authenticator with the popup root (the div with the theme class) */
-#authenticator,
-body > div[class*="theme-"] {
+html.is-mobile #authenticator,
+html.is-mobile body > div[class*="theme-"] {
   width: 100%;
   height: 100%;
 }
 
-body > div[class*="theme-"] {
+html.is-mobile body > div[class*="theme-"] {
   display: flex;
   flex-direction: column;
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-.header {
+html.is-mobile .header {
   flex: 0 0 auto;
   box-sizing: content-box;
   padding-top: env(safe-area-inset-top);
 }
 
-#codes {
+html.is-mobile #codes {
   flex: 1 1 auto;
   height: auto;
   min-height: 0;
@@ -44,33 +44,33 @@ body > div[class*="theme-"] {
   padding-right: 0;
 }
 
-#codes .codesScroll {
+html.is-mobile #codes .codesScroll {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
 
 /* Pages that cover the whole popup */
-#qr,
-#menu {
+html.is-mobile #qr,
+html.is-mobile #menu {
   width: 100vw;
   height: 100vh;
   height: 100dvh;
 }
 
-#menu {
+html.is-mobile #menu {
   display: flex;
   flex-direction: column;
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-#menu #menuBody {
+html.is-mobile #menu #menuBody {
   position: relative;
   flex: 1 1 auto;
   height: auto;
   min-height: 0;
 }
 
-#info {
+html.is-mobile #info {
   width: calc(100vw - 20px);
   height: calc(100vh - 20px);
   height: calc(
@@ -81,13 +81,13 @@ body > div[class*="theme-"] {
   flex-direction: column;
 }
 
-#info #infoContent {
+html.is-mobile #info #infoContent {
   flex: 1 1 auto;
   height: auto;
   min-height: 0;
 }
 
-.message-box {
+html.is-mobile .message-box {
   left: 50%;
   transform: translateX(-50%);
   max-width: calc(100vw - 20px);
@@ -95,16 +95,16 @@ body > div[class*="theme-"] {
 
 /* Touch screens have no hover: keep the hover-only entry controls visible. */
 @media (hover: none) {
-  #codes .entry .showqr,
-  #codes .entry .pin {
+  html.is-mobile #codes .entry .showqr,
+  html.is-mobile #codes .entry .pin {
     opacity: 1;
   }
   /* the drag handle (edit mode) must follow the finger, not scroll the list */
-  #codes .entry .movehandle {
+  html.is-mobile #codes .entry .movehandle {
     touch-action: none;
   }
   /* a long press opens the entry menu, not the browser's text selection */
-  #codes .entry {
+  html.is-mobile #codes .entry {
     -webkit-user-select: none;
     user-select: none;
   }

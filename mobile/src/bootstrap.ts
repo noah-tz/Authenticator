@@ -26,6 +26,8 @@ export function showWhenReady(message: string): void {
 }
 
 function installPlatform(): void {
+  // scopes the full-screen overrides in mobile.css to the app
+  document.documentElement.classList.add("is-mobile");
   const services: PlatformServices = {
     isMobile: true,
     scanQr: scanRaw,
