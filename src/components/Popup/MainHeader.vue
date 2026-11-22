@@ -36,7 +36,8 @@
         v-show="!style.isEditing && folders.length > 0"
         v-on:click="toggleAllFolders()"
       >
-        <IconExchange />
+        <IconUnfold v-if="isMobile" />
+        <IconExchange v-else />
       </div>
       <div
         class="icon"
@@ -81,6 +82,7 @@ import IconPencil from "../../../svg/pencil.svg";
 import IconCheck from "../../../svg/check.svg";
 import IconPlus from "../../../svg/plus.svg";
 import IconExchange from "../../../svg/exchange.svg";
+import IconUnfold from "../../../svg/unfold.svg";
 import { isFirefox } from "../../browser";
 import { platform } from "../../platform";
 
@@ -96,6 +98,11 @@ for (const module of computedPrototype) {
 }
 
 Object.assign(computed, mapGetters("accounts", ["folders"]));
+
+// Android app only: the exchange arrows look like a backup button there.
+Object.assign(computed, {
+  isMobile: () => platform.isMobile,
+});
 
 export default Vue.extend({
   computed,
@@ -225,6 +232,7 @@ export default Vue.extend({
     IconCheck,
     IconPlus,
     IconExchange,
+    IconUnfold,
   },
 });
 </script>
