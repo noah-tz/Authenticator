@@ -101,13 +101,14 @@
       <div class="text" :class="{ warning: view === 'error' }">
         {{ message }}
       </div>
+      <div v-if="detail" class="text">{{ detail }}</div>
       <a-button v-on:click="reset()">{{ i18n.sync_back }}</a-button>
     </div>
   </div>
 </template>
 <script lang="ts">
 import Vue from "vue";
-import { DriveError, isConfigured } from "../../models/driveClient";
+import { DriveError, isConfigured, redact } from "../../models/driveClient";
 import { SyncAccount, SyncError } from "../../models/syncCrypto";
 import {
   AccountDiff,
@@ -126,6 +127,16 @@ import {
   saveRemote,
 } from "../../models/syncService";
 
+// Underlying error text for the error screen (never a token).
+function describe(e: unknown): string {
+  if (e instanceof DriveError) {
+    return [e.code, e.status, e.detail].filter(Boolean).join(" ");
+  }
+  if (e instanceof Error) {
+    return redact(`${e.name}: ${e.message}`);
+  }
+  return redact(String(e));
+}
 type Direction = "upload" | "download";
 
 const emptyDiff = (): AccountDiff => ({
@@ -145,6 +156,7 @@ export default Vue.extend({
       passphraseConfirm: "",
       needConfirm: false,
       message: "",
+      detail: "",
       diff: emptyDiff(),
       confirmingMirror: false,
       choices: ["add", "overwrite", "mirror"] as SyncChoice[],
@@ -170,6 +182,7 @@ export default Vue.extend({
       this.passphraseConfirm = "";
       this.needConfirm = false;
       this.message = "";
+      this.detail = "";
       this.confirmingMirror = false;
       this.diff = emptyDiff();
       this.local = [];
@@ -187,12 +200,19 @@ export default Vue.extend({
         return false;
       }
       // Must be the first await in the click handler to keep the user gesture.
-      const granted = await chrome.permissions.request({
-        permissions: ["identity"],
-      });
+      let granted = false;
+      let detail = "";
+      try {
+        granted = await chrome.permissions.request({
+          permissions: ["identity"],
+        });
+      } catch (e) {
+        detail = describe(e);
+      }
       if (!granted) {
         this.view = "error";
         this.message = this.i18n.sync_error_permission;
+        this.detail = detail || "permissions.request returned false";
       }
       return granted;
     },
@@ -307,6 +327,7 @@ export default Vue.extend({
     },
     fail(e: unknown) {
       this.view = "error";
+      this.detail = describe(e);
       this.passphrase = "";
       this.passphraseConfirm = "";
       if (e instanceof SyncError) {

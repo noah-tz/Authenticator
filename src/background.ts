@@ -11,9 +11,17 @@ import { CodeState } from "./models/otp";
 import { getOTPAuthPerLineFromOPTAuthMigration } from "./models/migration";
 import { isFirefox } from "./browser";
 import { UserSettings } from "./models/settings";
+import { requestAuthToken } from "./models/driveClient";
 
 let contentTab: chrome.tabs.Tab | undefined;
 
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (message && message.action === "getAuthToken") {
+    requestAuthToken(!!message.interactive).then(sendResponse);
+    return true;
+  }
+  return false;
+});
 chrome.runtime.onMessage.addListener(async (message, sender) => {
   await UserSettings.updateItems();
 

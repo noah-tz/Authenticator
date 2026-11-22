@@ -14,13 +14,22 @@ export type DriveErrorCode =
   | "NETWORK"
   | "HTTP";
 
+// Error text shown to the user must never contain a token.
+export function redact(text: string): string {
+  return text
+    .replace(/ya29\.[\w.-]+/g, "[token]")
+    .replace(/Bearer\s+\S+/gi, "Bearer [token]")
+    .slice(0, 300);
+}
 export class DriveError extends Error {
   code: DriveErrorCode;
   status?: number;
-  constructor(code: DriveErrorCode, status?: number) {
+  detail?: string;
+  constructor(code: DriveErrorCode, status?: number, detail?: string) {
     super(status ? `${code} ${status}` : code);
     this.code = code;
     this.status = status;
+    this.detail = detail ? redact(detail) : undefined;
     Object.setPrototypeOf(this, DriveError.prototype);
   }
 }
@@ -42,21 +51,52 @@ export function isConfigured(): boolean {
   return !!id && !id.startsWith("YOUR_");
 }
 
-function getToken(interactive: boolean): Promise<string> {
-  return new Promise((resolve, reject) => {
-    chrome.identity.getAuthToken(
-      { interactive, scopes: [DRIVE_SCOPE] },
-      (token?: string) => {
-        if (chrome.runtime.lastError || !token) {
-          reject(new DriveError("AUTH_DENIED"));
+// Runs in the background service worker so the Google consent window cannot
+// close the popup and drop the answer. The token stays cached by Chrome.
+export function requestAuthToken(
+  interactive: boolean
+): Promise<{ token?: string; error?: string }> {
+  return new Promise((resolve) => {
+    try {
+      chrome.identity.getAuthToken({ interactive }, (result?: unknown) => {
+        const error = chrome.runtime.lastError?.message;
+        // Older Chrome returns a string, newer an object with a token field.
+        const token =
+          typeof result === "string"
+            ? result
+            : (result as { token?: string } | undefined)?.token;
+        if (error || !token) {
+          resolve({ error: error || "No token was returned." });
           return;
         }
-        resolve(token);
+        resolve({ token });
+      });
+    } catch (e) {
+      resolve({ error: e instanceof Error ? e.message : String(e) });
+    }
+  });
+}
+function getToken(interactive: boolean): Promise<string> {
+  return new Promise((resolve, reject) => {
+    chrome.runtime.sendMessage(
+      { action: "getAuthToken", interactive },
+      (response?: { token?: string; error?: string }) => {
+        const error = chrome.runtime.lastError?.message;
+        if (error || !response || !response.token) {
+          reject(
+            new DriveError(
+              "AUTH_DENIED",
+              undefined,
+              error || response?.error || "No response from background."
+            )
+          );
+          return;
+        }
+        resolve(response.token);
       }
     );
   });
 }
-
 function removeToken(token: string): Promise<void> {
   return new Promise((resolve) => {
     chrome.identity.removeCachedAuthToken({ token }, () => resolve());
@@ -80,7 +120,11 @@ async function request(
         headers: { ...init.headers, Authorization: `Bearer ${token}` },
       });
     } catch (e) {
-      throw new DriveError("NETWORK");
+      throw new DriveError(
+        "NETWORK",
+        undefined,
+        e instanceof Error ? e.message : String(e)
+      );
     }
     if (response.status === 401 && attempt === 0) {
       // cached token expired or was revoked: drop it and get a fresh one
@@ -89,7 +133,11 @@ async function request(
       continue;
     }
     if (!response.ok) {
-      throw new DriveError("HTTP", response.status);
+      throw new DriveError(
+        "HTTP",
+        response.status,
+        await response.text().catch(() => "")
+      );
     }
     return response;
   }
