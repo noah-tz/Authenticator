@@ -3,12 +3,12 @@
 
 export const FOLDER_SEPARATOR = "/";
 
-export interface FolderNode {
+export interface FolderNode<T extends { folder: string } = OTPEntryInterface> {
   name: string; // segment name
   path: string; // full path, the expandedFolders key
   depth: number; // 0 for top-level
-  children: FolderNode[];
-  entries: OTPEntryInterface[]; // entries whose full path === node.path
+  children: FolderNode<T>[];
+  entries: T[]; // entries whose full path === node.path
 }
 
 // Split a raw folder string into its trimmed, non-empty segments.
@@ -33,16 +33,16 @@ export function normalizeFolderPath(raw: string): string {
 // path names them. Each entry is attached to the node whose full path equals
 // normalizeFolderPath(entry.folder). Children are sorted by segment name via
 // localeCompare; entries keep their incoming (pinned-first) order.
-export function buildFolderTree(
+export function buildFolderTree<T extends { folder: string } = OTPEntryInterface>(
   paths: string[],
-  entries: OTPEntryInterface[]
-): FolderNode[] {
-  const roots: FolderNode[] = [];
-  const nodesByPath = new Map<string, FolderNode>();
+  entries: T[]
+): FolderNode<T>[] {
+  const roots: FolderNode<T>[] = [];
+  const nodesByPath = new Map<string, FolderNode<T>>();
 
-  const ensurePath = (segments: string[]): FolderNode | null => {
+  const ensurePath = (segments: string[]): FolderNode<T> | null => {
     let currentChildren = roots;
-    let currentNode: FolderNode | null = null;
+    let currentNode: FolderNode<T> | null = null;
     let currentPath = "";
 
     for (let depth = 0; depth < segments.length; depth++) {
@@ -88,7 +88,7 @@ export function buildFolderTree(
   }
 
   // Sort children recursively by segment name.
-  const sortChildren = (nodes: FolderNode[]) => {
+  const sortChildren = (nodes: FolderNode<T>[]) => {
     nodes.sort((a, b) => a.name.localeCompare(b.name));
     for (const node of nodes) {
       sortChildren(node.children);

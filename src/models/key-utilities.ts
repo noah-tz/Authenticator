@@ -1,4 +1,4 @@
-import { OTPType, OTPAlgorithm, OTPUtil } from "./otp";
+import { OTPType, OTPAlgorithm, OTPUtil } from "./otpEnums";
 import * as CryptoJS from "crypto-js";
 import {
   gostEngine as GostEngine,
