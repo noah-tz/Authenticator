@@ -17,12 +17,30 @@ let contentTab: chrome.tabs.Tab | undefined;
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message && message.action === "getAuthToken") {
-    requestAuthToken(!!message.interactive).then(sendResponse);
+    requestAuthToken(!!message.interactive)
+      .then(sendResponse)
+      .catch((e) =>
+        sendResponse({ error: String(e && e.message ? e.message : e) })
+      );
     return true;
   }
   return false;
 });
-chrome.runtime.onMessage.addListener(async (message, sender) => {
+chrome.runtime.onMessage.addListener((message, sender) => {
+  // Must not return a promise: Chrome would treat its value as the reply and
+  // override the getAuthToken answer above.
+  if (message && message.action === "getAuthToken") {
+    return false;
+  }
+  handleMessage(message, sender);
+  // https://stackoverflow.com/a/56483156
+  return true;
+});
+async function handleMessage(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  message: any,
+  sender: chrome.runtime.MessageSender
+) {
   await UserSettings.updateItems();
 
   if (message.action === "getCapture") {
@@ -56,10 +74,7 @@ chrome.runtime.onMessage.addListener(async (message, sender) => {
   } else if (message.action === "updateContextMenu") {
     updateContextMenu();
   }
-
-  // https://stackoverflow.com/a/56483156
-  return true;
-});
+}
 
 chrome.alarms.onAlarm.addListener(() => {
   chrome.storage.session.set({ cachedPassphrase: null, cachedKeyId: null });
