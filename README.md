@@ -4,10 +4,10 @@
 
 Authenticator Folders is a fork of the open-source [Authenticator](https://github.com/Authenticator-Extension/Authenticator) extension (MIT licensed), with these additions:
 
-- **Nested folders** — organize accounts into folders and sub-folders using a `/` separator (e.g. `Work/Clients`). Each folder is a collapsible accordion section.
-- **Folder picker** — an in-field dropdown with live autocomplete of existing folder paths.
-- **Expand / collapse all** — a header button to open or close every folder at once.
-- **Archive** — right-click an account to move it to a bottom-anchored, always-present Archive section (and restore it later). Codes keep generating while archived.
+- **Nested folders** ג€” organize accounts into folders and sub-folders using a `/` separator (e.g. `Work/Clients`). Each folder is a collapsible accordion section.
+- **Folder picker** ג€” an in-field dropdown with live autocomplete of existing folder paths.
+- **Expand / collapse all** ג€” a header button to open or close every folder at once.
+- **Archive** ג€” right-click an account to move it to a bottom-anchored, always-present Archive section (and restore it later). Codes keep generating while archived.
 
 Accounts continue to sync across your Chrome profiles via Chrome's built-in `chrome.storage.sync` (Google-account sync). The cloud-backup integrations (Google Drive / Dropbox / OneDrive) from upstream have been removed; manual file export/import and QR import remain.
 
@@ -20,13 +20,20 @@ npm install
 npm run chrome   # requires bash (Git Bash on Windows)
 ```
 
-The built, loadable extension is written to the `chrome/` directory. Load it via `chrome://extensions` → Developer mode → **Load unpacked** → select the `chrome/` folder.
+The built, loadable extension is written to the `chrome/` directory. Load it via `chrome://extensions` ג†’ Developer mode ג†’ **Load unpacked** ג†’ select the `chrome/` folder.
 
 > Windows users need [Git Bash](https://git-scm.com/download/win) to run the build scripts, or build the webpack/sass steps directly with Node.
 
 ## Mobile app (Android)
 
 The `mobile/` folder holds an Android app (Capacitor) that shows the same folders and syncs through the same encrypted Drive file as the extension. Install, build, Google Cloud setup and the hand-test checklist are in [docs/mobile-setup.md](docs/mobile-setup.md).
+
+The app is the extension popup: it is built from the same `src/` files (Vue components, Vuex store, `sass/popup.scss`, background handlers) with Vite. Desktop-only options (popup mode, context-menu and autofill settings, scale, permissions page) are hidden on mobile through the `src/platform.ts` seam.
+
+- Dev mode: `cd mobile; npm install; npm run dev` and open http://localhost:5173 (secrets are stored unencrypted in the browser, use test accounts only). Checks: `npm run typecheck`, `npm test`, `npm run build`.
+- The `chrome.*` shim: `mobile/src/chrome/` implements only the APIs the shared code uses (storage, runtime messaging, alarms, i18n, identity, permissions) on top of Keystore-backed storage, and is never bundled into the extension. Argon2 runs in a hash-wasm iframe (`mobile/argon.html`). Long-press replaces right-click, and the camera scan feeds the extension's own `getTotp` handler.
+- The Rate link opens the extension's store page, which is not meaningful in the app.
+- Not testable without a device: camera scanning, native Google sign-in, Keystore on real hardware, and the share sheet used for backup export.
 
 ## License
 
