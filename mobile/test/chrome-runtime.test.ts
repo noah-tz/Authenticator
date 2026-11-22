@@ -49,6 +49,31 @@ describe("chrome.runtime shim", () => {
     ).resolves.toBeUndefined();
   });
 
+  it("settles after a grace period when a listener keeps the channel open but never answers", async () => {
+    const listener = () => true;
+    runtime.onMessage.addListener(listener);
+    await expect(
+      runtime.sendMessage({ action: "lock" })
+    ).resolves.toBeUndefined();
+    runtime.onMessage.removeListener(listener);
+  });
+
+  it("waits for a slow getAuthToken answer", async () => {
+    const listener = (
+      _m: unknown,
+      _s: unknown,
+      sendResponse: (r?: unknown) => void
+    ) => {
+      setTimeout(() => sendResponse({ token: "t" }), 250);
+      return true;
+    };
+    runtime.onMessage.addListener(listener);
+    await expect(
+      runtime.sendMessage({ action: "getAuthToken" })
+    ).resolves.toEqual({ token: "t" });
+    runtime.onMessage.removeListener(listener);
+  });
+
   it("delivers asynchronously", async () => {
     const seen: string[] = [];
     const listener = () => {

@@ -44,6 +44,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         index: resolve(import.meta.dirname, "index.html"),
+        import: resolve(import.meta.dirname, "import.html"),
         argon: resolve(import.meta.dirname, "argon.html"),
       },
     },

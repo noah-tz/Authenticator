@@ -9,7 +9,12 @@ type Listener = (
 const listeners: Listener[] = [];
 const SENDER = { id: "mobile" };
 
+// Messages whose answer comes from real asynchronous work (the Google sign-in).
+const SLOW_REPLIES = new Set(["getAuthToken"]);
+const GRACE_MS = 100;
+
 function dispatch(message: unknown): Promise<unknown> {
+  const action = (message as { action?: string } | undefined)?.action || "";
   return new Promise((resolve) => {
     let answered = false;
     let pending = 0;
@@ -34,6 +39,11 @@ function dispatch(message: unknown): Promise<unknown> {
     }
     // Nobody will answer: settle like the browser does when the channel closes.
     if (pending === 0) respond(undefined);
+    // The background's catch-all listener keeps the channel open for messages
+    // it never answers (lock, cachePassphrase). The browser closes such a
+    // channel on its own; here the caller gets undefined after a short grace
+    // period, which lets the background finish clearing the session first.
+    else if (!SLOW_REPLIES.has(action)) setTimeout(() => respond(undefined), GRACE_MS);
   });
 }
 

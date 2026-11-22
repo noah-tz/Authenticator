@@ -56,7 +56,7 @@ export function parseOtpauthText(text: string): ScanOutcome {
 // Browser dev mode: webcam scan through jsQR (lazy chunk).
 async function scanWeb(): Promise<ScanOutcome> {
   try {
-    const { scanWithWebcam } = await import("./webScan");
+    const { scanWithWebcam } = await import("../platform/webScan");
     const raw = await scanWithWebcam();
     return raw === null ? fail("Scan cancelled.") : parseOtpauthText(raw);
   } catch (e) {

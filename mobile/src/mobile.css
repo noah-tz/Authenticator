@@ -99,6 +99,15 @@ body > div[class*="theme-"] {
   #codes .entry .pin {
     opacity: 1;
   }
+  /* the drag handle (edit mode) must follow the finger, not scroll the list */
+  #codes .entry .movehandle {
+    touch-action: none;
+  }
+  /* a long press opens the entry menu, not the browser's text selection */
+  #codes .entry {
+    -webkit-user-select: none;
+    user-select: none;
+  }
 }
 
 /* Browser dev mode only (npm run dev) */

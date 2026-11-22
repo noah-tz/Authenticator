@@ -40,7 +40,9 @@ export function scanWithWebcam(): Promise<string | null> {
         }, 250);
       })
       .catch((e) => {
-        finish(null);
+        if (timer) clearInterval(timer);
+        stream?.getTracks().forEach((t) => t.stop());
+        overlay.remove();
         reject(e);
       });
   });

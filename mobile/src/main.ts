@@ -2,26 +2,10 @@
 import { showStartupError } from "./diagnostics";
 import "../../sass/popup.scss";
 import "./mobile.css";
-import type { PlatformServices } from "../../src/platform";
 import { isWeb } from "./core/platform";
-import { installChrome } from "./chrome/install";
-
-type Ready = Parameters<NonNullable<PlatformServices["ready"]>>[0];
-
-// Handle on the popup's store, for the app integrations (scan results, sync).
-export let popupContext: Ready | undefined;
-
-function installPlatform(): void {
-  const services: PlatformServices = {
-    isMobile: true,
-    ready: (ctx) => {
-      popupContext = ctx;
-    },
-  };
-  ((globalThis as unknown) as {
-    __authenticatorPlatform: PlatformServices;
-  }).__authenticatorPlatform = services;
-}
+import { createSecureStore } from "./core/kvstore";
+import { bootstrap, showWhenReady } from "./bootstrap";
+import { migrateVault } from "./platform/migrateVault";
 
 function showDevBanner(): void {
   const banner = document.createElement("div");
@@ -32,12 +16,30 @@ function showDevBanner(): void {
   document.body.insertBefore(banner, document.body.firstChild);
 }
 
+// Carries the accounts of the previous app version into the extension's
+// storage (only when that is still empty).
+async function migrateLegacyAccounts(): Promise<void> {
+  const { Encryption } = await import("../../src/models/encryption");
+  const { EntryStorage } = await import("../../src/models/storage");
+  await migrateVault({
+    legacy: createSecureStore(),
+    hasEntries: async () =>
+      Object.values(await chrome.storage.local.get()).some((item) => {
+        const type = (item as { dataType?: string } | null)?.dataType;
+        return type === "OTPStorage" || type === "EncOTPStorage";
+      }),
+    importEntries: (data) => EntryStorage.import(new Encryption("", ""), data),
+    newHash: () => crypto.randomUUID(),
+    report: showWhenReady,
+  });
+}
+
 async function main(): Promise<void> {
   if (isWeb()) {
     showDevBanner();
   }
-  installPlatform();
-  await installChrome();
+  await bootstrap();
+  await migrateLegacyAccounts();
   // The extension's background handlers (lock, autolock, getTotp, Drive
   // token) run in the same page; then the popup itself.
   await import("../../src/background");
