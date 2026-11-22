@@ -520,5 +520,20 @@
   },
   "activate_auto_filter": {
     "message": "Warning: Smart filter loosely matches the domain name to an account. Always verify that you are on the correct website before entering a code!"
+  },
+  "text_size": {
+    "message": "גודל טקסט"
+  },
+  "text_size_small": {
+    "message": "קטן"
+  },
+  "text_size_normal": {
+    "message": "רגיל"
+  },
+  "text_size_large": {
+    "message": "גדול"
+  },
+  "text_size_xlarge": {
+    "message": "גדול מאוד"
   }
 }

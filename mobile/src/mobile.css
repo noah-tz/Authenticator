@@ -1,6 +1,24 @@
 /* Full-screen layout for the shared popup (sass/popup.scss is sized for a
    fixed 320x480 browser popup). Loaded after popup.scss; sass/ is not edited. */
 
+/* Text size. The popup is laid out in fixed px for 320x480, so the whole page
+   is scaled by --ui-scale (Preferences > Text size sets it on <html>; 1.25 is
+   the default). Lengths inside the scaled body are multiplied by it, so the
+   viewport sizes below are divided by it first. */
+html.is-mobile {
+  --ui-scale: 1.25;
+  --uw: calc(100vw / var(--ui-scale));
+  --uh: calc(100vh / var(--ui-scale));
+  --sat: calc(env(safe-area-inset-top) / var(--ui-scale));
+  --sab: calc(env(safe-area-inset-bottom) / var(--ui-scale));
+}
+
+@supports (height: 100dvh) {
+  html.is-mobile {
+    --uh: calc(100dvh / var(--ui-scale));
+  }
+}
+
 html.is-mobile,
 html.is-mobile body {
   width: 100vw;
@@ -9,6 +27,9 @@ html.is-mobile body {
 }
 
 html.is-mobile body {
+  zoom: var(--ui-scale);
+  width: var(--uw);
+  height: var(--uh);
   /* the zoom option is hidden on the phone; ignore a value synced from desktop */
   transform: none !important;
   margin: 0 !important;
@@ -27,13 +48,24 @@ html.is-mobile body > div[class*="theme-"] {
 html.is-mobile body > div[class*="theme-"] {
   display: flex;
   flex-direction: column;
-  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: var(--sab);
 }
 
 html.is-mobile .header {
   flex: 0 0 auto;
   box-sizing: content-box;
-  padding-top: env(safe-area-inset-top);
+  padding-top: var(--sat);
+  /* title about 18px on screen at the default scale */
+  font-size: 14.5px;
+}
+/* larger touch areas for the header icons */
+html.is-mobile .header .icon::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  bottom: -2px;
+  left: -4px;
+  right: -4px;
 }
 
 html.is-mobile #codes {
@@ -52,15 +84,14 @@ html.is-mobile #codes .codesScroll {
 /* Pages that cover the whole popup */
 html.is-mobile #qr,
 html.is-mobile #menu {
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
+  width: var(--uw);
+  height: var(--uh);
 }
 
 html.is-mobile #menu {
   display: flex;
   flex-direction: column;
-  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: var(--sab);
 }
 
 html.is-mobile #menu #menuBody {
@@ -71,16 +102,30 @@ html.is-mobile #menu #menuBody {
 }
 
 html.is-mobile #info {
-  width: calc(100vw - 20px);
-  height: calc(100vh - 20px);
-  height: calc(
-    100dvh - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom)
-  );
-  margin-top: env(safe-area-inset-top);
+  width: calc(var(--uw) - 20px);
+  height: calc(var(--uh) - 20px - var(--sat) - var(--sab));
+  margin-top: var(--sat);
   display: flex;
   flex-direction: column;
 }
-
+/* the password prompt fills the screen like the main view */
+html.is-mobile #info.passwordPrompt {
+  left: 0;
+  width: var(--uw);
+  height: var(--uh);
+  margin-top: 0;
+  padding: var(--sat) 10px var(--sab);
+  box-sizing: border-box;
+  border: none;
+  box-shadow: none;
+}
+html.is-mobile #info.passwordPrompt.fadein,
+html.is-mobile #info.passwordPrompt.show {
+  top: 0;
+}
+html.is-mobile #info.passwordPrompt #infoContent {
+  padding-top: 20px;
+}
 html.is-mobile #info #infoContent {
   flex: 1 1 auto;
   height: auto;
@@ -90,9 +135,25 @@ html.is-mobile #info #infoContent {
 html.is-mobile .message-box {
   left: 50%;
   transform: translateX(-50%);
-  max-width: calc(100vw - 20px);
+  max-width: calc(var(--uw) - 20px);
 }
 
+/* Tap targets of at least 44px on screen (the scale is applied on top) */
+html.is-mobile .folderSection .folderHeader,
+html.is-mobile .archiveSection .archiveHeader {
+  height: auto;
+  min-height: calc(44px / var(--ui-scale));
+}
+html.is-mobile .entryContextMenu .entryContextMenuItem,
+html.is-mobile .folderPickerMenu li {
+  min-height: calc(44px / var(--ui-scale));
+  display: flex;
+  align-items: center;
+}
+/* entry card a little larger than the plain scale */
+html.is-mobile #codes .entry {
+  padding: 13px 12px;
+}
 /* Touch screens have no hover: keep the hover-only entry controls visible. */
 @media (hover: none) {
   html.is-mobile #codes .entry .showqr,

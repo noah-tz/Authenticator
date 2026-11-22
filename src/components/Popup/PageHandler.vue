@@ -1,5 +1,5 @@
 <template>
-  <div id="info">
+  <div id="info" :class="{ passwordPrompt: info === 'EnterPasswordPage' }">
     <div
       id="infoClose"
       v-if="!(info === 'EnterPasswordPage' || info === 'LoadingPage')"

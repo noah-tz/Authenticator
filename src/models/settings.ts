@@ -8,6 +8,8 @@ interface UserSettingsData {
   lastRemindingBackupTime?: number;
   offset?: number;
   storageLocation?: StorageLocation;
+  // Android app only: text size in percent.
+  textSize?: number;
 
   // syncable settings
   advisorIgnoreList?: string[];
@@ -27,6 +29,7 @@ const LocalUserSettingsDataKeys = [
   "lastRemindingBackupTime",
   "offset",
   "storageLocation",
+  "textSize",
 ];
 
 export class UserSettings {
@@ -152,7 +155,12 @@ export class UserSettings {
 
 type BooleanOption = "autofill" | "enableContextMenu" | "smartFilter";
 
-type NumberOption = "autolock" | "lastRemindingBackupTime" | "offset" | "zoom";
+type NumberOption =
+  | "autolock"
+  | "lastRemindingBackupTime"
+  | "offset"
+  | "zoom"
+  | "textSize";
 
 type JSONOption = "advisorIgnoreList";
 
@@ -161,9 +169,13 @@ function isBooleanOption(key: string): key is BooleanOption {
 }
 
 function isNumberOption(key: string): key is NumberOption {
-  return ["autolock", "lastRemindingBackupTime", "offset", "zoom"].includes(
-    key
-  );
+  return [
+    "autolock",
+    "lastRemindingBackupTime",
+    "offset",
+    "zoom",
+    "textSize",
+  ].includes(key);
 }
 
 function isJSONOption(key: string): key is JSONOption {

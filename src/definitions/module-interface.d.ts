@@ -32,6 +32,8 @@ interface VuexConstructor {
 interface MenuState {
   version: string;
   zoom: number;
+  textSize: number;
+  textSize: number;
   autolock: number;
   useAutofill: boolean;
   smartFilter: boolean;

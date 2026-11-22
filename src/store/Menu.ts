@@ -1,6 +1,9 @@
 import { isSafari } from "../browser";
 import { UserSettings } from "../models/settings";
 import { ManagedStorage } from "../models/storage";
+import { platform } from "../platform";
+
+const DEFAULT_TEXT_SIZE = 125;
 
 export class Menu implements Module {
   async getModule() {
@@ -10,6 +13,7 @@ export class Menu implements Module {
       state: {
         version: chrome.runtime.getManifest()?.version || "0.0.0",
         zoom: Number(UserSettings.items.zoom) || 100,
+        textSize: Number(UserSettings.items.textSize) || DEFAULT_TEXT_SIZE,
         useAutofill: UserSettings.items.autofill === true,
         smartFilter: UserSettings.items.smartFilter === true,
         enableContextMenu: UserSettings.items.enableContextMenu === true,
@@ -31,6 +35,12 @@ export class Menu implements Module {
           UserSettings.items.zoom = zoom;
           UserSettings.commitItems();
           this.resize(zoom);
+        },
+        setTextSize: (state: MenuState, textSize: number) => {
+          state.textSize = textSize;
+          UserSettings.items.textSize = textSize;
+          UserSettings.commitItems();
+          this.applyTextSize(textSize);
         },
         setAutofill(state: MenuState, useAutofill: boolean) {
           state.useAutofill = useAutofill;
@@ -62,10 +72,20 @@ export class Menu implements Module {
     };
 
     this.resize(menuState.state.zoom);
+    this.applyTextSize(menuState.state.textSize);
 
     return menuState;
   }
 
+  // Android app only: mobile/src/mobile.css scales the page by --ui-scale.
+  private applyTextSize(textSize: number) {
+    if (platform.isMobile) {
+      document.documentElement.style.setProperty(
+        "--ui-scale",
+        String(textSize / 100)
+      );
+    }
+  }
   private resize(zoom: number) {
     if (zoom !== 100) {
       document.body.style.marginBottom = 480 * (zoom / 100 - 1) + "px";

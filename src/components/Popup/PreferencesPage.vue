@@ -30,6 +30,17 @@
       <option value="25">25%</option>
       <option value="20">20%</option>
     </a-select-input>
+    <a-select-input
+      v-if="isMobile"
+      :label="i18n.text_size"
+      v-model="textSize"
+      style="margin-left: 10px"
+    >
+      <option value="110">{{ i18n.text_size_small }}</option>
+      <option value="125">{{ i18n.text_size_normal }}</option>
+      <option value="145">{{ i18n.text_size_large }}</option>
+      <option value="170">{{ i18n.text_size_xlarge }}</option>
+    </a-select-input>
     <a-toggle-input
       v-if="!isMobile"
       :label="i18n.use_autofill"
@@ -79,6 +90,14 @@ export default Vue.extend({
       },
       set(zoom: number) {
         this.$store.commit("menu/setZoom", zoom);
+      },
+    },
+    textSize: {
+      get(): number {
+        return this.$store.state.menu.textSize;
+      },
+      set(textSize: number) {
+        this.$store.commit("menu/setTextSize", Number(textSize));
       },
     },
     useAutofill: {

@@ -674,5 +674,20 @@
   },
   "permission_identity": {
     "message": "Allows sign-in with Google for optional Drive sync."
+  },
+  "text_size": {
+    "message": "Text size"
+  },
+  "text_size_small": {
+    "message": "Small"
+  },
+  "text_size_normal": {
+    "message": "Normal"
+  },
+  "text_size_large": {
+    "message": "Large"
+  },
+  "text_size_xlarge": {
+    "message": "Extra large"
   }
 }
