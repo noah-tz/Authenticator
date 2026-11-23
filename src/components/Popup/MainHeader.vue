@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <span v-on:dblclick="popOut()">{{ i18n.extName }}</span>
+    <span v-on:dblclick="popOut()">{{ i18n.extShortName }}</span>
     <div v-show="!isPopup()">
       <div
         class="icon"

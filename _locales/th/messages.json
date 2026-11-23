@@ -1,10 +1,10 @@
 {
   "extName": {
-    "message": "Authenticator Folders",
+    "message": "Authenticator Folders - 2FA with Android Sync",
     "description": "Extension Name."
   },
   "extShortName": {
-    "message": "Auth Folders",
+    "message": "Authenticator Folders",
     "description": "Extension Short Name."
   },
   "extDesc": {
