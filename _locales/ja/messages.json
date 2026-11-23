@@ -1,6 +1,6 @@
 {
   "extName": {
-    "message": "Authenticator Folders - 2FA with Android Sync",
+    "message": "Authenticator Folders",
     "description": "Extension Name."
   },
   "extShortName": {
@@ -520,5 +520,289 @@
   },
   "activate_auto_filter": {
     "message": "警告：スマートフィルタはアカウントのドメイン名とほぼ一致します。常にあなたが正しいウェブサイトにいることを確認してください！"
+  },
+  "folder": {
+    "message": "フォルダ",
+    "description": "Folder label for grouping accounts."
+  },
+  "ungrouped": {
+    "message": "未分類",
+    "description": "Default section header for accounts without a folder."
+  },
+  "folder_placeholder": {
+    "message": "フォルダ（/ でネスト）",
+    "description": "Placeholder for the folder name input."
+  },
+  "folder_picker": {
+    "message": "フォルダを選択",
+    "description": "Label/aria for the folder picker button."
+  },
+  "toggle_folders": {
+    "message": "すべてのフォルダを展開/折りたたむ",
+    "description": "Title for the header button that expands or collapses all folders."
+  },
+  "archive": {
+    "message": "アーカイブ",
+    "description": "Title of the bottom-anchored archive section."
+  },
+  "archive_move": {
+    "message": "アーカイブに移動",
+    "description": "Context menu action to archive an account."
+  },
+  "archive_restore": {
+    "message": "アーカイブから復元",
+    "description": "Context menu action to unarchive an account."
+  },
+  "archive_empty": {
+    "message": "アーカイブされたアカウントはありません。",
+    "description": "Hint shown when the archive section is empty."
+  },
+  "rating_prompt_text": {
+    "message": "Authenticator Folders をお使いいただきありがとうございます。レビューをお願いします。",
+    "description": "One-time banner asking the user to rate the extension."
+  },
+  "rating_prompt_text_mobile": {
+    "message": "Authenticator Folders をお使いいただきありがとうございます。GitHub でプロジェクトにスターをお願いします。",
+    "description": "Android app only: one-time banner inviting a GitHub star."
+  },
+  "rating_prompt_rate": {
+    "message": "評価する",
+    "description": "Rating banner button that opens the store reviews page."
+  },
+  "rating_prompt_later": {
+    "message": "後で通知",
+    "description": "Rating banner button that hides the banner for 30 days."
+  },
+  "rating_prompt_no": {
+    "message": "結構です",
+    "description": "Rating banner button that hides the banner permanently."
+  },
+  "sync_title": {
+    "message": "Google ドライブと同期",
+    "description": "Title of the sync settings page."
+  },
+  "sync_menu": {
+    "message": "同期 (Drive)",
+    "description": "Menu label for sync."
+  },
+  "sync_intro": {
+    "message": "アカウントを自分の Google ドライブにアップロードするか、ダウンロードします。",
+    "description": "Explanation of how Drive sync works."
+  },
+  "sync_warning_unrecoverable": {
+    "message": "同期パスフレーズを知っているのはあなただけです。忘れた場合、データは復元できません。",
+    "description": "Warning about forgetting the passphrase."
+  },
+  "sync_no_warranty": {
+    "message": "保証なし：この機能は現状のまま提供されます。",
+    "description": "Disclaimer about no warranty."
+  },
+  "sync_upload": {
+    "message": "Drive にアップロード",
+    "description": "Button to upload to Drive."
+  },
+  "sync_download": {
+    "message": "Drive からダウンロード",
+    "description": "Button to download from Drive."
+  },
+  "sync_passphrase": {
+    "message": "同期パスフレーズ",
+    "description": "Label for sync passphrase input."
+  },
+  "sync_passphrase_confirm": {
+    "message": "同期パスフレーズを再入力",
+    "description": "Label for passphrase confirmation input."
+  },
+  "sync_passphrase_new_info": {
+    "message": "Drive にはまだ同期ファイルがありません。",
+    "description": "Info about creating a new passphrase."
+  },
+  "sync_passphrase_mismatch": {
+    "message": "パスフレーズが一致しません。",
+    "description": "Error when passphrases don't match."
+  },
+  "sync_passphrase_empty": {
+    "message": "同期パスフレーズを入力してください。",
+    "description": "Error when passphrase is empty."
+  },
+  "sync_continue": {
+    "message": "続行",
+    "description": "Button to continue."
+  },
+  "sync_cancel": {
+    "message": "キャンセル",
+    "description": "Button to cancel."
+  },
+  "sync_working": {
+    "message": "処理中です。",
+    "description": "Message while sync is working."
+  },
+  "sync_unlock_first": {
+    "message": "まずパスワードで拡張機能のロックを解除してください。",
+    "description": "Message to unlock before syncing."
+  },
+  "sync_conflict_title": {
+    "message": "両側が異なります",
+    "description": "Title of conflict resolution dialog."
+  },
+  "sync_conflict_info": {
+    "message": "まだ何も変更されていません。操作を選択してください。",
+    "description": "Info about conflict resolution."
+  },
+  "sync_this_device": {
+    "message": "このデバイス",
+    "description": "Label for this device in conflict dialog."
+  },
+  "sync_drive": {
+    "message": "Google ドライブ",
+    "description": "Label for Google Drive in conflict dialog."
+  },
+  "sync_only_here": {
+    "message": "このデバイスのみ",
+    "description": "Items only on this device."
+  },
+  "sync_only_drive": {
+    "message": "Google ドライブのみ",
+    "description": "Items only on Google Drive."
+  },
+  "sync_changed": {
+    "message": "両者間で異なる",
+    "description": "Items that differ between both."
+  },
+  "sync_changed_fields": {
+    "message": "異なる",
+    "description": "Label for fields that differ."
+  },
+  "sync_choice_add": {
+    "message": "不足分のみ追加",
+    "description": "Option to add missing items only."
+  },
+  "sync_choice_overwrite": {
+    "message": "変更されたアカウントを上書き",
+    "description": "Option to also overwrite changed items."
+  },
+  "sync_choice_mirror": {
+    "message": "不足分を削除",
+    "description": "Option to delete items missing on other side."
+  },
+  "sync_choice_add_info": {
+    "message": "ターゲットにないアカウントを追加します。",
+    "description": "Explanation of add-only option."
+  },
+  "sync_choice_overwrite_info": {
+    "message": "変更された値も一致するアカウントにコピーします。",
+    "description": "Explanation of overwrite option."
+  },
+  "sync_choice_mirror_info": {
+    "message": "もう一方にないターゲット上のアカウントも削除します。",
+    "description": "Explanation of mirror option."
+  },
+  "sync_target_changes": {
+    "message": "次の側が変更されます：",
+    "description": "Label showing which side will be changed."
+  },
+  "sync_confirm_mirror": {
+    "message": "これはもう一方にないアカウントを削除します。続行しますか？",
+    "description": "Confirmation for mirror action."
+  },
+  "sync_result_added": {
+    "message": "追加済み",
+    "description": "Result label for added items."
+  },
+  "sync_result_updated": {
+    "message": "更新済み",
+    "description": "Result label for updated items."
+  },
+  "sync_result_removed": {
+    "message": "削除済み",
+    "description": "Result label for removed items."
+  },
+  "sync_result_done": {
+    "message": "完了しました。",
+    "description": "Message when sync is complete."
+  },
+  "sync_in_sync": {
+    "message": "すでに同期済みです。",
+    "description": "Message when already in sync."
+  },
+  "sync_nothing_on_drive": {
+    "message": "Drive にはまだ何もありません。",
+    "description": "Message when Drive is empty."
+  },
+  "sync_uploaded": {
+    "message": "Drive にアップロードしました。",
+    "description": "Success message after upload."
+  },
+  "sync_erase": {
+    "message": "Drive のコピーを削除",
+    "description": "Button to erase Drive copy."
+  },
+  "sync_erase_confirm": {
+    "message": "Drive から同期ファイルを削除しますか？",
+    "description": "Confirmation for erasing Drive copy."
+  },
+  "sync_erased": {
+    "message": "Drive のコピーは削除されました。",
+    "description": "Success message after erasing."
+  },
+  "sync_error_not_configured": {
+    "message": "このビルドでは同期が設定されていません。",
+    "description": "Error when sync is not configured."
+  },
+  "sync_error_auth": {
+    "message": "Google サインインが完了しませんでした。",
+    "description": "Error when authentication fails."
+  },
+  "sync_error_network": {
+    "message": "Google ドライブに接続できませんでした。",
+    "description": "Error when network fails."
+  },
+  "sync_error_http": {
+    "message": "Google ドライブがエラーを返しました。",
+    "description": "Error when Drive returns HTTP error."
+  },
+  "sync_error_wrong_passphrase": {
+    "message": "パスフレーズが間違っているかファイルが破損しています。",
+    "description": "Error when passphrase is wrong."
+  },
+  "sync_error_bad_file": {
+    "message": "Drive 上のファイルは読み取れません。",
+    "description": "Error when file is unreadable."
+  },
+  "sync_error_permission": {
+    "message": "必要な権限が付与されませんでした。",
+    "description": "Error when permission is denied."
+  },
+  "sync_error_generic": {
+    "message": "同期に失敗しました。",
+    "description": "Generic sync error."
+  },
+  "sync_back": {
+    "message": "戻る",
+    "description": "Button to go back."
+  },
+  "text_size": {
+    "message": "文字サイズ",
+    "description": "Label for text size setting."
+  },
+  "text_size_small": {
+    "message": "小",
+    "description": "Small text size option."
+  },
+  "text_size_normal": {
+    "message": "標準",
+    "description": "Normal text size option."
+  },
+  "text_size_large": {
+    "message": "大",
+    "description": "Large text size option."
+  },
+  "text_size_xlarge": {
+    "message": "特大",
+    "description": "Extra large text size option."
+  },
+  "download_backup_otpauth": {
+    "message": "他のアプリ用にエクスポート（otpauth、フォルダなし）",
+    "description": "Button to export in otpauth format without folders."
   }
 }

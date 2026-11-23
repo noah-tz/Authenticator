@@ -1,6 +1,6 @@
 {
   "extName": {
-    "message": "Authenticator Folders - 2FA with Android Sync",
+    "message": "Authenticator Folders",
     "description": "Extension Name."
   },
   "extShortName": {
@@ -520,5 +520,289 @@
   },
   "activate_auto_filter": {
     "message": "Avertissement: Le filtre intelligent associe grosso modo le nom de domaine à un compte. Vérifiez toujours que vous êtes sur le bon site avant d'entrer un code !"
+  },
+  "folder": {
+    "message": "Dossier",
+    "description": "Folder label for grouping accounts."
+  },
+  "ungrouped": {
+    "message": "Sans dossier",
+    "description": "Default section header for accounts without a folder."
+  },
+  "folder_placeholder": {
+    "message": "Dossier (utilisez / pour l'imbrication)",
+    "description": "Placeholder for the folder name input."
+  },
+  "folder_picker": {
+    "message": "Choisir un dossier",
+    "description": "Label/aria for the folder picker button."
+  },
+  "toggle_folders": {
+    "message": "Développer / réduire tous les dossiers",
+    "description": "Title for the header button that expands or collapses all folders."
+  },
+  "archive": {
+    "message": "Archive",
+    "description": "Title of the bottom-anchored archive section."
+  },
+  "archive_move": {
+    "message": "Déplacer vers l'archive",
+    "description": "Context menu action to archive an account."
+  },
+  "archive_restore": {
+    "message": "Restaurer depuis l'archive",
+    "description": "Context menu action to unarchive an account."
+  },
+  "archive_empty": {
+    "message": "Aucun compte archivé.",
+    "description": "Hint shown when the archive section is empty."
+  },
+  "rating_prompt_text": {
+    "message": "Vous aimez Authenticator Folders ? Pensez à laisser un avis.",
+    "description": "One-time banner asking the user to rate the extension."
+  },
+  "rating_prompt_text_mobile": {
+    "message": "Vous aimez Authenticator Folders ? Pensez à donner une étoile au projet sur GitHub.",
+    "description": "Android app only: one-time banner inviting a GitHub star."
+  },
+  "rating_prompt_rate": {
+    "message": "Évaluer",
+    "description": "Rating banner button that opens the store reviews page."
+  },
+  "rating_prompt_later": {
+    "message": "Me rappeler plus tard",
+    "description": "Rating banner button that hides the banner for 30 days."
+  },
+  "rating_prompt_no": {
+    "message": "Non merci",
+    "description": "Rating banner button that hides the banner permanently."
+  },
+  "sync_title": {
+    "message": "Synchroniser avec Google Drive",
+    "description": "Title of the sync settings page."
+  },
+  "sync_menu": {
+    "message": "Sync (Drive)",
+    "description": "Menu label for sync."
+  },
+  "sync_intro": {
+    "message": "Téléchargez vos comptes vers votre propre Google Drive, ou téléchargez-les depuis celui-ci.",
+    "description": "Explanation of how Drive sync works."
+  },
+  "sync_warning_unrecoverable": {
+    "message": "Vous seul connaissez la phrase de passe. Si vous l'oubliez, les données ne pourront pas être récupérées.",
+    "description": "Warning about forgetting the passphrase."
+  },
+  "sync_no_warranty": {
+    "message": "Sans garantie : cette fonctionnalité est fournie telle quelle.",
+    "description": "Disclaimer about no warranty."
+  },
+  "sync_upload": {
+    "message": "Télécharger vers Drive",
+    "description": "Button to upload to Drive."
+  },
+  "sync_download": {
+    "message": "Télécharger depuis Drive",
+    "description": "Button to download from Drive."
+  },
+  "sync_passphrase": {
+    "message": "Phrase de passe de sync",
+    "description": "Label for sync passphrase input."
+  },
+  "sync_passphrase_confirm": {
+    "message": "Répéter la phrase de passe",
+    "description": "Label for passphrase confirmation input."
+  },
+  "sync_passphrase_new_info": {
+    "message": "Il n'y a pas encore de fichier de synchronisation sur Drive.",
+    "description": "Info about creating a new passphrase."
+  },
+  "sync_passphrase_mismatch": {
+    "message": "Les phrases de passe ne correspondent pas.",
+    "description": "Error when passphrases don't match."
+  },
+  "sync_passphrase_empty": {
+    "message": "Entrez une phrase de passe de synchronisation.",
+    "description": "Error when passphrase is empty."
+  },
+  "sync_continue": {
+    "message": "Continuer",
+    "description": "Button to continue."
+  },
+  "sync_cancel": {
+    "message": "Annuler",
+    "description": "Button to cancel."
+  },
+  "sync_working": {
+    "message": "Traitement en cours.",
+    "description": "Message while sync is working."
+  },
+  "sync_unlock_first": {
+    "message": "Déverrouillez d'abord l'extension avec votre mot de passe.",
+    "description": "Message to unlock before syncing."
+  },
+  "sync_conflict_title": {
+    "message": "Les deux côtés diffèrent",
+    "description": "Title of conflict resolution dialog."
+  },
+  "sync_conflict_info": {
+    "message": "Rien n'a encore été modifié. Choisissez quoi faire.",
+    "description": "Info about conflict resolution."
+  },
+  "sync_this_device": {
+    "message": "cet appareil",
+    "description": "Label for this device in conflict dialog."
+  },
+  "sync_drive": {
+    "message": "Google Drive",
+    "description": "Label for Google Drive in conflict dialog."
+  },
+  "sync_only_here": {
+    "message": "Uniquement sur cet appareil",
+    "description": "Items only on this device."
+  },
+  "sync_only_drive": {
+    "message": "Uniquement sur Google Drive",
+    "description": "Items only on Google Drive."
+  },
+  "sync_changed": {
+    "message": "Différent entre les deux",
+    "description": "Items that differ between both."
+  },
+  "sync_changed_fields": {
+    "message": "diffère",
+    "description": "Label for fields that differ."
+  },
+  "sync_choice_add": {
+    "message": "Ajouter uniquement ce qui manque",
+    "description": "Option to add missing items only."
+  },
+  "sync_choice_overwrite": {
+    "message": "Écraser les comptes modifiés",
+    "description": "Option to also overwrite changed items."
+  },
+  "sync_choice_mirror": {
+    "message": "Supprimer ce qui manque",
+    "description": "Option to delete items missing on other side."
+  },
+  "sync_choice_add_info": {
+    "message": "Ajoute les comptes que la cible n'a pas.",
+    "description": "Explanation of add-only option."
+  },
+  "sync_choice_overwrite_info": {
+    "message": "Copie également les valeurs modifiées sur les comptes correspondants.",
+    "description": "Explanation of overwrite option."
+  },
+  "sync_choice_mirror_info": {
+    "message": "Supprime également les comptes de la cible qui ne sont pas de l'autre côté.",
+    "description": "Explanation of mirror option."
+  },
+  "sync_target_changes": {
+    "message": "Le côté suivant sera modifié :",
+    "description": "Label showing which side will be changed."
+  },
+  "sync_confirm_mirror": {
+    "message": "Cela supprime les comptes que l'autre côté n'a pas. Continuer ?",
+    "description": "Confirmation for mirror action."
+  },
+  "sync_result_added": {
+    "message": "Ajouté",
+    "description": "Result label for added items."
+  },
+  "sync_result_updated": {
+    "message": "Mis à jour",
+    "description": "Result label for updated items."
+  },
+  "sync_result_removed": {
+    "message": "Supprimé",
+    "description": "Result label for removed items."
+  },
+  "sync_result_done": {
+    "message": "Terminé.",
+    "description": "Message when sync is complete."
+  },
+  "sync_in_sync": {
+    "message": "Déjà synchronisé.",
+    "description": "Message when already in sync."
+  },
+  "sync_nothing_on_drive": {
+    "message": "Il n'y a encore rien sur Drive.",
+    "description": "Message when Drive is empty."
+  },
+  "sync_uploaded": {
+    "message": "Téléchargé vers Drive.",
+    "description": "Success message after upload."
+  },
+  "sync_erase": {
+    "message": "Effacer la copie Drive",
+    "description": "Button to erase Drive copy."
+  },
+  "sync_erase_confirm": {
+    "message": "Supprimer le fichier de synchronisation de votre Drive ?",
+    "description": "Confirmation for erasing Drive copy."
+  },
+  "sync_erased": {
+    "message": "La copie Drive a été supprimée.",
+    "description": "Success message after erasing."
+  },
+  "sync_error_not_configured": {
+    "message": "La synchronisation n'est pas configurée.",
+    "description": "Error when sync is not configured."
+  },
+  "sync_error_auth": {
+    "message": "La connexion Google n'a pas été terminée.",
+    "description": "Error when authentication fails."
+  },
+  "sync_error_network": {
+    "message": "Impossible d'atteindre Google Drive.",
+    "description": "Error when network fails."
+  },
+  "sync_error_http": {
+    "message": "Google Drive a retourné une erreur.",
+    "description": "Error when Drive returns HTTP error."
+  },
+  "sync_error_wrong_passphrase": {
+    "message": "Mauvaise phrase de passe ou fichier endommagé.",
+    "description": "Error when passphrase is wrong."
+  },
+  "sync_error_bad_file": {
+    "message": "Le fichier sur Drive n'est pas lisible.",
+    "description": "Error when file is unreadable."
+  },
+  "sync_error_permission": {
+    "message": "La permission nécessaire n'a pas été accordée.",
+    "description": "Error when permission is denied."
+  },
+  "sync_error_generic": {
+    "message": "La synchronisation a échoué.",
+    "description": "Generic sync error."
+  },
+  "sync_back": {
+    "message": "Retour",
+    "description": "Button to go back."
+  },
+  "text_size": {
+    "message": "Taille du texte",
+    "description": "Label for text size setting."
+  },
+  "text_size_small": {
+    "message": "Petit",
+    "description": "Small text size option."
+  },
+  "text_size_normal": {
+    "message": "Normal",
+    "description": "Normal text size option."
+  },
+  "text_size_large": {
+    "message": "Grand",
+    "description": "Large text size option."
+  },
+  "text_size_xlarge": {
+    "message": "Très grand",
+    "description": "Extra large text size option."
+  },
+  "download_backup_otpauth": {
+    "message": "Exporter pour d'autres applications (otpauth, sans dossiers)",
+    "description": "Button to export in otpauth format without folders."
   }
 }

@@ -33,10 +33,9 @@ export function normalizeFolderPath(raw: string): string {
 // path names them. Each entry is attached to the node whose full path equals
 // normalizeFolderPath(entry.folder). Children are sorted by segment name via
 // localeCompare; entries keep their incoming (pinned-first) order.
-export function buildFolderTree<T extends { folder: string } = OTPEntryInterface>(
-  paths: string[],
-  entries: T[]
-): FolderNode<T>[] {
+export function buildFolderTree<
+  T extends { folder: string } = OTPEntryInterface
+>(paths: string[], entries: T[]): FolderNode<T>[] {
   const roots: FolderNode<T>[] = [];
   const nodesByPath = new Map<string, FolderNode<T>>();
 

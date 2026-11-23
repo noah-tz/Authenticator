@@ -1,6 +1,6 @@
 {
   "extName": {
-    "message": "Authenticator Folders - 2FA with Android Sync",
+    "message": "Authenticator Folders",
     "description": "Extension Name."
   },
   "extShortName": {
@@ -520,5 +520,289 @@
   },
   "activate_auto_filter": {
     "message": "Warning: Smart filter loosely matches the domain name to an account. Always verify that you are on the correct website before entering a code!"
+  },
+  "folder": {
+    "message": "文件夹",
+    "description": "Folder label for grouping accounts."
+  },
+  "ungrouped": {
+    "message": "未分组",
+    "description": "Default section header for accounts without a folder."
+  },
+  "folder_placeholder": {
+    "message": "文件夹（使用 / 嵌套）",
+    "description": "Placeholder for the folder name input."
+  },
+  "folder_picker": {
+    "message": "选择文件夹",
+    "description": "Label/aria for the folder picker button."
+  },
+  "toggle_folders": {
+    "message": "展开/折叠所有文件夹",
+    "description": "Title for the header button that expands or collapses all folders."
+  },
+  "archive": {
+    "message": "归档",
+    "description": "Title of the bottom-anchored archive section."
+  },
+  "archive_move": {
+    "message": "移至归档",
+    "description": "Context menu action to archive an account."
+  },
+  "archive_restore": {
+    "message": "从归档恢复",
+    "description": "Context menu action to unarchive an account."
+  },
+  "archive_empty": {
+    "message": "没有归档的账户。",
+    "description": "Hint shown when the archive section is empty."
+  },
+  "rating_prompt_text": {
+    "message": "喜欢 Authenticator Folders 吗？请考虑留下评价。",
+    "description": "One-time banner asking the user to rate the extension."
+  },
+  "rating_prompt_text_mobile": {
+    "message": "喜欢 Authenticator Folders 吗？请考虑在 GitHub 上给项目点个星。",
+    "description": "Android app only: one-time banner inviting a GitHub star."
+  },
+  "rating_prompt_rate": {
+    "message": "评价",
+    "description": "Rating banner button that opens the store reviews page."
+  },
+  "rating_prompt_later": {
+    "message": "稍后提醒",
+    "description": "Rating banner button that hides the banner for 30 days."
+  },
+  "rating_prompt_no": {
+    "message": "不用了",
+    "description": "Rating banner button that hides the banner permanently."
+  },
+  "sync_title": {
+    "message": "与 Google Drive 同步",
+    "description": "Title of the sync settings page."
+  },
+  "sync_menu": {
+    "message": "同步 (Drive)",
+    "description": "Menu label for sync."
+  },
+  "sync_intro": {
+    "message": "将您的账户上传到您自己的 Google Drive，或从中下载。",
+    "description": "Explanation of how Drive sync works."
+  },
+  "sync_warning_unrecoverable": {
+    "message": "只有您知道同步密码短语。如果您忘记了，数据将无法被恢复。",
+    "description": "Warning about forgetting the passphrase."
+  },
+  "sync_no_warranty": {
+    "message": "免责声明：此功能按原样提供。",
+    "description": "Disclaimer about no warranty."
+  },
+  "sync_upload": {
+    "message": "上传到 Drive",
+    "description": "Button to upload to Drive."
+  },
+  "sync_download": {
+    "message": "从 Drive 下载",
+    "description": "Button to download from Drive."
+  },
+  "sync_passphrase": {
+    "message": "同步密码短语",
+    "description": "Label for sync passphrase input."
+  },
+  "sync_passphrase_confirm": {
+    "message": "重复同步密码短语",
+    "description": "Label for passphrase confirmation input."
+  },
+  "sync_passphrase_new_info": {
+    "message": "Drive 上还没有同步文件。",
+    "description": "Info about creating a new passphrase."
+  },
+  "sync_passphrase_mismatch": {
+    "message": "两个密码短语不匹配。",
+    "description": "Error when passphrases don't match."
+  },
+  "sync_passphrase_empty": {
+    "message": "请输入同步密码短语。",
+    "description": "Error when passphrase is empty."
+  },
+  "sync_continue": {
+    "message": "继续",
+    "description": "Button to continue."
+  },
+  "sync_cancel": {
+    "message": "取消",
+    "description": "Button to cancel."
+  },
+  "sync_working": {
+    "message": "正在处理。",
+    "description": "Message while sync is working."
+  },
+  "sync_unlock_first": {
+    "message": "请先用密码解锁扩展程序。",
+    "description": "Message to unlock before syncing."
+  },
+  "sync_conflict_title": {
+    "message": "两边不同",
+    "description": "Title of conflict resolution dialog."
+  },
+  "sync_conflict_info": {
+    "message": "尚未进行任何更改。选择要执行的操作。",
+    "description": "Info about conflict resolution."
+  },
+  "sync_this_device": {
+    "message": "此设备",
+    "description": "Label for this device in conflict dialog."
+  },
+  "sync_drive": {
+    "message": "Google Drive",
+    "description": "Label for Google Drive in conflict dialog."
+  },
+  "sync_only_here": {
+    "message": "仅在此设备上",
+    "description": "Items only on this device."
+  },
+  "sync_only_drive": {
+    "message": "仅在 Google Drive 上",
+    "description": "Items only on Google Drive."
+  },
+  "sync_changed": {
+    "message": "两者之间不同",
+    "description": "Items that differ between both."
+  },
+  "sync_changed_fields": {
+    "message": "不同",
+    "description": "Label for fields that differ."
+  },
+  "sync_choice_add": {
+    "message": "仅添加缺少的",
+    "description": "Option to add missing items only."
+  },
+  "sync_choice_overwrite": {
+    "message": "覆盖被更改方的已更改账户",
+    "description": "Option to also overwrite changed items."
+  },
+  "sync_choice_mirror": {
+    "message": "删除缺少的",
+    "description": "Option to delete items missing on other side."
+  },
+  "sync_choice_add_info": {
+    "message": "添加目标没有的账户。",
+    "description": "Explanation of add-only option."
+  },
+  "sync_choice_overwrite_info": {
+    "message": "还会将更改的值复制到目标上的匹配账户。",
+    "description": "Explanation of overwrite option."
+  },
+  "sync_choice_mirror_info": {
+    "message": "还会删除目标上另一方没有的账户。",
+    "description": "Explanation of mirror option."
+  },
+  "sync_target_changes": {
+    "message": "以下一方将被更改：",
+    "description": "Label showing which side will be changed."
+  },
+  "sync_confirm_mirror": {
+    "message": "这将删除另一方没有的账户。继续？",
+    "description": "Confirmation for mirror action."
+  },
+  "sync_result_added": {
+    "message": "已添加",
+    "description": "Result label for added items."
+  },
+  "sync_result_updated": {
+    "message": "已更新",
+    "description": "Result label for updated items."
+  },
+  "sync_result_removed": {
+    "message": "已删除",
+    "description": "Result label for removed items."
+  },
+  "sync_result_done": {
+    "message": "完成。",
+    "description": "Message when sync is complete."
+  },
+  "sync_in_sync": {
+    "message": "已同步。",
+    "description": "Message when already in sync."
+  },
+  "sync_nothing_on_drive": {
+    "message": "Drive 上还没有内容。",
+    "description": "Message when Drive is empty."
+  },
+  "sync_uploaded": {
+    "message": "已上传到 Drive。",
+    "description": "Success message after upload."
+  },
+  "sync_erase": {
+    "message": "删除 Drive 副本",
+    "description": "Button to erase Drive copy."
+  },
+  "sync_erase_confirm": {
+    "message": "从您的 Drive 中删除同步文件？",
+    "description": "Confirmation for erasing Drive copy."
+  },
+  "sync_erased": {
+    "message": "Drive 副本已删除。",
+    "description": "Success message after erasing."
+  },
+  "sync_error_not_configured": {
+    "message": "此版本未设置同步。",
+    "description": "Error when sync is not configured."
+  },
+  "sync_error_auth": {
+    "message": "Google 登录未完成。",
+    "description": "Error when authentication fails."
+  },
+  "sync_error_network": {
+    "message": "无法连接到 Google Drive。",
+    "description": "Error when network fails."
+  },
+  "sync_error_http": {
+    "message": "Google Drive 返回错误。",
+    "description": "Error when Drive returns HTTP error."
+  },
+  "sync_error_wrong_passphrase": {
+    "message": "密码短语错误或文件已损坏。",
+    "description": "Error when passphrase is wrong."
+  },
+  "sync_error_bad_file": {
+    "message": "此版本无法读取 Drive 上的文件。",
+    "description": "Error when file is unreadable."
+  },
+  "sync_error_permission": {
+    "message": "未授予所需的权限。",
+    "description": "Error when permission is denied."
+  },
+  "sync_error_generic": {
+    "message": "同步失败。",
+    "description": "Generic sync error."
+  },
+  "sync_back": {
+    "message": "返回",
+    "description": "Button to go back."
+  },
+  "text_size": {
+    "message": "文字大小",
+    "description": "Label for text size setting."
+  },
+  "text_size_small": {
+    "message": "小",
+    "description": "Small text size option."
+  },
+  "text_size_normal": {
+    "message": "正常",
+    "description": "Normal text size option."
+  },
+  "text_size_large": {
+    "message": "大",
+    "description": "Large text size option."
+  },
+  "text_size_xlarge": {
+    "message": "特大",
+    "description": "Extra large text size option."
+  },
+  "download_backup_otpauth": {
+    "message": "导出到其他应用（otpauth，不含文件夹）",
+    "description": "Button to export in otpauth format without folders."
   }
 }

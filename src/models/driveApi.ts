@@ -141,7 +141,11 @@ export function createDriveApi(auth: DriveAuth) {
   }
 
   async function deleteFile(id: string): Promise<void> {
-    await request(`${API}/${encodeURIComponent(id)}`, { method: "DELETE" }, true);
+    await request(
+      `${API}/${encodeURIComponent(id)}`,
+      { method: "DELETE" },
+      true
+    );
   }
 
   return { findFile, downloadFile, createFile, updateFile, deleteFile };

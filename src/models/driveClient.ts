@@ -3,12 +3,7 @@
 // the only place it is stored. REST calls live in driveApi.ts.
 import { createDriveApi, DriveAuth, DriveError, DriveFile } from "./driveApi";
 
-export {
-  DriveError,
-  redact,
-  SYNC_FILE_NAME,
-  DRIVE_SCOPE,
-} from "./driveApi";
+export { DriveError, redact, SYNC_FILE_NAME, DRIVE_SCOPE } from "./driveApi";
 export type { DriveFile, DriveErrorCode } from "./driveApi";
 
 export function getClientId(): string | undefined {

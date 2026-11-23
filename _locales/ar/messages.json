@@ -1,6 +1,6 @@
 {
   "extName": {
-    "message": "Authenticator Folders - 2FA with Android Sync",
+    "message": "Authenticator Folders",
     "description": "Extension Name."
   },
   "extShortName": {
@@ -520,5 +520,289 @@
   },
   "activate_auto_filter": {
     "message": "تحذير: يقوم المدقق الذكي بمطابقة اسم الاختصاص مع الحساب بشكل غير جيد. تأكد دائمًا من أنك على موقع التبويب الصحيح قبل إدخال الرمز!"
+  },
+  "folder": {
+    "message": "مجلد",
+    "description": "Folder label for grouping accounts."
+  },
+  "ungrouped": {
+    "message": "بدون تصنيف",
+    "description": "Default section header for accounts without a folder."
+  },
+  "folder_placeholder": {
+    "message": "مجلد (استخدم / للتداخل)",
+    "description": "Placeholder for the folder name input."
+  },
+  "folder_picker": {
+    "message": "اختر مجلد",
+    "description": "Label/aria for the folder picker button."
+  },
+  "toggle_folders": {
+    "message": "توسيع / طي جميع المجلدات",
+    "description": "Title for the header button that expands or collapses all folders."
+  },
+  "archive": {
+    "message": "الأرشيف",
+    "description": "Title of the bottom-anchored archive section."
+  },
+  "archive_move": {
+    "message": "نقل إلى الأرشيف",
+    "description": "Context menu action to archive an account."
+  },
+  "archive_restore": {
+    "message": "استعادة من الأرشيف",
+    "description": "Context menu action to unarchive an account."
+  },
+  "archive_empty": {
+    "message": "لا توجد حسابات مؤرشفة.",
+    "description": "Hint shown when the archive section is empty."
+  },
+  "rating_prompt_text": {
+    "message": "هل تستمتع بـ Authenticator Folders؟ يرجى التفكير في ترك تقييم.",
+    "description": "One-time banner asking the user to rate the extension."
+  },
+  "rating_prompt_text_mobile": {
+    "message": "هل تستمتع بـ Authenticator Folders؟ يرجى التفكير في إعطاء المشروع نجمة على GitHub.",
+    "description": "Android app only: one-time banner inviting a GitHub star."
+  },
+  "rating_prompt_rate": {
+    "message": "تقييم",
+    "description": "Rating banner button that opens the store reviews page."
+  },
+  "rating_prompt_later": {
+    "message": "ذكرني لاحقاً",
+    "description": "Rating banner button that hides the banner for 30 days."
+  },
+  "rating_prompt_no": {
+    "message": "لا شكراً",
+    "description": "Rating banner button that hides the banner permanently."
+  },
+  "sync_title": {
+    "message": "المزامنة مع Google Drive",
+    "description": "Title of the sync settings page."
+  },
+  "sync_menu": {
+    "message": "مزامنة (Drive)",
+    "description": "Menu label for sync."
+  },
+  "sync_intro": {
+    "message": "ارفع حساباتك إلى Google Drive الخاص بك، أو قم بتنزيلها منه. يتم تشفير البيانات على هذا الجهاز بعبارة مرور المزامنة قبل إرسالها.",
+    "description": "Explanation of how Drive sync works."
+  },
+  "sync_warning_unrecoverable": {
+    "message": "أنت وحدك تعرف عبارة مرور المزامنة. إذا نسيتها، لا يمكن لأحد استرداد البيانات على Drive.",
+    "description": "Warning about forgetting the passphrase."
+  },
+  "sync_no_warranty": {
+    "message": "بدون ضمان: يتم توفير هذه الميزة كما هي. المطور لا يتلقى أو يخزن بياناتك أبداً.",
+    "description": "Disclaimer about no warranty."
+  },
+  "sync_upload": {
+    "message": "رفع إلى Drive",
+    "description": "Button to upload to Drive."
+  },
+  "sync_download": {
+    "message": "تنزيل من Drive",
+    "description": "Button to download from Drive."
+  },
+  "sync_passphrase": {
+    "message": "عبارة مرور المزامنة",
+    "description": "Label for sync passphrase input."
+  },
+  "sync_passphrase_confirm": {
+    "message": "كرر عبارة مرور المزامنة",
+    "description": "Label for passphrase confirmation input."
+  },
+  "sync_passphrase_new_info": {
+    "message": "لا يوجد ملف مزامنة على Drive بعد. اختر عبارة مرور للمزامنة.",
+    "description": "Info about creating a new passphrase."
+  },
+  "sync_passphrase_mismatch": {
+    "message": "عبارتا المرور غير متطابقتين.",
+    "description": "Error when passphrases don't match."
+  },
+  "sync_passphrase_empty": {
+    "message": "أدخل عبارة مرور المزامنة.",
+    "description": "Error when passphrase is empty."
+  },
+  "sync_continue": {
+    "message": "متابعة",
+    "description": "Button to continue."
+  },
+  "sync_cancel": {
+    "message": "إلغاء",
+    "description": "Button to cancel."
+  },
+  "sync_working": {
+    "message": "جارٍ العمل. قد يستغرق اشتقاق المفتاح بضع ثوانٍ.",
+    "description": "Message while sync is working."
+  },
+  "sync_unlock_first": {
+    "message": "افتح الامتداد بكلمة المرور الخاصة بك أولاً.",
+    "description": "Message to unlock before syncing."
+  },
+  "sync_conflict_title": {
+    "message": "الجانبان مختلفان",
+    "description": "Title of conflict resolution dialog."
+  },
+  "sync_conflict_info": {
+    "message": "لم يتم تغيير أي شيء بعد. اختر ماذا تفعل.",
+    "description": "Info about conflict resolution."
+  },
+  "sync_this_device": {
+    "message": "هذا الجهاز",
+    "description": "Label for this device in conflict dialog."
+  },
+  "sync_drive": {
+    "message": "Google Drive",
+    "description": "Label for Google Drive in conflict dialog."
+  },
+  "sync_only_here": {
+    "message": "فقط على هذا الجهاز",
+    "description": "Items only on this device."
+  },
+  "sync_only_drive": {
+    "message": "فقط على Google Drive",
+    "description": "Items only on Google Drive."
+  },
+  "sync_changed": {
+    "message": "تختلف بين الاثنين",
+    "description": "Items that differ between both."
+  },
+  "sync_changed_fields": {
+    "message": "يختلف",
+    "description": "Label for fields that differ."
+  },
+  "sync_choice_add": {
+    "message": "أضف فقط ما هو مفقود",
+    "description": "Option to add missing items only."
+  },
+  "sync_choice_overwrite": {
+    "message": "استبدل الحسابات المتغيرة",
+    "description": "Option to also overwrite changed items."
+  },
+  "sync_choice_mirror": {
+    "message": "احذف ما هو مفقود",
+    "description": "Option to delete items missing on other side."
+  },
+  "sync_choice_add_info": {
+    "message": "يضيف الحسابات التي لا يملكها الهدف.",
+    "description": "Explanation of add-only option."
+  },
+  "sync_choice_overwrite_info": {
+    "message": "ينسخ أيضاً القيم المتغيرة على الحسابات المطابقة.",
+    "description": "Explanation of overwrite option."
+  },
+  "sync_choice_mirror_info": {
+    "message": "يحذف أيضاً الحسابات في الهدف غير الموجودة في الجانب الآخر.",
+    "description": "Explanation of mirror option."
+  },
+  "sync_target_changes": {
+    "message": "سيتم تغيير الجانب التالي:",
+    "description": "Label showing which side will be changed."
+  },
+  "sync_confirm_mirror": {
+    "message": "هذا يحذف الحسابات التي لا يملكها الجانب الآخر. متابعة؟",
+    "description": "Confirmation for mirror action."
+  },
+  "sync_result_added": {
+    "message": "تمت الإضافة",
+    "description": "Result label for added items."
+  },
+  "sync_result_updated": {
+    "message": "تم التحديث",
+    "description": "Result label for updated items."
+  },
+  "sync_result_removed": {
+    "message": "تمت الإزالة",
+    "description": "Result label for removed items."
+  },
+  "sync_result_done": {
+    "message": "تم.",
+    "description": "Message when sync is complete."
+  },
+  "sync_in_sync": {
+    "message": "متزامن بالفعل.",
+    "description": "Message when already in sync."
+  },
+  "sync_nothing_on_drive": {
+    "message": "لا يوجد شيء على Drive بعد.",
+    "description": "Message when Drive is empty."
+  },
+  "sync_uploaded": {
+    "message": "تم الرفع إلى Drive.",
+    "description": "Success message after upload."
+  },
+  "sync_erase": {
+    "message": "مسح نسخة Drive",
+    "description": "Button to erase Drive copy."
+  },
+  "sync_erase_confirm": {
+    "message": "هل تريد حذف ملف المزامنة من Drive؟",
+    "description": "Confirmation for erasing Drive copy."
+  },
+  "sync_erased": {
+    "message": "تم حذف نسخة Drive.",
+    "description": "Success message after erasing."
+  },
+  "sync_error_not_configured": {
+    "message": "المزامنة غير مهيأة في هذا الإصدار.",
+    "description": "Error when sync is not configured."
+  },
+  "sync_error_auth": {
+    "message": "لم يتم إكمال تسجيل الدخول إلى Google.",
+    "description": "Error when authentication fails."
+  },
+  "sync_error_network": {
+    "message": "لا يمكن الوصول إلى Google Drive.",
+    "description": "Error when network fails."
+  },
+  "sync_error_http": {
+    "message": "أرجع Google Drive خطأً.",
+    "description": "Error when Drive returns HTTP error."
+  },
+  "sync_error_wrong_passphrase": {
+    "message": "عبارة مرور خاطئة أو الملف تالف.",
+    "description": "Error when passphrase is wrong."
+  },
+  "sync_error_bad_file": {
+    "message": "الملف على Drive غير قابل للقراءة.",
+    "description": "Error when file is unreadable."
+  },
+  "sync_error_permission": {
+    "message": "لم يتم منح الإذن المطلوب.",
+    "description": "Error when permission is denied."
+  },
+  "sync_error_generic": {
+    "message": "فشلت المزامنة.",
+    "description": "Generic sync error."
+  },
+  "sync_back": {
+    "message": "رجوع",
+    "description": "Button to go back."
+  },
+  "text_size": {
+    "message": "حجم النص",
+    "description": "Label for text size setting."
+  },
+  "text_size_small": {
+    "message": "صغير",
+    "description": "Small text size option."
+  },
+  "text_size_normal": {
+    "message": "عادي",
+    "description": "Normal text size option."
+  },
+  "text_size_large": {
+    "message": "كبير",
+    "description": "Large text size option."
+  },
+  "text_size_xlarge": {
+    "message": "كبير جداً",
+    "description": "Extra large text size option."
+  },
+  "download_backup_otpauth": {
+    "message": "تصدير لتطبيقات أخرى (otpauth)",
+    "description": "Button to export in otpauth format without folders."
   }
 }

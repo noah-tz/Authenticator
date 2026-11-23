@@ -326,10 +326,15 @@ svg {
     align-items: center;
     padding: 0 10px;
     margin-left: 10px;
+    // Explicit min-height ensures the full row is clickable. Without it, flex
+    // layout can shrink the box and leave dead zones at the top of the row.
+    min-height: 24px;
     height: 24px;
     line-height: 24px;
     font-size: 12px;
     cursor: pointer;
+    // Ensure clicks register across the entire row, not just on the text.
+    box-sizing: border-box;
     @include themify($themes) {
       color: themed("grey-1");
     }

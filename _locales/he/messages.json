@@ -1,6 +1,6 @@
 {
   "extName": {
-    "message": "Authenticator Folders - 2FA with Android Sync",
+    "message": "Authenticator Folders",
     "description": "Extension Name."
   },
   "extShortName": {
@@ -535,5 +535,269 @@
   },
   "text_size_xlarge": {
     "message": "גדול מאוד"
+  },
+  "folder": {
+    "message": "תיקייה",
+    "description": "Folder label for grouping accounts."
+  },
+  "ungrouped": {
+    "message": "ללא תיקייה",
+    "description": "Default section header for accounts without a folder."
+  },
+  "folder_placeholder": {
+    "message": "תיקייה (השתמש ב-/ לקינון)",
+    "description": "Placeholder for the folder name input."
+  },
+  "folder_picker": {
+    "message": "בחר תיקייה",
+    "description": "Label/aria for the folder picker button."
+  },
+  "toggle_folders": {
+    "message": "הרחב / כווץ את כל התיקיות",
+    "description": "Title for the header button that expands or collapses all folders."
+  },
+  "archive": {
+    "message": "ארכיון",
+    "description": "Title of the bottom-anchored archive section."
+  },
+  "archive_move": {
+    "message": "העבר לארכיון",
+    "description": "Context menu action to archive an account."
+  },
+  "archive_restore": {
+    "message": "שחזר מהארכיון",
+    "description": "Context menu action to unarchive an account."
+  },
+  "archive_empty": {
+    "message": "אין חשבונות בארכיון.",
+    "description": "Hint shown when the archive section is empty."
+  },
+  "rating_prompt_text": {
+    "message": "נהנה מ-Authenticator Folders? נשמח אם תשאיר ביקורת.",
+    "description": "One-time banner asking the user to rate the extension."
+  },
+  "rating_prompt_text_mobile": {
+    "message": "נהנה מ-Authenticator Folders? נשמח אם תיתן כוכב לפרויקט ב-GitHub.",
+    "description": "Android app only: one-time banner inviting a GitHub star."
+  },
+  "rating_prompt_rate": {
+    "message": "דרג",
+    "description": "Rating banner button that opens the store reviews page."
+  },
+  "rating_prompt_later": {
+    "message": "הזכר לי מאוחר יותר",
+    "description": "Rating banner button that hides the banner for 30 days."
+  },
+  "rating_prompt_no": {
+    "message": "לא תודה",
+    "description": "Rating banner button that hides the banner permanently."
+  },
+  "sync_title": {
+    "message": "סנכרון עם Google Drive",
+    "description": "Title of the sync settings page."
+  },
+  "sync_menu": {
+    "message": "סנכרון (Drive)",
+    "description": "Menu label for sync."
+  },
+  "sync_intro": {
+    "message": "העלה את החשבונות שלך ל-Google Drive שלך, או הורד אותם ממנו. הנתונים מוצפנים במכשיר זה עם סיסמת סנכרון לפני שהם יוצאים, ומאוחסנים בתיקיית נתוני אפליקציה מוסתרת שרק תוסף זה יכול לראות.",
+    "description": "Explanation of how Drive sync works."
+  },
+  "sync_warning_unrecoverable": {
+    "message": "רק אתה יודע את סיסמת הסנכרון. אם תשכח אותה, הנתונים ב-Drive לא יוכלו להיות משוחזרים על ידי אף אחד, כולל המפתח.",
+    "description": "Warning about forgetting the passphrase."
+  },
+  "sync_no_warranty": {
+    "message": "ללא אחריות: תכונה זו מסופקת כמות שהיא. המפתח לעולם לא מקבל או מאחסן את הנתונים שלך. הם נמצאים רק ב-Google Drive שלך, מוצפנים בסיסמה שלך. אתה אחראי לשמור על הגיבויים שלך.",
+    "description": "Disclaimer about no warranty."
+  },
+  "sync_upload": {
+    "message": "העלה ל-Drive",
+    "description": "Button to upload to Drive."
+  },
+  "sync_download": {
+    "message": "הורד מ-Drive",
+    "description": "Button to download from Drive."
+  },
+  "sync_passphrase": {
+    "message": "סיסמת סנכרון",
+    "description": "Label for sync passphrase input."
+  },
+  "sync_passphrase_confirm": {
+    "message": "חזור על סיסמת הסנכרון",
+    "description": "Label for passphrase confirmation input."
+  },
+  "sync_passphrase_new_info": {
+    "message": "אין עדיין קובץ סנכרון ב-Drive. בחר סיסמת סנכרון. היא שונה מהסיסמה שמגנה על התוסף הזה.",
+    "description": "Info about creating a new passphrase."
+  },
+  "sync_passphrase_mismatch": {
+    "message": "שתי הסיסמאות אינן תואמות.",
+    "description": "Error when passphrases don't match."
+  },
+  "sync_passphrase_empty": {
+    "message": "הזן סיסמת סנכרון.",
+    "description": "Error when passphrase is empty."
+  },
+  "sync_continue": {
+    "message": "המשך",
+    "description": "Button to continue."
+  },
+  "sync_cancel": {
+    "message": "ביטול",
+    "description": "Button to cancel."
+  },
+  "sync_working": {
+    "message": "עובד. יצירת המפתח יכולה לקחת מספר שניות.",
+    "description": "Message while sync is working."
+  },
+  "sync_unlock_first": {
+    "message": "פתח את התוסף עם הסיסמה שלך קודם. חשבונות נעולים לא יכולים להסתנכרן.",
+    "description": "Message to unlock before syncing."
+  },
+  "sync_conflict_title": {
+    "message": "שני הצדדים שונים",
+    "description": "Title of conflict resolution dialog."
+  },
+  "sync_conflict_info": {
+    "message": "שום דבר לא שונה עדיין. בחר מה לעשות.",
+    "description": "Info about conflict resolution."
+  },
+  "sync_this_device": {
+    "message": "מכשיר זה",
+    "description": "Label for this device in conflict dialog."
+  },
+  "sync_drive": {
+    "message": "Google Drive",
+    "description": "Label for Google Drive in conflict dialog."
+  },
+  "sync_only_here": {
+    "message": "רק במכשיר זה",
+    "description": "Items only on this device."
+  },
+  "sync_only_drive": {
+    "message": "רק ב-Google Drive",
+    "description": "Items only on Google Drive."
+  },
+  "sync_changed": {
+    "message": "שונה בין השניים",
+    "description": "Items that differ between both."
+  },
+  "sync_changed_fields": {
+    "message": "שונה",
+    "description": "Label for fields that differ."
+  },
+  "sync_choice_add": {
+    "message": "הוסף רק מה שחסר",
+    "description": "Option to add missing items only."
+  },
+  "sync_choice_overwrite": {
+    "message": "דרוס חשבונות שהשתנו בצד המשתנה",
+    "description": "Option to also overwrite changed items."
+  },
+  "sync_choice_mirror": {
+    "message": "מחק מה שחסר",
+    "description": "Option to delete items missing on other side."
+  },
+  "sync_choice_add_info": {
+    "message": "מוסיף חשבונות שאין ליעד. שום דבר לא נדרס או נמחק.",
+    "description": "Explanation of add-only option."
+  },
+  "sync_choice_overwrite_info": {
+    "message": "גם מעתיק את הערכים שהשתנו (שם, תיקייה, ארכיון וכו') על חשבונות תואמים ביעד. שום דבר לא נמחק.",
+    "description": "Explanation of overwrite option."
+  },
+  "sync_choice_mirror_info": {
+    "message": "גם מוחק חשבונות ביעד שאינם בצד השני, כך שהיעד יהיה זהה.",
+    "description": "Explanation of mirror option."
+  },
+  "sync_target_changes": {
+    "message": "הצד הבא ישתנה:",
+    "description": "Label showing which side will be changed."
+  },
+  "sync_confirm_mirror": {
+    "message": "פעולה זו מוחקת חשבונות שאין לצד השני. להמשיך?",
+    "description": "Confirmation for mirror action."
+  },
+  "sync_result_added": {
+    "message": "נוספו",
+    "description": "Result label for added items."
+  },
+  "sync_result_updated": {
+    "message": "עודכנו",
+    "description": "Result label for updated items."
+  },
+  "sync_result_removed": {
+    "message": "הוסרו",
+    "description": "Result label for removed items."
+  },
+  "sync_result_done": {
+    "message": "בוצע.",
+    "description": "Message when sync is complete."
+  },
+  "sync_in_sync": {
+    "message": "כבר מסונכרן. שום דבר לא שונה.",
+    "description": "Message when already in sync."
+  },
+  "sync_nothing_on_drive": {
+    "message": "אין עדיין כלום ב-Drive. העלה קודם.",
+    "description": "Message when Drive is empty."
+  },
+  "sync_uploaded": {
+    "message": "הועלה ל-Drive.",
+    "description": "Success message after upload."
+  },
+  "sync_erase": {
+    "message": "מחק עותק ב-Drive",
+    "description": "Button to erase Drive copy."
+  },
+  "sync_erase_confirm": {
+    "message": "למחוק את קובץ הסנכרון מה-Drive שלך? החשבונות במכשיר זה לא יושפעו.",
+    "description": "Confirmation for erasing Drive copy."
+  },
+  "sync_erased": {
+    "message": "העותק ב-Drive נמחק.",
+    "description": "Success message after erasing."
+  },
+  "sync_error_not_configured": {
+    "message": "הסנכרון לא מוגדר בגרסה זו (אין מזהה לקוח Google OAuth).",
+    "description": "Error when sync is not configured."
+  },
+  "sync_error_auth": {
+    "message": "הכניסה ל-Google לא הושלמה או נדחתה.",
+    "description": "Error when authentication fails."
+  },
+  "sync_error_network": {
+    "message": "לא ניתן להגיע ל-Google Drive. בדוק את החיבור שלך.",
+    "description": "Error when network fails."
+  },
+  "sync_error_http": {
+    "message": "Google Drive החזיר שגיאה.",
+    "description": "Error when Drive returns HTTP error."
+  },
+  "sync_error_wrong_passphrase": {
+    "message": "סיסמה שגויה, או שהקובץ ב-Drive פגום. שום דבר לא שונה.",
+    "description": "Error when passphrase is wrong."
+  },
+  "sync_error_bad_file": {
+    "message": "הקובץ ב-Drive אינו ניתן לקריאה על ידי גרסה זו.",
+    "description": "Error when file is unreadable."
+  },
+  "sync_error_permission": {
+    "message": "ההרשאה הנדרשת להיכנס עם Google לא ניתנה.",
+    "description": "Error when permission is denied."
+  },
+  "sync_error_generic": {
+    "message": "הסנכרון נכשל. שום דבר לא שונה.",
+    "description": "Generic sync error."
+  },
+  "sync_back": {
+    "message": "חזור",
+    "description": "Button to go back."
+  },
+  "download_backup_otpauth": {
+    "message": "ייצוא לאפליקציות אחרות (otpauth, ללא תיקיות)",
+    "description": "Button to export in otpauth format without folders."
   }
 }
