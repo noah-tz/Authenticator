@@ -1,54 +1,71 @@
-{
-  "manifest_version": 3,
-  "name": "__MSG_extName__",
-  "short_name": "__MSG_extShortName__",
-  "version": "1.0.3",
-  "default_locale": "en",
-  "description": "__MSG_extDesc__",
-  "icons": {
-    "16": "images/icon16.png",
-    "48": "images/icon48.png",
-    "128": "images/icon128.png"
-  },
-  "action": {
-    "default_icon": {
-      "19": "images/icon19.png",
-      "38": "images/icon38.png"
-    },
-    "default_title": "__MSG_extShortName__",
-    "default_popup": "view/popup.html"
-  },
-  "commands": {
-    "_execute_action": {},
-    "scan-qr": {
-      "description": "Scan a QR code"
-    },
-    "autofill": {
-      "description": "Autofill the matched code"
-    }
-  },
-  "options_ui": {
-    "page": "view/options.html",
-    "open_in_tab": false
-  },
-  "storage": {
-    "managed_schema": "schema.json"
-  },
-  "background": {
-    "service_worker": "dist/background.js"
-  },
-  "sandbox": {
-    "pages": ["view/argon.html"]
-  },
-  "permissions": ["activeTab", "storage", "alarms", "scripting"],
-  "optional_permissions": ["clipboardWrite", "contextMenus", "identity"],
-  "oauth2": {
-    "client_id": "952154291785-57rtr17aa5ob9isisr6d87cuga1scesf.apps.googleusercontent.com",
-    "scopes": ["https://www.googleapis.com/auth/drive.appdata"]
-  },
-  "optional_host_permissions": ["https://www.google.com/"],
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; font-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src https://www.google.com/ https://www.googleapis.com/; default-src 'none'",
-    "sandbox": "sandbox allow-scripts; script-src 'self' 'unsafe-eval';"
-  }
+﻿{
+    "manifest_version":  3,
+    "name":  "__MSG_extName__",
+    "short_name":  "__MSG_extShortName__",
+    "version":  "1.0.4",
+    "default_locale":  "en",
+    "description":  "__MSG_extDesc__",
+    "icons":  {
+                  "16":  "images/icon16.png",
+                  "48":  "images/icon48.png",
+                  "128":  "images/icon128.png"
+              },
+    "action":  {
+                   "default_icon":  {
+                                        "19":  "images/icon19.png",
+                                        "38":  "images/icon38.png"
+                                    },
+                   "default_title":  "__MSG_extShortName__",
+                   "default_popup":  "view/popup.html"
+               },
+    "commands":  {
+                     "_execute_action":  {
+
+                                         },
+                     "scan-qr":  {
+                                     "description":  "Scan a QR code"
+                                 },
+                     "autofill":  {
+                                      "description":  "Autofill the matched code"
+                                  }
+                 },
+    "options_ui":  {
+                       "page":  "view/options.html",
+                       "open_in_tab":  false
+                   },
+    "storage":  {
+                    "managed_schema":  "schema.json"
+                },
+    "background":  {
+                       "service_worker":  "dist/background.js"
+                   },
+    "sandbox":  {
+                    "pages":  [
+                                  "view/argon.html"
+                              ]
+                },
+    "permissions":  [
+                        "activeTab",
+                        "storage",
+                        "alarms",
+                        "scripting"
+                    ],
+    "optional_permissions":  [
+                                 "clipboardWrite",
+                                 "contextMenus",
+                                 "identity"
+                             ],
+    "oauth2":  {
+                   "client_id":  "952154291785-57rtr17aa5ob9isisr6d87cuga1scesf.apps.googleusercontent.com",
+                   "scopes":  [
+                                  "https://www.googleapis.com/auth/drive.appdata"
+                              ]
+               },
+    "optional_host_permissions":  [
+                                      "https://www.google.com/"
+                                  ],
+    "content_security_policy":  {
+                                    "extension_pages":  "script-src \u0027self\u0027; font-src \u0027self\u0027; img-src \u0027self\u0027 data:; style-src \u0027self\u0027 \u0027unsafe-inline\u0027; connect-src https://www.google.com/ https://www.googleapis.com/; default-src \u0027none\u0027",
+                                    "sandbox":  "sandbox allow-scripts; script-src \u0027self\u0027 \u0027unsafe-eval\u0027;"
+                                }
 }
